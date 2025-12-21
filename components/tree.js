@@ -62,6 +62,8 @@ class Tree extends EmitterComponent {
     this.contextMenu = null;
     this.contextMenuData = options.contextData || [];
     this.openedNodes = {};
+    // Store bound event listeners for cleanup
+    this.boundListeners = new Map();
   }
 
   /**
@@ -89,19 +91,32 @@ class Tree extends EmitterComponent {
     this.upsert(this.tree, this.objects, "", false, "root");
 
     // Global listener for collapse events within this tree to track state
-    this.tree.addEventListener("shown.bs.collapse", (e) => {
+    // Bind handlers for proper cleanup on destroy
+    const onShown = (e) => {
       e.stopPropagation(); // Prevent bubbling if nested
       // The target ID is likely "some-id-collapse", we want the node ID
       // Based on template: id="${id}-collapse" -> Node ID is ${id}
       const nodeId = e.target.id.replace("-collapse", "");
       this.trackOpened(nodeId, true);
-    });
+    };
 
-    this.tree.addEventListener("hidden.bs.collapse", (e) => {
+    const onHidden = (e) => {
       e.stopPropagation();
       const nodeId = e.target.id.replace("-collapse", "");
       this.trackOpened(nodeId, false);
-    });
+    };
+
+    const onContextMenu = (e) => {
+      this.contextMenu.show(this, e);
+    };
+
+    // Store bound listeners for cleanup
+    this.boundListeners.set("shown.bs.collapse", onShown);
+    this.boundListeners.set("hidden.bs.collapse", onHidden);
+    this.boundListeners.set("contextmenu", onContextMenu);
+
+    this.tree.addEventListener("shown.bs.collapse", onShown);
+    this.tree.addEventListener("hidden.bs.collapse", onHidden);
 
     let contextMenuContainer = this.element.querySelector("#contextMenuContainer");
     this.contextMenu = new ContextMenu({
@@ -112,9 +127,7 @@ class Tree extends EmitterComponent {
     });
     this.contextMenu.renderInto(contextMenuContainer);
     this.contextMenu.setDropdownItems(this.contextMenuData);
-    this.tree.addEventListener("contextmenu", (e) => {
-      this.contextMenu.show(this, e);
-    });
+    this.tree.addEventListener("contextmenu", onContextMenu);
   }
 
   /**
@@ -151,12 +164,16 @@ class Tree extends EmitterComponent {
       const collapseContainer = parent.querySelector(collapseContainerKey);
       const childNode = parent.querySelector(`#${stableId}`); // this childNode becomes the parent for next level
 
-      // Fix: Directly call the function or bind it properly.
-      // Since we can't easily pass arguments to the event listener if we use .bind within arrow,
-      // we'll just wrapper it.
-      collapseContainer.addEventListener("show.bs.collapse", () => {
+      // Bind listener for proper cleanup tracking
+      const onShowCollapse = () => {
         this.upsertChild(childNode, object, update, stableId);
-      });
+      };
+
+      // Store listener reference for cleanup
+      const key = `collapse-${stableId}`;
+      this.boundListeners.set(key, { element: collapseContainer, event: "show.bs.collapse", handler: onShowCollapse });
+
+      collapseContainer.addEventListener("show.bs.collapse", onShowCollapse);
 
       // If it should be expanded, we might need to trigger load now if not already loaded
       if (isExpanded) {
@@ -309,16 +326,30 @@ class Tree extends EmitterComponent {
 
   /**
    * Removes a node from the tree and the internal data structure.
+   * Cleans up associated event listeners to prevent memory leaks.
    * @param {HTMLElement} node - The node to remove.
    */
   remove(node) {
     if (!node) return;
 
-    // Clean up opened state for this node and children?
-    // Since IDs are path based, if we remove it, the ID is gone.
-    // But we should probably clean up openedNodes garbage if possible.
-    // For now, simpler to just let it be or delete just this one.
-    delete this.openedNodes[node.id];
+    const nodeId = node.id;
+
+    // Clean up opened state for this node
+    delete this.openedNodes[nodeId];
+
+    // Clean up event listeners associated with this node
+    const collapseKey = `collapse-${nodeId}`;
+    const listener = this.boundListeners.get(collapseKey);
+    if (listener) {
+      listener.element.removeEventListener(listener.event, listener.handler);
+      this.boundListeners.delete(collapseKey);
+    }
+
+    // Clean up visited tracking
+    const collapseContainer = node.querySelector(".children");
+    if (collapseContainer) {
+      this.visited.delete(collapseContainer.id);
+    }
 
     Utility.deleteValue(this.objects, node.dataset.uri);
     node.remove();
