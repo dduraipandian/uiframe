@@ -180,7 +180,6 @@ class Table extends EmitterComponent {
     if (this.fields.length === 0) {
       if (this.columns.length === 0 && this.data.length > 0) {
         this.columns = Object.keys(this.data[0]);
-        console.log(this.columns, this.data[0]);
       }
     } else {
       this.columns = [...this.fields];
@@ -424,7 +423,6 @@ class Table extends EmitterComponent {
       pageLink.textContent = pageNumber;
     }
 
-    console.log(typeof pageNumber);
     if (pageNumber > maxPagesToShow) {
       pageItem.style.display = "none";
     }
@@ -469,7 +467,7 @@ class Table extends EmitterComponent {
 
     if (this.pages.length === 0 || !this.pages[pageNumber]) return;
 
-    console.log("Activating page:", pageNumber);
+    console.debug("Activating page:", pageNumber);
 
     this.pages[pageNumber].classList.add("active");
 
@@ -497,7 +495,6 @@ class Table extends EmitterComponent {
       }
     }
 
-    console.log(this.tablePaginationStart);
     this.tablePaginationStart.textContent = startIdx + 1;
     this.tablePaginationEnd.textContent = Math.min(endIdx, visibleRows.length);
     this.tablePaginationTotal.textContent = visibleRows.length;

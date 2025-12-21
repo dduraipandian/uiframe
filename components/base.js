@@ -205,4 +205,25 @@ class EmitterComponent extends Component {
   }
 }
 
-export { EmitterComponent, Component };
+class ObserverComponent {
+  constructor({ element, callBack }) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          callBack();
+        }
+      });
+    }, {
+      root: null, // use the document viewport
+      threshold: 0.1 // fire when 10% of the element is visible
+    });
+    this.element = element;
+    this.callBack = callBack;
+    this.observer = observer;
+  }
+  observe() {
+    this.observer.observe(this.element);
+  }
+}
+
+export { EmitterComponent, Component, ObserverComponent };
