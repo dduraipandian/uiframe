@@ -68,7 +68,7 @@ describe("Table Component", () => {
     expect(paginationItems.length).toBe(9);
 
     // First page should show 10 rows
-    const visibleRows = container.querySelectorAll("tbody tr[style=\"display: table-row;\"]");
+    const visibleRows = container.querySelectorAll('tbody tr[style="display: table-row;"]');
     expect(visibleRows.length).toBe(10);
     expect(container.querySelector(`#${table.tableId}-pagination-start`).textContent).toBe("1");
     expect(container.querySelector(`#${table.tableId}-pagination-end`).textContent).toBe("10");

@@ -412,13 +412,13 @@ class Table extends EmitterComponent {
     pageLink.href = "#";
 
     if (pageNumber == "start") {
-      pageLink.innerHTML = "<span aria-hidden=\"true\">&laquo;</span>";
+      pageLink.innerHTML = '<span aria-hidden="true">&laquo;</span>';
     } else if (pageNumber == "end") {
-      pageLink.innerHTML = "<span aria-hidden=\"true\">&raquo;</span>";
+      pageLink.innerHTML = '<span aria-hidden="true">&raquo;</span>';
     } else if (pageNumber == "previous") {
-      pageLink.innerHTML = "<span aria-hidden=\"true\" style=\"font-size: 10px;\">❮</span>";
+      pageLink.innerHTML = '<span aria-hidden="true" style="font-size: 10px;">❮</span>';
     } else if (pageNumber == "next") {
-      pageLink.innerHTML = "<span aria-hidden=\"true\" style=\"font-size: 10px;\">❯</span>";
+      pageLink.innerHTML = '<span aria-hidden="true" style="font-size: 10px;">❯</span>';
     } else {
       pageLink.textContent = pageNumber;
     }

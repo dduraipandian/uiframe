@@ -62,7 +62,7 @@ class Dropdown extends EmitterComponent {
     let displayEnd = "dropdown-menu-end";
     if (this.isContextMenu) {
       hide = "d-none";
-      staticDisplay = "data-bs-display=\"static\"";
+      staticDisplay = 'data-bs-display="static"';
       displayEnd = "";
     }
     const template = `

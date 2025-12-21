@@ -3,7 +3,7 @@ import { Component, EmitterComponent } from "../components/base.js";
 // Define concrete classes for testing base classes
 class TestComponent extends Component {
   html() {
-    return "<div id=\"test-el\">Test</div>";
+    return '<div id="test-el">Test</div>';
   }
   init() {}
 }

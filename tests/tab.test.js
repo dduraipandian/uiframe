@@ -3,7 +3,7 @@ import { EmitterComponent } from "../components/base.js";
 
 class MockContent extends EmitterComponent {
   html() {
-    return "<div id=\"mock-content\">Mock</div>";
+    return '<div id="mock-content">Mock</div>';
   }
   init() {}
 }

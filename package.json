@@ -27,7 +27,7 @@
   ],
   "author": "dduraipandian",
   "license": "MIT",
-  "engines": {    
+  "engines": {
     "node": ">=18.16.0"
   },
   "files": [

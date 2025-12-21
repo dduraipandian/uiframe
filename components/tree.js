@@ -171,7 +171,11 @@ class Tree extends EmitterComponent {
 
       // Store listener reference for cleanup
       const key = `collapse-${stableId}`;
-      this.boundListeners.set(key, { element: collapseContainer, event: "show.bs.collapse", handler: onShowCollapse });
+      this.boundListeners.set(key, {
+        element: collapseContainer,
+        event: "show.bs.collapse",
+        handler: onShowCollapse,
+      });
 
       collapseContainer.addEventListener("show.bs.collapse", onShowCollapse);
 

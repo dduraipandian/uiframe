@@ -33,8 +33,8 @@ describe("Dropdown Component", () => {
 
     // Test search
     dropdown.handleSearch("ba");
-    const apple = itemsContainer.querySelector("[data-name=\"Apple\"]");
-    const banana = itemsContainer.querySelector("[data-name=\"Banana\"]");
+    const apple = itemsContainer.querySelector('[data-name="Apple"]');
+    const banana = itemsContainer.querySelector('[data-name="Banana"]');
 
     expect(apple.style.display).toBe("none");
     expect(banana.style.display).toBe("block");

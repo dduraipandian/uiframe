@@ -35,6 +35,7 @@ A lightweight, opinionated composable UI framework for building professional web
 ### Installation
 
 Clone locally for development:
+
 ```bash
 git clone https://github.com/dduraipandian/uiframe.git
 cd uiframe
@@ -55,9 +56,9 @@ All components are ES Modules. Here's a simple example using the `Spinner` compo
 
   const mySpinner = new Spinner({
     name: "MainLoader",
-    options: { 
-      loadingText: "Loading data...", 
-      spinnerColor: "text-primary" 
+    options: {
+      loadingText: "Loading data...",
+      spinnerColor: "text-primary",
     },
   });
 
@@ -106,18 +107,18 @@ npm run format  # Auto-format code with Prettier
 
 All core components are located in [components/](components/):
 
-| File | Purpose |
-|------|---------|
-| `base.js` | Core component classes (`Component`, `EmitterComponent`) |
-| `utils.js` | Shared utility functions (deep value access, etc.) |
-| `spinner.js` | Loading indicator with custom styling |
-| `table.js` | Data grid with search, pagination, export |
-| `tree.js` | Recursive tree view with lazy-loading & state persistence |
-| `tab.js` | Dynamic tab management |
-| `dropdown.js` | Searchable dropdown component |
-| `contextmenu.js` | Right-click context menus |
-| `online.js` | Network status monitoring |
-| `split.js` | Resizable split pane layouts |
+| File             | Purpose                                                   |
+| ---------------- | --------------------------------------------------------- |
+| `base.js`        | Core component classes (`Component`, `EmitterComponent`)  |
+| `utils.js`       | Shared utility functions (deep value access, etc.)        |
+| `spinner.js`     | Loading indicator with custom styling                     |
+| `table.js`       | Data grid with search, pagination, export                 |
+| `tree.js`        | Recursive tree view with lazy-loading & state persistence |
+| `tab.js`         | Dynamic tab management                                    |
+| `dropdown.js`    | Searchable dropdown component                             |
+| `contextmenu.js` | Right-click context menus                                 |
+| `online.js`      | Network status monitoring                                 |
+| `split.js`       | Resizable split pane layouts                              |
 
 ## Contributing
 
@@ -131,6 +132,7 @@ Contributions are welcome! Here's how to get started:
 6. **Push** and open a Pull Request
 
 Please ensure:
+
 - All tests pass (`npm test`)
 - Code is properly formatted (`npm run format`)
 - No linting errors (`npm run lint`)
