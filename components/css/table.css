@@ -18,16 +18,18 @@
       color: var(--dropdown-background-color);
     }
 
-    .active > .page-link,
+    .active>.page-link,
     .page-link.active {
       z-index: 3;
-      color: var(--bs-pagination-active-color);
+      outline: 0;
+      box-shadow: none;
+      color: var(--input-border-color);
       background-color: var(--dropdown-background-color);
       border-color: var(--dropdown-background-color);
     }
   }
 
-  .table-sm > :not(caption) > * > * {
+  .table-sm> :not(caption)>*>* {
     padding: 0.125rem 0.125rem !important;
   }
 
@@ -38,6 +40,7 @@
 
     thead {
       background-color: var(--table-header-bg-color) !important;
+
       tr {
         background-color: var(--table-header-bg-color) !important;
       }

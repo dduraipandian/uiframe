@@ -27,6 +27,7 @@
   --dropdown-font-size: var(--font-size-sm);
   --input-border-color: var(--border-color);
   --table-header-bg-color: var(--bg-sidebar);
+  --dropdown-active-color: var(--text-muted);
 }
 
 body {

@@ -2,6 +2,8 @@
   .dropdown-title {
     font-size: var(--dropdown-font-size) !important;
     background-color: var(--dropdown-background-color);
+    color: var(--dropdown-text-color);
+
     .hidden {
       visibility: hidden;
       width: 0;
@@ -23,7 +25,7 @@
     --bs-dropdown-link-active-bg: var(--bs-tertiary-bg) !important;
 
     a {
-      --bs-dropdown-link-active-bg: var(--bs-tertiary-bg) !important;
+      --bs-dropdown-link-active-bg: var(--dropdown-active-color) !important;
       font-size: var(--dropdown-font-size) !important;
     }
 
