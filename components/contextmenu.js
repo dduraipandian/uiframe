@@ -96,6 +96,7 @@ class ContextMenu extends Dropdown {
   itemOnClick(link, item) {
     if (item.callback) {
       item.callback(this.context, this.currentNode);
+      return;
     }
     // Emit standard event via parent
     super.itemOnClick(link, item);
