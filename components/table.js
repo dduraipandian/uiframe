@@ -411,6 +411,7 @@ class Table extends EmitterComponent {
     pageLink.dataset.page = pageNumber;
     pageLink.href = "#";
 
+    // eslint-disable quotes
     if (pageNumber == "start") {
       pageLink.innerHTML = '<span aria-hidden="true">&laquo;</span>';
     } else if (pageNumber == "end") {

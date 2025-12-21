@@ -4,7 +4,7 @@ import globals from "globals";
 
 export default [
   {
-    ignores: ["_app/**", "node_modules/**"],
+    ignores: ["node_modules/**"],
   },
   js.configs.recommended,
   {
@@ -32,7 +32,7 @@ export default [
     rules: {
       indent: ["error", 2],
       "linebreak-style": ["error", "unix"],
-      quotes: ["error", "double"],
+      quotes: ["error", "double", { avoidEscape: true }],
       semi: ["error", "always"],
       "no-unused-vars": ["warn"],
       "no-console": "off",
