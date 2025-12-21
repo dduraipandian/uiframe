@@ -53,6 +53,8 @@ describe("Dropdown Component", () => {
     itemLink.click();
 
     expect(spy).toHaveBeenCalledWith(items[0]);
+
+    // dropdown menu should be active after item click
     expect(itemLink.classList.contains("active")).toBe(true);
     expect(container.querySelector(".dropdown-title").textContent).toBe("Item 1");
   });

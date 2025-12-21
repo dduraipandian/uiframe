@@ -133,7 +133,9 @@ describe("ContextMenu Component", () => {
     const itemLink = menu.dropdownItemContainer.querySelector("a");
 
     menu.itemOnClick(itemLink, items[0]);
-
     expect(callback).toHaveBeenCalledWith({ ctx: 1 }, targetContainer);
+
+    // context menu should not active after item click
+    expect(itemLink.classList.contains("active")).toBe(false);
   });
 });
