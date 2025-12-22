@@ -238,7 +238,6 @@
       tree: "Interactive folder/tree component.",
       contextmenu: "Small context menu built on top of Bootstrap dropdown.",
       online: "Network status indicator with optional toast notifications.",
-      aiflow: "AI Flow: Node-based visual editor.",
       flow: "Flow: Node-based visual editor.",
     };
 
@@ -246,10 +245,6 @@
 
     componentNames.forEach((component) => {
       let displayName = component.charAt(0).toUpperCase() + component.slice(1);
-
-      // Manual overrides for names
-      if (component === "aiflow") displayName = "AI Flow";
-      if (component === "flow") displayName = "Flow";
 
       // Add to Sidebar
       let lstItem = `<a class="component-link" 
