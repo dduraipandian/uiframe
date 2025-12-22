@@ -1,6 +1,85 @@
 import { EmitterComponent } from "./base.js";
 import Utility from "./utils.js";
 
+
+class DragHandler {
+    constructor(element, onMoveHandler, initialPosition = { x: 0, y: 0 }, startDragPosition = { x: 0, y: 0 }) {
+        this.element = element;
+        this.onMoveHandler = onMoveHandler;
+
+        this.isDragging = false;
+        this.dragStartPosition = startDragPosition;
+        this.initialPosition = initialPosition;
+
+        this.elementX = this.initialPosition.x;
+        this.elementY = this.initialPosition.y;
+    }
+
+    destroy() {
+        this.element.removeEventListener("mousedown", this.onHold.bind(this));
+        this.element.removeEventListener("mousemove", this.onMove.bind(this));
+        this.element.removeEventListener("mouseup", this.onRelease.bind(this));
+    }
+
+    registerDragEvent() {
+        // Canvas Panning Listeners for click and drag, draggable will not work 
+        // as it will go to initial position when click is released
+        this.element.addEventListener("mousedown", this.onHold.bind(this));
+        this.element.addEventListener("mousemove", this.onMove.bind(this));
+        this.element.addEventListener("mouseup", this.onRelease.bind(this));
+    }
+
+    onHold(e) {
+        if (e.button === this.MOUSE_RIGHT_CLICK) {
+            console.log("FLOW: Ignoreing Right click on ", this.element);
+            return
+        }
+
+        e.stopPropagation();
+        this.isDragging = true;
+        this.dragStartPosition = { x: e.clientX, y: e.clientY };
+        this.initialPosition = { x: this.elementX, y: this.elementY };
+        this.element.style.cursor = "grabbing";
+        console.log("FLOW: Left click on", this.element);
+    }
+
+    onMove(e) {
+        if (e.button === this.MOUSE_RIGHT_CLICK) {
+            console.log("FLOW: Ignoreing Right click on", this.element);
+            return
+        }
+
+        if (!this.isDragging) {
+            return;
+        }
+
+        console.log("FLOW: mouse move on ", this.element);
+        const dx = e.clientX - this.dragStartPosition.x;
+        const dy = e.clientY - this.dragStartPosition.y;
+        this.elementX = this.initialPosition.x + dx;
+        this.elementY = this.initialPosition.y + dy;
+        this.onMoveHandler(this.elementX, this.elementY);
+    }
+
+    onRelease(e) {
+        if (e.button === this.MOUSE_RIGHT_CLICK) {
+            console.log("FLOW: Ignoreing right click on", this.element);
+            return
+        }
+
+        e.stopPropagation();
+        this.isDragging = false;
+        this.element.style.cursor = "grab";
+        console.log("FLOW: mouseup on ", this.element);
+    }
+
+    static register(element, onMoveHandler) {
+        const dragHandler = new DragHandler(element, onMoveHandler);
+        dragHandler.registerDragEvent();
+        return dragHandler
+    }
+}
+
 /**
  * A lightweight Flow/Node editor component inspired by Drawflow, and freeform.
  * features: zoom, pan, draggable nodes, input/output ports, bezier connections.
@@ -22,6 +101,11 @@ class Flow extends EmitterComponent {
         this.canvasX = options.canvas?.x || 0;
         this.canvasY = options.canvas?.y || 0;
 
+        this.isDraggingCanvas = false;
+        this.isDraggingNode = false;
+        this.initialCanvasPosition = { x: this.canvasX, y: this.canvasY };
+        this.canvasDragStartPosition = { x: 0, y: 0 }; // Mouse position at start of drag 
+
         this.nodes = {}; // { id: { id, x, y, inputs, outputs, data, el } }
         this.connections = []; // [ { outputNodeId, outputPort, inputNodeId, inputPort } ]
         this.nodeIdCounter = 1;
@@ -29,6 +113,9 @@ class Flow extends EmitterComponent {
         // DOM References
         this.canvasEl = null;
         this.svgEl = null;
+
+        this.MOUSE_RIGHT_CLICK = 2;
+        this.gridFactor = 24;
     }
 
     /**
@@ -50,6 +137,12 @@ class Flow extends EmitterComponent {
         this.containerEl = this.container.querySelector(`#${this.id}-flow-container`);
         this.canvasEl = this.container.querySelector(`#${this.id}-canvas`);
         this.svgEl = this.container.querySelector(`#${this.id}-svg`);
+
+        // canvas container drag handler
+        DragHandler.register(this.containerEl, this.redrawCanvasWithXY.bind(this));
+
+        // passive: false to allow preventDefault to be called. It is false by default except for Safari.
+        this.containerEl.addEventListener("wheel", this.onCanvasWheelZoom.bind(this), { passive: false });
     }
 
     /**
@@ -94,27 +187,49 @@ class Flow extends EmitterComponent {
         </div>
         `;
         el.innerHTML = nodeHtml;
-        el.querySelectorAll(".flow-port").forEach((port) => {
+
+        const nodeEl = el.querySelector(`#node-${node.id}`);
+
+        nodeEl.onmousedown = (e) => this.onNodeMouseDown(e, node.id);
+        nodeEl.querySelectorAll(".flow-port").forEach((port) => {
             port.onmousedown = (e) => this.onPortMouseDown(e, node.id, port.dataset.type, port.dataset.index);
         });
-        el.onmousedown = (e) => this.onNodeMouseDown(e, node.id);
 
-        this.nodes[node.id].el = el;
-        this.canvasEl.appendChild(el);
+        this.nodes[node.id].el = nodeEl;
+        this.canvasEl.appendChild(nodeEl);
+    }
+
+    // handling mouse left click on port in the node    
+    onCanvasWheelZoom(e) {
+        e.preventDefault();
+        console.log("FLOW: Wheel on canvas with deltaY: ", e.deltaY);
+
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        const newZoom = Math.max(0.1, Math.min(this.zoom + delta, 3));
+        this.zoom = newZoom;
+        this.redrawCanvas();
     }
 
     onPortMouseDown(e, nodeId, type, index) {
+        if (e.button === this.MOUSE_RIGHT_CLICK) {
+            console.log("FLOW: Ignoreing Right click on port", nodeId, type, index);
+            return
+        }
+
         e.stopPropagation();
         if (type === "output") {
             this.isConnecting = true;
             this.connectionStart = { nodeId, index };
-
-            // Clear cache for source node to ensure accurate start point
-            if (this.nodes[nodeId]) this.nodes[nodeId].portsCache = null;
         }
     }
 
+    // handling mouse left click on node
     onNodeMouseDown(e, id) {
+        if (e.button === this.MOUSE_RIGHT_CLICK) {
+            console.log("FLOW: Ignoreing Right click on node", id);
+            return
+        }
+
         e.stopPropagation(); // Don't trigger canvas drag
         e.preventDefault(); // Prevent text selection/native drag
 
@@ -122,13 +237,29 @@ class Flow extends EmitterComponent {
         this.dragNodeParams = { id, startX: e.clientX, startY: e.clientY };
         this.initialNodePos = { x: this.nodes[id].x, y: this.nodes[id].y };
 
-        // Clear cache to ensure fresh calc on move
-        this.nodes[id].portsCache = null;
-
         // Select node styling
         // de-select all other nodes except the current one
         this.canvasEl.querySelectorAll(".flow-node").forEach(n => n.classList.remove("selected"));
         this.nodes[id].el.classList.add("selected");
+        console.log(this.nodes[id].el.classList);
+    }
+
+    redrawCanvas() {
+        this.redrawCanvasWithXY(this.canvasX, this.canvasY)
+    }
+
+    redrawCanvasWithXY(x, y) {
+        this.canvasX = x;
+        this.canvasY = y;
+
+        this.canvasEl.style.transform = `translate(${x}px, ${y}px) scale(${this.zoom})`;
+
+        // updating grid size (dot dots)
+        const gridSize = this.gridFactor * this.zoom;
+        this.containerEl.style.backgroundSize = `${gridSize}px ${gridSize}px`;
+        this.containerEl.style.backgroundPosition = `${x}px ${y}px`;
+
+        this.containerEl.style.backgroundImage = `radial-gradient(#d2d2d7 ${1.5 * this.zoom}px, transparent ${1.5 * this.zoom}px)`;
     }
 
     addConnection(outNodeId, outPort, inNodeId, inPort) {
@@ -177,34 +308,22 @@ class Flow extends EmitterComponent {
 
         if (!node || !nodeEl) return { x: 0, y: 0 };
 
-        // CACHE OFFSET: Check if we already calculated the ports relative position
-        // This avoids layout trashing during drag
-        if (!node.portsCache) node.portsCache = {};
-        const cacheKey = `${type}-${index}`;
+        const portEl = nodeEl.querySelector(`.flow-port[data-type="${type}"][data-index="${index}"]`);
+        if (!portEl) return { x: node.x, y: node.y };
 
-        if (!node.portsCache[cacheKey]) {
-            const portEl = nodeEl.querySelector(`.flow-port[data-type="${type}"][data-index="${index}"]`);
-            if (!portEl) return { x: node.x, y: node.y };
+        // Temporarily need rects to calculate static offset
+        let portRect = portEl.getBoundingClientRect();
+        let nodeRect = nodeEl.getBoundingClientRect();
 
-            // Temporarily need rects to calculate static offset
-            let portRect = portEl.getBoundingClientRect();
-            let nodeRect = nodeEl.getBoundingClientRect();
-
-            console.log("port rect: ", portEl, portRect);
-            console.log("node rect: ", nodeEl, nodeRect);
-
-            // The offset of the port center RELATIVE to the node top-left (unscaled by zoom)
-            // We need to divide by zoom here because getBoundingClientRect includes the zoom transform
-            const offsetX = (portRect.left - nodeRect.left + portRect.width / 2) / this.zoom;
-            const offsetY = (portRect.top - nodeRect.top + portRect.height / 2) / this.zoom;
-
-            node.portsCache[cacheKey] = { x: offsetX, y: offsetY };
-        }
+        // The offset of the port center RELATIVE to the node top-left (unscaled by zoom)
+        // We need to divide by zoom here because getBoundingClientRect includes the zoom transform
+        const offsetX = (portRect.left - nodeRect.left + portRect.width / 2) / this.zoom;
+        const offsetY = (portRect.top - nodeRect.top + portRect.height / 2) / this.zoom;
 
         // Return purely logic-based position: Node current X/Y + Static Offset
         return {
-            x: node.x + node.portsCache[cacheKey].x,
-            y: node.y + node.portsCache[cacheKey].y
+            x: node.x + offsetX,
+            y: node.y + offsetY
         };
     }
 
