@@ -13,6 +13,10 @@ class DragHandler {
 
         this.elementX = this.initialPosition.x;
         this.elementY = this.initialPosition.y;
+
+        this.rafId = null;
+
+        this.MOUSE_RIGHT_CLICK = 2;
     }
 
     destroy() {
@@ -25,8 +29,6 @@ class DragHandler {
         // Canvas Panning Listeners for click and drag, draggable will not work 
         // as it will go to initial position when click is released
         this.element.addEventListener("mousedown", this.onHold.bind(this));
-        this.element.addEventListener("mousemove", this.onMove.bind(this));
-        this.element.addEventListener("mouseup", this.onRelease.bind(this));
     }
 
     onHold(e) {
@@ -41,6 +43,11 @@ class DragHandler {
         this.initialPosition = { x: this.elementX, y: this.elementY };
         this.element.style.cursor = "grabbing";
         console.log("FLOW: Left click on", this.element);
+
+        document.addEventListener("mousemove", this.onMove.bind(this));
+        document.addEventListener("mouseup", this.onRelease.bind(this));
+
+        this.startRaf();
     }
 
     onMove(e) {
@@ -56,9 +63,9 @@ class DragHandler {
         console.log("FLOW: mouse move on ", this.element);
         const dx = e.clientX - this.dragStartPosition.x;
         const dy = e.clientY - this.dragStartPosition.y;
+
         this.elementX = this.initialPosition.x + dx;
         this.elementY = this.initialPosition.y + dy;
-        this.onMoveHandler(this.elementX, this.elementY);
     }
 
     onRelease(e) {
@@ -70,6 +77,8 @@ class DragHandler {
         e.stopPropagation();
         this.isDragging = false;
         this.element.style.cursor = "grab";
+        document.removeEventListener("mousemove", this.onMove.bind(this));
+        document.removeEventListener("mouseup", this.onRelease.bind(this));
         console.log("FLOW: mouseup on ", this.element);
     }
 
@@ -77,6 +86,23 @@ class DragHandler {
         const dragHandler = new DragHandler(element, onMoveHandler);
         dragHandler.registerDragEvent();
         return dragHandler
+    }
+
+    startRaf() {
+        if (this.rafId) return;
+
+        const loop = () => {
+            if (!this.isDragging) {
+                this.rafId = null;
+                return;
+            }
+
+            // DOM update happens ONLY here
+            this.onMoveHandler(this.elementX, this.elementY);
+            this.rafId = requestAnimationFrame(loop);
+        };
+
+        this.rafId = requestAnimationFrame(loop);
     }
 }
 
@@ -190,7 +216,18 @@ class Flow extends EmitterComponent {
 
         const nodeEl = el.querySelector(`#node-${node.id}`);
 
-        nodeEl.onmousedown = (e) => this.onNodeMouseDown(e, node.id);
+        nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
+
+        // nodeEl.onmousedown = (e) => this.onNodeMouseDown(e, node.id);
+        // nodeEl.onmousemove = (e) => this.onNodeMouseMove(e, node.id);
+        // nodeEl.onmouseup = (e) => this.onNodeMouseUp(e, node.id);
+
+        const hl = new DragHandler(nodeEl,
+            this.redrawNodeWithXY.bind(this, node.id),
+            { x: this.nodes[node.id].x, y: this.nodes[node.id].y }
+        );
+        hl.registerDragEvent();
+
         nodeEl.querySelectorAll(".flow-port").forEach((port) => {
             port.onmousedown = (e) => this.onPortMouseDown(e, node.id, port.dataset.type, port.dataset.index);
         });
@@ -224,6 +261,11 @@ class Flow extends EmitterComponent {
     }
 
     // handling mouse left click on node
+    onNodeClick(e, id) {
+        this.canvasEl.querySelectorAll(".flow-node").forEach(n => n.classList.remove("selected"));
+        this.nodes[id].el.classList.add("selected");
+    }
+
     onNodeMouseDown(e, id) {
         if (e.button === this.MOUSE_RIGHT_CLICK) {
             console.log("FLOW: Ignoreing Right click on node", id);
@@ -239,9 +281,57 @@ class Flow extends EmitterComponent {
 
         // Select node styling
         // de-select all other nodes except the current one
-        this.canvasEl.querySelectorAll(".flow-node").forEach(n => n.classList.remove("selected"));
-        this.nodes[id].el.classList.add("selected");
+        this.nodes[id].el.style.cursor = "grabbing";
         console.log(this.nodes[id].el.classList);
+    }
+
+    onNodeMouseMove(e, id) {
+        if (e.button === this.MOUSE_RIGHT_CLICK) {
+            console.log("FLOW: Ignoreing Right click on", this.element);
+            return
+        }
+
+        e.stopPropagation(); // Don't trigger canvas drag
+        e.preventDefault(); // Prevent text selection/native drag
+
+        if (this.isDraggingCanvas) {
+            const dx = e.clientX - this.dragStart.x;
+            const dy = e.clientY - this.dragStart.y;
+            this.canvasX = this.initialCanvas.x + dx;
+            this.canvasY = this.initialCanvas.y + dy;
+            this.updateCanvasTransform();
+        }
+        else if (this.isDraggingNode) {
+            const dx = (e.clientX - this.dragNodeParams.startX);
+            const dy = (e.clientY - this.dragNodeParams.startY);
+            const node = this.nodes[this.dragNodeParams.id];
+            node.x = this.initialNodePos.x + dx;
+            node.y = this.initialNodePos.y + dy;
+            node.el.style.transform = `translate(${node.x}px, ${node.y}px)`;
+
+            // this.updateConnections(node.id); // Re-draw lines connected to this node
+        }
+        else if (this.isConnecting) {
+            // Draw temp line to mouse
+            this.renderTempConnection(e);
+        }
+    }
+
+    onNodeMouseUp(e, id) {
+        if (e.button === this.MOUSE_RIGHT_CLICK) {
+            console.log("FLOW: Ignoreing Right click on", this.element);
+            return
+        }
+
+        e.stopPropagation(); // Don't trigger canvas drag
+        e.preventDefault(); // Prevent text selection/native drag
+
+        this.isDraggingCanvas = false;
+        this.isDraggingNode = false;
+        this.canvasEl.style.pointerEvents = "all"; // Re-enable pointer events
+        // Reset drag params
+        this.dragNodeParams = null;
+        this.nodes[id].el.style.cursor = "grab";
     }
 
     redrawCanvas() {
@@ -260,6 +350,11 @@ class Flow extends EmitterComponent {
         this.containerEl.style.backgroundPosition = `${x}px ${y}px`;
 
         this.containerEl.style.backgroundImage = `radial-gradient(#d2d2d7 ${1.5 * this.zoom}px, transparent ${1.5 * this.zoom}px)`;
+    }
+
+    redrawNodeWithXY(id, x, y) {
+        this.nodes[id].el.style.transform = `translate(${x}px, ${y}px)`;
+        // this.updateConnections(node.id); // Re-draw lines connected to this node
     }
 
     addConnection(outNodeId, outPort, inNodeId, inPort) {
