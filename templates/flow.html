@@ -55,7 +55,7 @@
     <div id="app-layout">
         <!-- Palette Sidebar -->
         <div id="sidebar">
-            <h5>AI Flow Blocks</h5>
+            <h5>Flow Blocks</h5>
             <p class="text-muted small">Drag blocks to canvas</p>
 
             <div class="draggable-item" draggable="true" ondragstart="drag(event)"
@@ -103,14 +103,14 @@
         const n2 = flow.addNode({ name: "Process", inputs: 1, outputs: 1, x: 400, y: 100, html: "Validating..." });
         flow.addConnection(n1, 0, n2, 0);
 
-        // window.exportData = () => {
-        //     console.log(flow.export());
-        //     alert("Flow data logged to console!");
-        // };
+        window.exportData = () => {
+            console.log(flow.export());
+            alert("Flow data logged to console!");
+        };
 
-        // window.clearData = () => {
-        //     flow.import({ nodes: [], connections: [] });
-        // };
+        window.clearData = () => {
+            flow.import({ nodes: [], connections: [] });
+        };
     </script>
     <script>
         function drag(ev) {

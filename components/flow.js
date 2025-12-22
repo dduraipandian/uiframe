@@ -283,7 +283,10 @@ class Flow extends EmitterComponent {
         event.stopPropagation();
         this.isConnecting = true;
         this.connectionStart = { nodeId, index: port.dataset.index };
-        window.onmousemove = (e) => this.drawConnection(port, nodeId, e);
+
+        // Use addEventListener instead of window.onmousemove to avoid JSDOM redefinition errors
+        this._drawConnection = (e) => this.drawConnection(port, nodeId, e);
+        window.addEventListener("mousemove", this._drawConnection);
 
         // Clear cache for source node to ensure accurate start point
         if (this.nodes[nodeId]) this.nodes[nodeId].portOffsets = {};
@@ -307,7 +310,11 @@ class Flow extends EmitterComponent {
             }
             this.isConnecting = false;
             this.clearTempConnection();
-            window.onmousemove = null;
+
+            if (this._drawConnection) {
+                window.removeEventListener("mousemove", this._drawConnection);
+                this._drawConnection = null;
+            }
         }
     }
 
@@ -474,4 +481,39 @@ class Flow extends EmitterComponent {
     }
 }
 
-export default Flow;
+class FlowActions extends Flow {
+    export() {
+        const nodesExport = Object.values(this.nodes).map(({ el, ...rest }) => rest);
+        return {
+            nodes: nodesExport,
+            connections: this.connections,
+            zoom: this.zoom,
+            canvas: { x: this.canvasX, y: this.canvasY }
+        };
+    }
+
+    import(data) {
+        this.canvasEl.innerHTML = `<svg id="${this.id}-svg" class="flow-connections"></svg>`;
+        this.svgEl = this.canvasEl.querySelector("svg");
+        this.nodes = {};
+        this.connections = [];
+        this.nodeIdCounter = 1;
+
+        this.zoom = data.zoom || 1;
+        this.canvasX = data.canvas?.x || 0;
+        this.canvasY = data.canvas?.y || 0;
+        this.redrawCanvas();
+
+        if (data.nodes) {
+            data.nodes.forEach(n => {
+                this.addNode(n);
+                if (n.id >= this.nodeIdCounter) this.nodeIdCounter = n.id + 1;
+            });
+        }
+        if (data.connections) {
+            data.connections.forEach(c => this.addConnection(c.outNodeId, c.outPort, c.inNodeId, c.inPort));
+        }
+    }
+}
+
+export { FlowActions as Flow };
