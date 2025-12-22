@@ -134,6 +134,8 @@ class Flow extends EmitterComponent {
 
         this.MOUSE_RIGHT_CLICK = 2;
         this.gridFactor = 24;
+        this.nodeWidth = 200;
+        this.nodeHeight = 90;
     }
 
     /**
@@ -161,6 +163,10 @@ class Flow extends EmitterComponent {
 
         // passive: false to allow preventDefault to be called. It is false by default except for Safari.
         this.containerEl.addEventListener("wheel", this.onCanvasWheelZoom.bind(this), { passive: false });
+
+        // Drop listener for adding new nodes from outside
+        this.containerEl.addEventListener("dragover", (e) => e.preventDefault());
+        this.containerEl.addEventListener("drop", this.onDrop.bind(this));
     }
 
     /**
@@ -191,7 +197,8 @@ class Flow extends EmitterComponent {
         <div id="node-${node.id}" 
             data-id="${node.id}" 
             class="flow-node" 
-            style="top: ${node.y}px; left: ${node.x}px; transform: scale(${this.zoom})">
+            style="top: ${node.y}px; left: ${node.x}px; transform: scale(${this.zoom}); 
+                    width: ${this.nodeWidth}px; height: ${this.nodeHeight}px">
             <div class="flow-ports-column flow-ports-in">
                 ${Array.from({ length: node.inputs }, (_, i) => inputHtml.replace("{{index}}", i)).join("\n")}
             </div>
@@ -223,6 +230,31 @@ class Flow extends EmitterComponent {
 
         this.nodes[node.id].el = nodeEl;
         this.canvasEl.appendChild(nodeEl);
+    }
+
+    onDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        try {
+            const raw = e.dataTransfer.getData("application/json");
+            if (!raw) return;
+
+            const data = JSON.parse(raw);
+            const rect = this.containerEl.getBoundingClientRect();
+            const x = (e.clientX - rect.left - this.canvasX - (this.nodeWidth / 2)) / this.zoom;
+            const y = (e.clientY - rect.top - this.canvasY - (this.nodeHeight / 2)) / this.zoom;
+
+            this.addNode({
+                name: data.name,
+                inputs: data.inputs,
+                outputs: data.outputs,
+                x, y,
+                html: data.html
+            });
+        } catch (err) {
+            console.error("Invalid drop data", err);
+        }
     }
 
     // handling mouse left click on port in the node    
@@ -276,6 +308,12 @@ class Flow extends EmitterComponent {
     redrawNodeWithXY(id, x, y) {
         this.nodes[id].x = x;
         this.nodes[id].y = y;
+
+        // https://stackoverflow.com/questions/7108941/css-transform-vs-position
+        // Changing transform will trigger a redraw in compositor layer only for the animated element 
+        // (subsequent elements in DOM will not be redrawn). I want DOM to be redraw to make connection attached to the port.
+        // so using position top/left to keep the position intact, not for the animation.
+        // I spent hours to find this out with trial and error.        
         this.nodes[id].el.style.top = `${y}px`;
         this.nodes[id].el.style.left = `${x}px`;
         this.nodes[id].portOffsets = {};
