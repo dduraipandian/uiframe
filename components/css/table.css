@@ -18,7 +18,7 @@
       color: var(--dropdown-background-color);
     }
 
-    .active>.page-link,
+    .active > .page-link,
     .page-link.active {
       z-index: 3;
       outline: 0;
@@ -29,7 +29,7 @@
     }
   }
 
-  .table-sm> :not(caption)>*>* {
+  .table-sm > :not(caption) > * > * {
     padding: 0.125rem 0.125rem !important;
   }
 
