@@ -43,8 +43,8 @@ class DragHandler {
         this.initialPosition = { x: this.elementX, y: this.elementY };
         this.element.style.cursor = "grabbing";
 
-        document.addEventListener("mousemove", this.onMove.bind(this));
-        document.addEventListener("mouseup", this.onRelease.bind(this));
+        this.element.addEventListener("mousemove", this.onMove.bind(this));
+        this.element.addEventListener("mouseup", this.onRelease.bind(this));
     }
 
     onMove(e) {
@@ -75,8 +75,9 @@ class DragHandler {
         e.stopPropagation();
         this.isDragging = false;
         this.element.style.cursor = "grab";
-        document.removeEventListener("mousemove", this.onMove.bind(this));
-        document.removeEventListener("mouseup", this.onRelease.bind(this));
+
+        this.element.removeEventListener("mousemove", this.onMove.bind(this));
+        this.element.removeEventListener("mouseup", this.onRelease.bind(this));
     }
 
     static register(element, onMoveHandler) {
@@ -218,14 +219,23 @@ class Flow extends EmitterComponent {
         nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
         nodeEl.onmousedown = (e) => this.onNodeClick(e, node.id);
 
+        // register drap handler
         const hl = new DragHandler(nodeEl,
             this.redrawNodeWithXY.bind(this, node.id),
             { x: this.nodes[node.id].x, y: this.nodes[node.id].y }
         );
         hl.registerDragEvent();
 
-        nodeEl.querySelectorAll(".flow-port").forEach((port) => {
-            port.onmousedown = (e) => this.onPortMouseDown(e, node.id, port.dataset.type, port.dataset.index);
+        // nodeEl.querySelectorAll(".flow-port .flow-ports-out").forEach((port) => {
+        //     port.onmousedown = (e) => this.onPortMouseDown(e, node.id, port.dataset.type, port.dataset.index);
+        // });
+
+        nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach((port) => {
+            port.onmousedown = (e) => this.startConnection(port, node.id, e);
+        });
+
+        nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach((port) => {
+            port.onmouseup = (e) => this.completeConnection(port, node.id, e);
         });
 
         this.nodes[node.id].el = nodeEl;
@@ -268,16 +278,36 @@ class Flow extends EmitterComponent {
         this.redrawCanvas();
     }
 
-    onPortMouseDown(e, nodeId, type, index) {
-        if (e.button === this.MOUSE_RIGHT_CLICK) {
-            console.log("FLOW: Ignoreing Right click on port", nodeId, type, index);
-            return
-        }
+    startConnection(port, nodeId, event) {
+        console.debug("FLOW: Start connection from port: ", port, "nodeId: ", nodeId);
+        event.stopPropagation();
+        this.isConnecting = true;
+        this.connectionStart = { nodeId, index: port.dataset.index };
+        window.onmousemove = (e) => this.drawConnection(port, nodeId, e);
 
-        e.stopPropagation();
-        if (type === "output") {
-            this.isConnecting = true;
-            this.connectionStart = { nodeId, index };
+        // Clear cache for source node to ensure accurate start point
+        if (this.nodes[nodeId]) this.nodes[nodeId].portOffsets = {};
+    }
+
+    drawConnection(port, nodeId, event) {
+        if (this.isConnecting) {
+            console.debug("FLOW: Drawing connection from port: ", port, "nodeId: ", nodeId);
+            this.renderTempConnection(port, nodeId, event)
+        }
+    }
+
+    completeConnection(port, nodeId, event) {
+        if (this.isConnecting) {
+            // Check if dropped on local input port
+            const target = event.target.closest(".flow-port");
+            if (target && target.dataset.type === "input") {
+                const inputNodeId = parseInt(target.dataset.nodeId);
+                const inputIndex = parseInt(target.dataset.index);
+                this.addConnection(this.connectionStart.nodeId, this.connectionStart.index, inputNodeId, inputIndex);
+            }
+            this.isConnecting = false;
+            this.clearTempConnection();
+            window.onmousemove = null;
         }
     }
 
@@ -418,6 +448,29 @@ class Flow extends EmitterComponent {
                 this.createConnectionPath(conn);
             }
         });
+    }
+    renderTempConnection(port, nodeId, event) {
+        const node = this.nodes[nodeId]
+        let path = this.svgEl.querySelector(".flow-connection-temp");
+        if (!path) {
+            path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("class", "flow-connection-path selected flow-connection-temp");
+            path.style.pointerEvents = "none";
+            this.svgEl.appendChild(path);
+        }
+
+        const p1 = this.getPortPosition(node.id, "output", port.dataset.index);
+
+        const rect = this.canvasEl.getBoundingClientRect();
+        const mouseX = (event.clientX - rect.left) / this.zoom;
+        const mouseY = (event.clientY - rect.top) / this.zoom;
+
+        path.setAttribute("d", this.getBazierPath(p1.x, p1.y, mouseX, mouseY));
+    }
+
+    clearTempConnection() {
+        const path = this.svgEl.querySelector(".flow-connection-temp");
+        if (path) path.remove();
     }
 }
 
