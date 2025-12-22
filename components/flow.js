@@ -33,7 +33,7 @@ class DragHandler {
 
     onHold(e) {
         if (e.button === this.MOUSE_RIGHT_CLICK) {
-            console.log("FLOW: Ignoreing Right click on ", this.element);
+            console.debug("FLOW: Ignoreing Right click on ", this.element);
             return
         }
 
@@ -42,7 +42,6 @@ class DragHandler {
         this.dragStartPosition = { x: e.clientX, y: e.clientY };
         this.initialPosition = { x: this.elementX, y: this.elementY };
         this.element.style.cursor = "grabbing";
-        console.log("FLOW: Left click on", this.element);
 
         document.addEventListener("mousemove", this.onMove.bind(this));
         document.addEventListener("mouseup", this.onRelease.bind(this));
@@ -52,7 +51,7 @@ class DragHandler {
 
     onMove(e) {
         if (e.button === this.MOUSE_RIGHT_CLICK) {
-            console.log("FLOW: Ignoreing Right click on", this.element);
+            console.debug("FLOW: Ignoreing Right click on", this.element);
             return
         }
 
@@ -60,7 +59,6 @@ class DragHandler {
             return;
         }
 
-        console.log("FLOW: mouse move on ", this.element);
         const dx = e.clientX - this.dragStartPosition.x;
         const dy = e.clientY - this.dragStartPosition.y;
 
@@ -70,7 +68,7 @@ class DragHandler {
 
     onRelease(e) {
         if (e.button === this.MOUSE_RIGHT_CLICK) {
-            console.log("FLOW: Ignoreing right click on", this.element);
+            console.debug("FLOW: Ignoreing right click on", this.element);
             return
         }
 
@@ -79,7 +77,6 @@ class DragHandler {
         this.element.style.cursor = "grab";
         document.removeEventListener("mousemove", this.onMove.bind(this));
         document.removeEventListener("mouseup", this.onRelease.bind(this));
-        console.log("FLOW: mouseup on ", this.element);
     }
 
     static register(element, onMoveHandler) {
@@ -218,10 +215,6 @@ class Flow extends EmitterComponent {
 
         nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
 
-        // nodeEl.onmousedown = (e) => this.onNodeMouseDown(e, node.id);
-        // nodeEl.onmousemove = (e) => this.onNodeMouseMove(e, node.id);
-        // nodeEl.onmouseup = (e) => this.onNodeMouseUp(e, node.id);
-
         const hl = new DragHandler(nodeEl,
             this.redrawNodeWithXY.bind(this, node.id),
             { x: this.nodes[node.id].x, y: this.nodes[node.id].y }
@@ -282,7 +275,6 @@ class Flow extends EmitterComponent {
         // Select node styling
         // de-select all other nodes except the current one
         this.nodes[id].el.style.cursor = "grabbing";
-        console.log(this.nodes[id].el.classList);
     }
 
     onNodeMouseMove(e, id) {
@@ -353,8 +345,15 @@ class Flow extends EmitterComponent {
     }
 
     redrawNodeWithXY(id, x, y) {
+        this.nodes[id].x = x;
+        this.nodes[id].y = y;
         this.nodes[id].el.style.transform = `translate(${x}px, ${y}px)`;
-        // this.updateConnections(node.id); // Re-draw lines connected to this node
+
+        // REMOVED: this.nodes[id].portOffsets = {}; 
+        // We do NOT want to clear cache during drag, as it causes layout thrashing.
+
+        // Directly update connections without waiting for observer
+        this.updateConnections(id);
     }
 
     addConnection(outNodeId, outPort, inNodeId, inPort) {
@@ -375,7 +374,9 @@ class Flow extends EmitterComponent {
         // This is important to ensure that the connection is created after the node is rendered 
         // when it is added programmatically, not from the drawing
         const node = this.canvasEl.querySelector(`#node-${outId}`);
-        Utility.observe(node, () => this.createConnectionPath(connection));
+        Utility.observe(node, () => {
+            this.createConnectionPath(connection);
+        });
     }
 
     createConnectionPath(conn) {
@@ -399,26 +400,34 @@ class Flow extends EmitterComponent {
 
     getPortPosition(nodeId, type, index) {
         const node = this.nodes[nodeId];
-        const nodeEl = this.canvasEl.querySelector(`#node-${nodeId}`);
+        if (!node || !node.el) return { x: 0, y: 0 };
 
-        if (!node || !nodeEl) return { x: 0, y: 0 };
-
-        const portEl = nodeEl.querySelector(`.flow-port[data-type="${type}"][data-index="${index}"]`);
+        const portEl = node.el.querySelector(`.flow-port[data-type="${type}"][data-index="${index}"]`);
         if (!portEl) return { x: node.x, y: node.y };
 
-        // Temporarily need rects to calculate static offset
-        let portRect = portEl.getBoundingClientRect();
-        let nodeRect = nodeEl.getBoundingClientRect();
+        // Cache port offset calculations to avoid expensive DOM measurements
+        const cacheKey = `${type}-${index}`;
+        if (!node.portOffsets) {
+            node.portOffsets = {};
+        }
 
-        // The offset of the port center RELATIVE to the node top-left (unscaled by zoom)
-        // We need to divide by zoom here because getBoundingClientRect includes the zoom transform
-        const offsetX = (portRect.left - nodeRect.left + portRect.width / 2) / this.zoom;
-        const offsetY = (portRect.top - nodeRect.top + portRect.height / 2) / this.zoom;
+        if (!node.portOffsets[cacheKey]) {
+            const portRect = portEl.getBoundingClientRect();
+            const nodeRect = node.el.getBoundingClientRect();
 
-        // Return purely logic-based position: Node current X/Y + Static Offset
+            // Cache the offset relative to the node
+            // IMPORTANT: Divide by zoom to get the logical offset in the transform coordinate space
+            node.portOffsets[cacheKey] = {
+                x: (portRect.left - nodeRect.left + portRect.width / 2) / this.zoom,
+                y: (portRect.top - nodeRect.top + portRect.height / 2) / this.zoom
+            };
+        }
+
+        // Return cached offset + current node position
+        const offset = node.portOffsets[cacheKey];
         return {
-            x: node.x + offsetX,
-            y: node.y + offsetY
+            x: node.x + offset.x,
+            y: node.y + offset.y
         };
     }
 
@@ -428,6 +437,23 @@ class Flow extends EmitterComponent {
         const hx2 = x2 - Math.abs(x2 - x1) * curvature;
 
         return `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2} ${y2}`;
+    }
+
+    updateConnections(nodeId) {
+        const id = parseInt(nodeId);
+        const relevant = this.connections.filter(c => c.outNodeId === id || c.inNodeId === id);
+
+        relevant.forEach(conn => {
+            const path = this.svgEl.querySelector(`path[data-id="${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}"]`);
+            if (path) {
+                const p1 = this.getPortPosition(conn.outNodeId, "output", conn.outPort);
+                const p2 = this.getPortPosition(conn.inNodeId, "input", conn.inPort);
+                const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
+                path.setAttribute("d", d);
+            } else {
+                this.createConnectionPath(conn);
+            }
+        });
     }
 }
 
