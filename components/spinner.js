@@ -22,8 +22,8 @@ class Spinner extends EmitterComponent {
     this.spinnerColor = options.spinnerColor || "text-secondary";
     this.enabledCancel = options.enabledCancel || false;
     this.spinnerType = options.spinnerType || "border";
-    this.cancelId = `${this.containerId}-${this.id}-cancel`;
-    this.spinnerTextId = `${this.id}-spinner-text`;
+    this.cancelId = `uiframe-${this.containerId}-${this.id}-cancel`;
+    this.spinnerTextId = `uiframe-${this.id}-spinner-text`;
     this.cancelEventId = `spinner:${this.containerId}:${this.id}:cancel`;
     this.loadingText = options.loadingText || "Loading";
 
@@ -49,20 +49,26 @@ class Spinner extends EmitterComponent {
 
     if (this.loadingText) {
       progressHTML = `<span id="${this.spinnerTextId}" 
-                                class="text-white mt-3"
-                                style="min-width: 100px">${this.loadingText}</span>`;
+                          class="uiframe-spinner-text mt-2"
+                          style="min-width: 100px">
+                          ${this.loadingText}
+                      </span>`;
     }
     if (this.enabledCancel) {
-      cancelHTML = `<button class="btn btn-sm btn-outline-secondary" id="${this.cancelId}">Cancel</button>`;
+      cancelHTML = `<button id="${this.cancelId}"
+                        class="uiframe-spinner-cancel-button btn btn-sm btn-outline-secondary">
+                      Cancel
+                    </button>`;
     }
 
     return `
             <div id="${this.id}-container"
+                class="uiframe-spinner-container"
                 style="position: absolute; pointer-events: visible !important; width: 100%">
                     <div id="${this.id}-spinner"                         
-                        class="d-flex flex-column align-items-center justify-content-center">
+                        class="uiframe-spinner d-flex flex-column align-items-center justify-content-center">
                     <div class="${spinnerType} ${this.spinnerColor}" 
-                        style="position: relative; left: -10px !important;"
+                        style="position: relative;"
                         role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
