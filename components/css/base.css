@@ -161,119 +161,113 @@
 
 /* START: FLOW COMPONENT */
 /* Flow Container - The stage */
-/* Flow Component - functional essentials */
-
 /* Container must handle overflow and cursor */
-.flow-container {
+.uiframe-flow-container {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
     user-select: none;
     cursor: grab;
-}
 
-.flow-container:active {
-    cursor: grabbing;
-}
+    &:active {
+        cursor: grabbing;
+    }
 
-/* Canvas transforms for pan/zoom */
-.flow-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform-origin: 0 0;
-}
+    /* Canvas transforms for pan/zoom */
+    .flow-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform-origin: 0 0;
 
-/* SVG layer for connections */
-.flow-connections {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    z-index: 0;
-    pointer-events: none;
-}
+        /* Nodes - absolute positioning required */
+        .flow-node {
+            position: absolute;
+            display: flex;
+            z-index: 1;
+            cursor: grab;
 
-/* Connection paths */
-.flow-connection-path {
-    fill: none;
-    stroke: var(--bs-secondary);
-    stroke-width: 3px;
-    stroke-linecap: round;
-    pointer-events: stroke;
-}
+            &:active {
+                cursor: grabbing;
+            }
 
-.flow-connection-path:hover {
-    stroke: var(--bs-primary);
-    stroke-width: 4px;
-    cursor: pointer;
-}
+            &.selected {
+                z-index: 10;
+            }
 
-.flow-connection-path.selected {
-    stroke: var(--bs-primary);
-}
+            .flow-node-content {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
 
-/* Nodes - absolute positioning required */
-.flow-node {
-    position: absolute;
-    display: flex;
-    z-index: 1;
-    cursor: grab;
-}
+                .flow-node-header {
+                    cursor: grab;
+                }
+            }
 
-.flow-node:active {
-    cursor: grabbing;
-}
+            /* Ports - functional layout */
+            .flow-ports-column {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 0;
+                position: relative;
+                z-index: 2;
+                overflow: visible;
 
-.flow-node.selected {
-    box-shadow: 0 0 0 2px var(--bs-body-bg), 0 0 0 4px var(--bs-primary);
-    z-index: 10;
-}
+                .flow-port {
+                    width: 10px;
+                    height: 10px;
+                    background: var(--bs-body-bg);
+                    border-radius: 50%;
+                    margin: 8px 0;
+                    z-index: 2;
+                    cursor: crosshair;
+                    position: relative;
+                }
 
-.flow-node-content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
+                .flow-port:hover {
+                    transform: scale(1.5);
+                }
+            }
+        }
+    }
 
-.flow-node-header {
-    cursor: grab;
-}
+    /* SVG layer for connections */
+    .flow-connections {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        z-index: 0;
+        pointer-events: none;
 
-/* Ports - functional layout */
-.flow-ports-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 0;
-    position: relative;
-    z-index: 2;
-    overflow: visible;
-}
+        /* Connection paths */
+        .flow-connection-path {
+            fill: none;
+            stroke: var(--bs-secondary);
+            stroke-width: 3px;
+            stroke-linecap: round;
+            pointer-events: stroke;
 
-.flow-port {
-    width: 10px;
-    height: 10px;
-    background: var(--bs-body-bg);
-    border: 1px solid var(--bs-secondary);
-    border-radius: 50%;
-    margin: 8px 0;
-    z-index: 2;
-    cursor: crosshair;
-    position: relative;
-}
+            &:hover {
+                stroke: var(--bs-primary);
+                stroke-width: 4px;
+                cursor: pointer;
+            }
 
-.flow-port:hover {
-    background: var(--bs-primary);
-    border-color: var(--bs-primary);
-    transform: scale(1.3);
+            &.selected {
+                stroke: var(--bs-primary);
+            }
+        }
+    }
 }
 
 /* END: FLOW COMPONENT */

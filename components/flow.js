@@ -148,7 +148,7 @@ class Flow extends EmitterComponent {
    */
   html() {
     return `
-            <div id="${this.id}-flow-container" class="flow-container">
+            <div id="${this.id}-flow-container" class="uiframe-flow-container">
                 <div id="${this.id}-canvas" 
                     class="flow-canvas" 
                     style="transform: translate(${this.canvasX}px, ${this.canvasY}px) scale(${this.zoom})">
