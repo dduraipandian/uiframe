@@ -1,41 +1,37 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tab — Minimal Docs</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" type="text/css" href="../components/css/__app_root.css" />
-    <link rel="stylesheet" type="text/css" href="../components/css/__base.css" />
-    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
-    <link rel="stylesheet" type="text/css" href="../components/css/tab.css" />
-  </head>
 
-  <body class="p-3" style="overflow: auto">
-    <div class="container page">
-      <div class="header mb-3">
-        <h1 class="mb-0">Tab</h1>
-        <span class="subtitle">Simple, configurable tabs</span>
-      </div>
-      <p class="text-muted mb-3">Create tabbed views with a minimal API.</p>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tab — Minimal Docs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="../components/css/uiframe.base.css" />
+  <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+  <link rel="stylesheet" type="text/css" href="../components/css/tab.css" />
+</head>
 
-      <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;script type="module"&gt;
+<body class="p-3" style="overflow: auto">
+  <div class="container page">
+    <div class="header mb-3">
+      <h1 class="mb-0">Tab</h1>
+      <span class="subtitle">Simple, configurable tabs</span>
+    </div>
+    <p class="text-muted mb-3">Create tabbed views with a minimal API.</p>
+
+    <div class="card">
+      <div class="section-title">Install & Import</div>
+      <p class="mb-2">Use as an ES module.</p>
+      <pre><code>&lt;script type="module"&gt;
 import Tab from './components/tab.js';
 &lt;/script&gt;
       </code></pre>
-      </div>
+    </div>
 
-      <div class="card">
-        <div class="section-title">Quick Start</div>
-        <pre><code>const tab = new Tab({ 
+    <div class="card">
+      <div class="section-title">Quick Start</div>
+      <pre><code>const tab = new Tab({ 
   name: 'my-tabs',
   options: {
     activeTab: 'home' 
@@ -45,52 +41,51 @@ tab.renderInto('container-id');
 tab.addTab({ id: 'home', title: 'Home', content: 'Home Content' });
 tab.addTab({ id: 'profile', title: 'Profile', content: 'Profile Content' });
       </code></pre>
-      </div>
-
-      <div class="card">
-        <div class="section-title">Options</div>
-        <ul class="list-compact">
-          <li><strong>tabs</strong>: Initial array of tab objects (optional).</li>
-          <li><strong>activeTab</strong>: ID of the tab to show initially.</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <div class="section-title">API</div>
-        <ul class="list-compact">
-          <li><code>renderInto(id)</code>: Renders the tab layout into the target container.</li>
-          <li>
-            <code>addTab(tab)</code>: Adds a new tab. Expects <code>{ id, title, content }</code>.
-            Content can be a string, HTMLElement, or Component instance.
-          </li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <div class="section-title">Events</div>
-        <p class="mb-2">
-          This component currently relies on native Bootstrap tab events on the DOM elements.
-        </p>
-      </div>
-
-      <h2 class="mt-4">Live Demo</h2>
-      <div class="card">
-        <div id="tab-demo" class="demo-box"></div>
-      </div>
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-      crossorigin="anonymous"
-    ></script>
-    <script type="module">
-      import Tab from "../components/tab.js";
-      const tab = new Tab({ name: "Demo Tabs" });
-      tab.renderInto("tab-demo");
-      tab.addTab({ id: "home", title: "Home", content: "Welcome to the Home tab!" });
-      tab.addTab({ id: "profile", title: "Profile", content: "This is your profile tab." });
-      tab.addTab({ id: "settings", title: "Settings", content: "Adjust your settings here." });
-    </script>
-  </body>
+    <div class="card">
+      <div class="section-title">Options</div>
+      <ul class="list-compact">
+        <li><strong>tabs</strong>: Initial array of tab objects (optional).</li>
+        <li><strong>activeTab</strong>: ID of the tab to show initially.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="section-title">API</div>
+      <ul class="list-compact">
+        <li><code>renderInto(id)</code>: Renders the tab layout into the target container.</li>
+        <li>
+          <code>addTab(tab)</code>: Adds a new tab. Expects <code>{ id, title, content }</code>.
+          Content can be a string, HTMLElement, or Component instance.
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Events</div>
+      <p class="mb-2">
+        This component currently relies on native Bootstrap tab events on the DOM elements.
+      </p>
+    </div>
+
+    <h2 class="mt-4">Live Demo</h2>
+    <div class="card">
+      <div id="tab-demo" class="demo-box"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script type="module">
+    import Tab from "../components/tab.js";
+    const tab = new Tab({ name: "Demo Tabs" });
+    tab.renderInto("tab-demo");
+    tab.addTab({ id: "home", title: "Home", content: "Welcome to the Home tab!" });
+    tab.addTab({ id: "profile", title: "Profile", content: "This is your profile tab." });
+    tab.addTab({ id: "settings", title: "Settings", content: "Adjust your settings here." });
+  </script>
+</body>
+
 </html>

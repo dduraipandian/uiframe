@@ -1,0 +1,279 @@
+/* START: Utility classes for components */
+.pointer {
+    cursor: pointer;
+}
+
+.clickable {
+    cursor: pointer;
+
+    &:hover {
+        filter: brightness(120%);
+    }
+}
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--input-border-color) var(--input-background-color);
+    /* scrollbar-gutter: stable; or stable both-edges */
+
+    &::-webkit-scrollbar {
+        width: 0.125em !important;
+    }
+}
+
+.disabled {
+    pointer-events: none !important;
+    /* opacity: 0.7 !important; */
+    filter: brightness(60%);
+}
+
+.hide {
+    opacity: 0;
+}
+
+.show {
+    opacity: 100 !important;
+}
+
+.hover-light:hover {
+    filter: brightness(120%);
+}
+
+/* END: Utility classes for components */
+
+
+/* START: SPLIT COMPONENT */
+
+/* full-height container */
+.split-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.split-pane {
+    min-height: 130px;
+    /* minimum height to avoid collapsing */
+}
+
+/* visual divider / drag handle */
+.split-divider {
+    height: 1px;
+    background-color: var(--split-divider-color) !important;
+    z-index: 10000;
+
+    .split-divider-icon {
+        margin-top: -22px;
+        cursor: row-resize;
+        filter: brightness(0.5);
+    }
+}
+
+/* during drag reduce selection */
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+/* END: SPLIT COMPONENT */
+
+/* START: TAP COMPONENT */
+
+.frame-tab {
+    .nav-link {
+        color: var(--dropdown-background-color);
+    }
+}
+
+/* END: TAP COMPONENT */
+
+/* START: TABLE COMPONENT */
+.bt-table-container {
+    .table-col-wrapper {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .json-nested-object {
+        max-width: 300px;
+        overflow: hidden;
+    }
+
+    tbody tr:hover {
+        cursor: pointer;
+    }
+
+    .table-identifier-link {
+        text-decoration: none;
+
+        &:hover {
+            filter: brightness(120%);
+        }
+    }
+}
+
+/* END: TABLE COMPONENT */
+
+/* START: TREE COMPONENT */
+.tree {
+    .btn-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35em;
+        width: 100%;
+        background-color: transparent;
+        border: none;
+    }
+
+    .btn-toggle::before {
+        content: "";
+        display: inline-block;
+        width: 1.25em;
+        height: 1.25em;
+        background: currentColor;
+        font-size: 0.65em;
+        -webkit-mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e") no-repeat center / contain;
+        mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e") no-repeat center / contain;
+        transition: transform 0.35s ease;
+        transform-origin: center;
+    }
+
+    .btn-toggle[aria-expanded="true"]::before {
+        transform: rotate(90deg);
+    }
+
+    .span-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25em;
+    }
+
+    .span-icon svg {
+        width: 1em;
+        height: 1em;
+    }
+}
+
+/* END: TREE COMPONENT */
+
+/* START: FLOW COMPONENT */
+/* Flow Container - The stage */
+/* Flow Component - functional essentials */
+
+/* Container must handle overflow and cursor */
+.flow-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    user-select: none;
+    cursor: grab;
+}
+
+.flow-container:active {
+    cursor: grabbing;
+}
+
+/* Canvas transforms for pan/zoom */
+.flow-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: 0 0;
+}
+
+/* SVG layer for connections */
+.flow-connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Connection paths */
+.flow-connection-path {
+    fill: none;
+    stroke: var(--bs-secondary);
+    stroke-width: 3px;
+    stroke-linecap: round;
+    pointer-events: stroke;
+}
+
+.flow-connection-path:hover {
+    stroke: var(--bs-primary);
+    stroke-width: 4px;
+    cursor: pointer;
+}
+
+.flow-connection-path.selected {
+    stroke: var(--bs-primary);
+}
+
+/* Nodes - absolute positioning required */
+.flow-node {
+    position: absolute;
+    display: flex;
+    z-index: 1;
+    cursor: grab;
+}
+
+.flow-node:active {
+    cursor: grabbing;
+}
+
+.flow-node.selected {
+    box-shadow: 0 0 0 2px var(--bs-body-bg), 0 0 0 4px var(--bs-primary);
+    z-index: 10;
+}
+
+.flow-node-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.flow-node-header {
+    cursor: grab;
+}
+
+/* Ports - functional layout */
+.flow-ports-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 0;
+    position: relative;
+    z-index: 2;
+    overflow: visible;
+}
+
+.flow-port {
+    width: 10px;
+    height: 10px;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-secondary);
+    border-radius: 50%;
+    margin: 8px 0;
+    z-index: 2;
+    cursor: crosshair;
+    position: relative;
+}
+
+.flow-port:hover {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    transform: scale(1.3);
+}
+
+/* END: FLOW COMPONENT */

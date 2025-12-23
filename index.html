@@ -1,315 +1,267 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>UI Frame Docs</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
-    <link rel="stylesheet" type="text/css" href="./components/css/__app_root.css" />
-    <link rel="stylesheet" type="text/css" href="./components/css/__base.css" />
-    <link rel="stylesheet" type="text/css" href="./components/css/doc.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --navbar-height: 60px;
-      }
 
-      body {
-        padding-top: var(--navbar-height);
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UI Frame Docs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" type="text/css" href="./components/css/__base.css" />
+  <link rel="stylesheet" type="text/css" href="./components/css/doc.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navbar-height: 60px;
+    }
 
-      .navbar {
-        height: var(--navbar-height);
-        border-bottom: 1px solid var(--border-color);
-        z-index: 1030;
-      }
+    body {
+      padding-top: var(--navbar-height);
+    }
 
-      .navbar-brand {
-        font-weight: 700;
-        letter-spacing: -0.5px;
-      }
+    .navbar {
+      height: var(--navbar-height);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1030;
+    }
 
-      .search-container {
-        padding: 1rem;
-        border-bottom: 1px solid var(--border-color);
-      }
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
 
-      .component-link {
-        padding: 0.6rem 1.25rem;
-        font-size: 0.95rem;
-        color: var(--text-main);
-        text-decoration: none;
-        display: block;
-        transition:
-          background-color 0.2s,
-          color 0.2s;
-      }
+    .search-container {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
 
-      .component-link:hover {
-        background-color: #e9ecef;
-        color: var(--primary-color);
-      }
+    .component-link {
+      padding: 0.6rem 1.25rem;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      text-decoration: none;
+      display: block;
+      transition:
+        background-color 0.2s,
+        color 0.2s;
+    }
 
-      .component-link.active {
-        background-color: #e7f1ff;
-        color: var(--primary-color);
-        font-weight: 600;
-        border-right: 3px solid var(--primary-color);
-      }
+    .component-link:hover {
+      background-color: #e9ecef;
+      color: var(--primary-color);
+    }
 
-      .main-content {
-        height: calc(100vh - var(--navbar-height));
-        overflow: hidden;
-      }
+    .component-link.active {
+      background-color: #e7f1ff;
+      color: var(--primary-color);
+      font-weight: 600;
+      border-right: 3px solid var(--primary-color);
+    }
 
-      .content-pane {
-        height: 100%;
-        overflow-y: hidden;
-      }
+    .main-content {
+      height: calc(100vh - var(--navbar-height));
+      overflow: hidden;
+    }
 
-      iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-      }
+    .content-pane {
+      height: 100%;
+      overflow-y: hidden;
+    }
 
-      .home-hero {
-        padding: 4rem 2rem;
-        text-align: center;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 12px;
-        margin-bottom: 2rem;
-      }
-    </style>
-  </head>
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
-  <body>
-    <header>
-      <nav class="navbar navbar-expand-md navbar-light bg-white fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand d-flex align-items-center" href="#">
-            <i class="bi bi-box-seam-fill me-2 text-primary"></i>
-            UI Frame
-          </a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarCollapse"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ms-auto mb-2 mb-md-0">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">Documentation</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="https://github.com/digitul-labs/uiframe"
-                  ><i class="bi bi-github"></i> GitHub</a
-                >
-              </li>
-            </ul>
+    .home-hero {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-md navbar-light bg-white fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <i class="bi bi-box-seam-fill me-2 text-primary"></i>
+          UI Frame
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Documentation</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/digitul-labs/uiframe"><i class="bi bi-github"></i> GitHub</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <aside class="col-md-3 col-lg-2 px-0 sidebar-sticky">
+        <div class="search-container">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" id="component-search" class="form-control border-start-0 ps-0"
+              placeholder="Filter components..." />
           </div>
         </div>
-      </nav>
-    </header>
+        <div class="list-group list-group-flush" id="list-tab" role="tablist">
+          <a class="component-link active" id="home-component-tab" data-bs-toggle="list" href="#home-component"
+            role="tab" aria-controls="home-component">
+            <i class="bi bi-house-door me-2"></i> Home
+          </a>
+          <!-- Dynamic components will be inserted here -->
+        </div>
+      </aside>
 
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Sidebar -->
-        <aside class="col-md-3 col-lg-2 px-0 sidebar-sticky">
-          <div class="search-container">
-            <div class="input-group input-group-sm">
-              <span class="input-group-text bg-white border-end-0"
-                ><i class="bi bi-search text-muted"></i
-              ></span>
-              <input
-                type="text"
-                id="component-search"
-                class="form-control border-start-0 ps-0"
-                placeholder="Filter components..."
-              />
-            </div>
-          </div>
-          <div class="list-group list-group-flush" id="list-tab" role="tablist">
-            <a
-              class="component-link active"
-              id="home-component-tab"
-              data-bs-toggle="list"
-              href="#home-component"
-              role="tab"
-              aria-controls="home-component"
-            >
-              <i class="bi bi-house-door me-2"></i> Home
-            </a>
-            <!-- Dynamic components will be inserted here -->
-          </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="col-md-9 col-lg-10 px-0 main-content">
-          <div class="tab-content h-100" id="nav-tabContent">
-            <div
-              class="tab-pane fade show active h-100 content-pane"
-              id="home-component"
-              role="tabpanel"
-              aria-labelledby="home-component-tab"
-            >
-              <div class="container py-5 px-4">
-                <div class="home-hero">
-                  <h1 class="display-4 fw-bold">UI Frame</h1>
-                  <p class="lead text-muted">
-                    A collection of lightweight, opinionated composable UI components built on
-                    Bootstrap 5.
-                  </p>
-                  <div class="mt-4">
-                    <a
-                      href="#"
-                      class="btn btn-primary btn-lg px-4 me-md-2"
-                      onclick="document.querySelector('.component-link:nth-child(2)').click()"
-                      >Get Started</a
-                    >
-                    <a
-                      href="https://github.com/digitul-labs/uiframe"
-                      class="btn btn-outline-secondary btn-lg px-4"
-                      >GitHub</a
-                    >
-                  </div>
+      <!-- Main Content -->
+      <main class="col-md-9 col-lg-10 px-0 main-content">
+        <div class="tab-content h-100" id="nav-tabContent">
+          <div class="tab-pane fade show active h-100 content-pane" id="home-component" role="tabpanel"
+            aria-labelledby="home-component-tab">
+            <div class="container py-5 px-4">
+              <div class="home-hero">
+                <h1 class="display-4 fw-bold">UI Frame</h1>
+                <p class="lead text-muted">
+                  A collection of lightweight, opinionated composable UI components built on
+                  Bootstrap 5.
+                </p>
+                <div class="mt-4">
+                  <a href="#" class="btn btn-primary btn-lg px-4 me-md-2"
+                    onclick="document.querySelector('.component-link:nth-child(2)').click()">Get Started</a>
+                  <a href="https://github.com/digitul-labs/uiframe"
+                    class="btn btn-outline-secondary btn-lg px-4">GitHub</a>
                 </div>
+              </div>
 
-                <div class="row g-4 mt-2">
-                  <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                      <div class="card-body text-center p-4">
-                        <div
-                          class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto"
-                          style="
+              <div class="row g-4 mt-2">
+                <div class="col-md-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                      <div class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto" style="
                             width: 3rem;
                             height: 3rem;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                          "
-                        >
-                          <i class="bi bi-lightning-fill"></i>
-                        </div>
-                        <h3 class="h5 fw-bold">Fast & Lightweight</h3>
-                        <p class="text-muted small">
-                          Optimized components designed for performance and minimal footprint.
-                        </p>
+                          ">
+                        <i class="bi bi-lightning-fill"></i>
                       </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                      <div class="card-body text-center p-4">
-                        <div
-                          class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3 mx-auto"
-                          style="
-                            width: 3rem;
-                            height: 3rem;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          <i class="bi bi-bootstrap-fill"></i>
-                        </div>
-                        <h3 class="h5 fw-bold">Bootstrap Compatible</h3>
-                        <p class="text-muted small">
-                          Built on top of Bootstrap 5, making integration seamless for developers.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                      <div class="card-body text-center p-4">
-                        <div
-                          class="feature-icon bg-info bg-gradient text-white rounded-3 mb-3 mx-auto"
-                          style="
-                            width: 3rem;
-                            height: 3rem;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          <i class="bi bi-puzzle-fill"></i>
-                        </div>
-                        <h3 class="h5 fw-bold">Extensible</h3>
-                        <p class="text-muted small">
-                          Easily customize and extend components to fit your specific needs.
-                        </p>
-                      </div>
+                      <h3 class="h5 fw-bold">Fast & Lightweight</h3>
+                      <p class="text-muted small">
+                        Optimized components designed for performance and minimal footprint.
+                      </p>
                     </div>
                   </div>
                 </div>
-
-                <div class="mt-5">
-                  <h2 class="fw-bold mb-4">Available Components</h2>
-                  <div class="row row-cols-1 row-cols-md-2 g-3" id="navigation-to-component">
-                    <!-- Dynamic component summaries will be inserted here -->
+                <div class="col-md-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                      <div class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3 mx-auto" style="
+                            width: 3rem;
+                            height: 3rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          ">
+                        <i class="bi bi-bootstrap-fill"></i>
+                      </div>
+                      <h3 class="h5 fw-bold">Bootstrap Compatible</h3>
+                      <p class="text-muted small">
+                        Built on top of Bootstrap 5, making integration seamless for developers.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                      <div class="feature-icon bg-info bg-gradient text-white rounded-3 mb-3 mx-auto" style="
+                            width: 3rem;
+                            height: 3rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          ">
+                        <i class="bi bi-puzzle-fill"></i>
+                      </div>
+                      <h3 class="h5 fw-bold">Extensible</h3>
+                      <p class="text-muted small">
+                        Easily customize and extend components to fit your specific needs.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <div class="mt-5">
+                <h2 class="fw-bold mb-4">Available Components</h2>
+                <div class="row row-cols-1 row-cols-md-2 g-3" id="navigation-to-component">
+                  <!-- Dynamic component summaries will be inserted here -->
+                </div>
+              </div>
             </div>
-            <!-- Dynamic tab panes will be inserted here -->
           </div>
-        </main>
-      </div>
+          <!-- Dynamic tab panes will be inserted here -->
+        </div>
+      </main>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="module">
-      const components = {
-        spinner: "A minimal, searchable, animated menu.",
-        dropdown: "A configurable loading overlay.",
-        tab: "Simple, configurable tabs.",
-        table: "Data table with sorting and pagination.",
-        split: "Resizable panes layout.",
-        tree: "Interactive folder/tree component.",
-        contextmenu: "Small context menu built on top of Bootstrap dropdown.",
-        online: "Network status indicator with optional toast notifications.",
-      };
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script type="module">
+    const components = {
+      spinner: "A minimal, searchable, animated menu.",
+      dropdown: "A configurable loading overlay.",
+      tab: "Simple, configurable tabs.",
+      table: "Data table with sorting and pagination.",
+      split: "Resizable panes layout.",
+      tree: "Interactive folder/tree component.",
+      contextmenu: "Small context menu built on top of Bootstrap dropdown.",
+      online: "Network status indicator with optional toast notifications.",
+    };
 
-      const componentNames = Object.keys(components).sort();
+    const componentNames = Object.keys(components).sort();
 
-      componentNames.forEach((component) => {
-        let displayName = component.charAt(0).toUpperCase() + component.slice(1);
+    componentNames.forEach((component) => {
+      let displayName = component.charAt(0).toUpperCase() + component.slice(1);
 
-        // Add to Sidebar
-        let lstItem = `<a class="component-link" 
+      // Add to Sidebar
+      let lstItem = `<a class="component-link" 
             id="${component}-component-tab" data-bs-toggle="list"
             href="#${component}-component" 
             role="tab" aria-controls="${component}-component">
             <i class="bi bi-chevron-right small me-2"></i> ${displayName}
           </a>`;
-        document.getElementById("list-tab").innerHTML += lstItem;
+      document.getElementById("list-tab").innerHTML += lstItem;
 
-        // Add to Tab Content
-        let tabItem = `<div class="tab-pane fade h-100 content-pane" id="${component}-component" 
+      // Add to Tab Content
+      let tabItem = `<div class="tab-pane fade h-100 content-pane" id="${component}-component" 
         role="tabpanel" aria-labelledby="${component}-component-tab">
         <iframe src="./templates/${component}.html" frameborder="0"></iframe>
       </div>`;
-        document.getElementById("nav-tabContent").innerHTML += tabItem;
+      document.getElementById("nav-tabContent").innerHTML += tabItem;
 
-        // Add to Home Grid
-        let navToComponent = `
+      // Add to Home Grid
+      let navToComponent = `
         <div class="col">
           <div class="card h-100 border shadow-sm component-card" style="cursor: pointer;" onclick="document.getElementById('${component}-component-tab').click();">
             <div class="card-body">
@@ -318,27 +270,28 @@
             </div>
           </div>
         </div>`;
-        document.getElementById("navigation-to-component").innerHTML += navToComponent;
-      });
+      document.getElementById("navigation-to-component").innerHTML += navToComponent;
+    });
 
-      // Search functionality
-      $("#component-search").on("input", function () {
-        let value = $(this).val().toLowerCase();
-        $(".component-link").filter(function () {
-          if ($(this).attr("id") === "home-component-tab") return false;
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
+    // Search functionality
+    $("#component-search").on("input", function () {
+      let value = $(this).val().toLowerCase();
+      $(".component-link").filter(function () {
+        if ($(this).attr("id") === "home-component-tab") return false;
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
       });
+    });
 
-      // Handle active class for sidebar links
-      $(".component-link").on("click", function () {
-        $(".component-link").removeClass("active");
-        $(this).addClass("active");
+    // Handle active class for sidebar links
+    $(".component-link").on("click", function () {
+      $(".component-link").removeClass("active");
+      $(this).addClass("active");
 
-        // Reset scroll position of the content pane
-        const targetId = $(this).attr("href");
-        $(`${targetId}`).scrollTop(0);
-      });
-    </script>
-  </body>
+      // Reset scroll position of the content pane
+      const targetId = $(this).attr("href");
+      $(`${targetId}`).scrollTop(0);
+    });
+  </script>
+</body>
+
 </html>
