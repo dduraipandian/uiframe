@@ -118,7 +118,7 @@
 /* END: TABLE COMPONENT */
 
 /* START: TREE COMPONENT */
-.tree {
+.uiframe-tree {
     .btn-toggle {
         display: inline-flex;
         align-items: center;

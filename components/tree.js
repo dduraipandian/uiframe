@@ -73,9 +73,9 @@ class Tree extends EmitterComponent {
    */
   html() {
     return `
-            <div class="tree" id="${this.id}-tree">
+            <div class="uiframe-tree" id="${this.id}-tree">
             </div>
-            <div id="contextMenuContainer">
+            <div class="uiframe-tree-cm" id="contextMenuContainer">
             </div>
         `;
   }
@@ -86,7 +86,7 @@ class Tree extends EmitterComponent {
    */
   init() {
     this.element = this.container;
-    this.tree = this.element.querySelector(".tree");
+    this.tree = this.element.querySelector(".uiframe-tree");
     // Initial render: Root has no parent ID, so we pass empty string or unique root prefix
     this.upsert(this.tree, this.objects, "", false, "root");
 
