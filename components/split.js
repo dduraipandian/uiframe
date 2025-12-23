@@ -30,10 +30,10 @@ class SplitPane {
     // ensure elements exist
     this.container = document.getElementById(this.containerID);
 
-    this.splitContainerID = `${this.containerID}-split-container`;
-    this.topContainerID = `${this.containerID}-split-top`;
-    this.bottomContainerID = `${this.containerID}-split-bottom`;
-    this.dividerContainerID = `${this.containerID}-split-divider`; // id of the divider
+    this.splitContainerID = `uiframe-${this.containerID}-split-container`;
+    this.topContainerID = `uiframe-${this.containerID}-split-top`;
+    this.bottomContainerID = `uiframe-${this.containerID}-split-bottom`;
+    this.dividerContainerID = `uiframe-${this.containerID}-split-divider`; // id of the divider
   }
 
   /**
