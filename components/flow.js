@@ -209,9 +209,9 @@ class Flow extends EmitterComponent {
             <div class="flow-ports-column flow-ports-in">
                 ${Array.from({ length: node.inputs }, (_, i) => inputHtml.replace("{{index}}", i)).join("\n")}
             </div>
-            <div class="flow-node-content">
-                <div class="flow-node-header">${node.name}</div>
-                <div class="flow-node-body">${node.html}</div>
+            <div class="flow-node-content card w-100">
+              <div class="card-header">${node.name}</div>
+              <div class="card-body">${node.html}</div>
             </div>
             <div class="flow-ports-column flow-ports-out">
                 ${Array.from({ length: node.outputs }, (_, i) => outputHtml.replace("{{index}}", i)).join("\n")}
