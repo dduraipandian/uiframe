@@ -38,12 +38,12 @@ class Tab extends EmitterComponent {
     const tabHeaders = this.tabs.map((tab) => this.newTabListHtml(tab)).join("");
 
     return `
-            <nav class="frame-tab">
+            <nav class="uiframe-tab">
                 <div class="nav nav-tabs" id="${this.tabListId}" role="tablist">
                     ${tabHeaders}
                 </div>
             </nav>
-            <div class="tab-content" id="${this.tabContentId}" style="height: calc(100% - 40px); overflow: auto;">
+            <div class="uiframe-tab-content" id="${this.tabContentId}" style="height: calc(100% - 40px); overflow: auto;">
                 ${this.tabs.map((tab) => this.newTabContentHtml(tab)).join("")}
             </div>
         `;

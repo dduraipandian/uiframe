@@ -79,15 +79,15 @@
 
 /* END: SPLIT COMPONENT */
 
-/* START: TAP COMPONENT */
+/* START: TAB COMPONENT */
 
-.frame-tab {
+.uiframe-tab {
     .nav-link {
         color: var(--dropdown-background-color);
     }
 }
 
-/* END: TAP COMPONENT */
+/* END: TAB COMPONENT */
 
 /* START: TABLE COMPONENT */
 .bt-table-container {
