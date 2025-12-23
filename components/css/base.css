@@ -90,7 +90,7 @@
 /* END: TAB COMPONENT */
 
 /* START: TABLE COMPONENT */
-.bt-table-container {
+.uiframe-table {
     .table-col-wrapper {
         max-width: 250px;
         overflow: hidden;

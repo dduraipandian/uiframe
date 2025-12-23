@@ -150,8 +150,8 @@ class Table extends EmitterComponent {
 
     return `
             <div id="${this.tableContainerId}" 
-                class="bt-table-container d-flex flex-column" 
-                style="height: 100%; overflow-y: auto; margin: 0;">
+                class="uiframe-table d-flex flex-column"
+                style="height: 100%; margin: 0;">
                 ${toolbarTemplate}
                 <div id="${this.tableId}-body" 
                     class="table-responsive border-top scrollbar"
