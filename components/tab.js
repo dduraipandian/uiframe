@@ -17,8 +17,8 @@ class Tab extends EmitterComponent {
 
     this.options = options;
 
-    this.tabListId = `${this.containerID}-tab-list`;
-    this.tabContentId = `${this.containerID}-tab-content`;
+    this.tabListId = `uiframe-${this.containerID}-tab-list`;
+    this.tabContentId = `uiframe-${this.containerID}-tab-content`;
 
     this.tabs = options.tabs || [];
     this.activeTab = options.activeTab || (this.tabs.length > 0 ? this.tabs[0].id : null);

@@ -83,7 +83,7 @@
 
 .uiframe-tab {
     .nav-link {
-        color: var(--dropdown-background-color);
+        color: var(--bs-secondary);
     }
 }
 
