@@ -13,7 +13,7 @@
 
 .scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: var(--input-border-color) var(--input-background-color);
+    /* scrollbar-color: var(--input-border-color) var(--input-background-color); */
     /* scrollbar-gutter: stable; or stable both-edges */
 
     &::-webkit-scrollbar {
@@ -49,6 +49,37 @@
 /* END: Utility classes for components */
 
 
+/* START: DROPDOWN COMPONENT */
+.dropdown {
+    .dropdown-title {
+        font-size: var(--bs-body-font-size);
+        background-color: var(--bs-secondary-bg);
+        color: var(--bs-secondary-color);
+    }
+
+    .dropdown-menu {
+        padding: 0 !important;
+
+        .dropdown-item {
+            transition: opacity 0.25s ease-in-out;
+            -moz-transition: opacity 0.25s ease-in-out;
+            -webkit-transition: opacity 0.25s ease-in-out;
+
+            .hide {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            .show {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+        }
+    }
+}
+
+/* END: DROPDOWN COMPONENT */
+
 /* START: SPLIT COMPONENT */
 
 /* full-height container */
@@ -66,7 +97,7 @@
     /* visual divider / drag handle */
     .split-divider {
         height: 1px;
-        background-color: var(--split-divider-color) !important;
+        background-color: var(--bs-secondary-color) !important;
         z-index: 10000;
 
         .split-divider-icon {
