@@ -272,5 +272,34 @@ describe("Flow Component", () => {
     const pathId2 = `1:0-2:0`;
     const path2 = flow.svgEl.querySelector(`path[data-id="${pathId2}"]`);
     expect(path2).toBeNull();
-  })
+  });
+
+  test("should cancel connection on ESC keydown while drawing", () => {
+    const flow = new Flow({ name: "TestFlow" });
+    flow.renderInto(container);
+
+    const n1 = flow.addNode({ name: "Out", x: 0, y: 0, outputs: 1 });
+    const n2 = flow.addNode({ name: "In", x: 200, y: 0, inputs: 1 });
+
+    const outPort = container.querySelector(`#node-${n1} .flow-port[data-type="output"]`);
+
+    // Start drag from output port
+    outPort.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+    expect(flow.isConnecting).toBe(true);
+
+    // Move mouse to draw temp connection
+    window.dispatchEvent(new MouseEvent("mousemove", { clientX: 100, clientY: 100 }));
+    expect(container.querySelector(".flow-connection-temp")).not.toBeNull();
+
+    // Press ESC key to cancel
+    window.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 27, bubbles: true }));
+
+    // Verify connection was cancelled
+    expect(flow.isConnecting).toBe(false);
+    expect(container.querySelector(".flow-connection-temp")).toBeNull();
+    expect(flow.connections.length).toBe(0);
+
+    const path = flow.svgEl.querySelector("path");
+    expect(path).toBeNull();
+  });
 });
