@@ -1,38 +1,41 @@
 <!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dropdown — Minimal Docs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dropdown — Minimal Docs</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
-  <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
-  <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
-</head>
+  <body class="p-3" style="overflow: auto">
+    <div class="container page">
+      <div class="header mb-3">
+        <h1 class="mb-0">Dropdown</h1>
+        <span class="subtitle">Minimal, searchable, animated menu</span>
+      </div>
+      <p class="text-muted mb-3">
+        A compact dropdown with optional search, item animations, and event-driven selection.
+      </p>
 
-<body class="p-3" style="overflow: auto">
-  <div class="container page">
-    <div class="header mb-3">
-      <h1 class="mb-0">Dropdown</h1>
-      <span class="subtitle">Minimal, searchable, animated menu</span>
-    </div>
-    <p class="text-muted mb-3">
-      A compact dropdown with optional search, item animations, and event-driven selection.
-    </p>
-
-    <div class="card">
-      <div class="section-title">Install & Import</div>
-      <p class="mb-2">Use as an ES module.</p>
-      <pre><code>&lt;script type="module"&gt;
+      <div class="card">
+        <div class="section-title">Install & Import</div>
+        <p class="mb-2">Use as an ES module.</p>
+        <pre><code>&lt;script type="module"&gt;
 import Dropdown from './components/dropdown.js';
 &lt;/script&gt;
       </code></pre>
-    </div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Quick Start</div>
-      <pre><code>const dd = new Dropdown({
+      <div class="card">
+        <div class="section-title">Quick Start</div>
+        <pre><code>const dd = new Dropdown({
   name: 'my-dropdown',
   options: {
     search: true,
@@ -46,80 +49,80 @@ dd.setDropdownItems([
 ]);
 dd.on('item:click', (item) => console.log('Selected:', item));
       </code></pre>
-    </div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Options</div>
-      <ul class="list-compact">
-        <li>
-          <strong>search</strong>: Enable search input filter (default: <code>false</code>).
-        </li>
-        <li>
-          <strong>maxHeight</strong>: CSS max-height for the item list (default:
-          <code>'15em'</code>).
-        </li>
-      </ul>
-    </div>
+      <div class="card">
+        <div class="section-title">Options</div>
+        <ul class="list-compact">
+          <li>
+            <strong>search</strong>: Enable search input filter (default: <code>false</code>).
+          </li>
+          <li>
+            <strong>maxHeight</strong>: CSS max-height for the item list (default:
+            <code>'15em'</code>).
+          </li>
+        </ul>
+      </div>
 
-    <div class="card">
-      <div class="section-title">API</div>
-      <ul class="list-compact">
-        <li><code>renderInto(id)</code>: Renders the dropdown into the target container.</li>
-        <li>
-          <code>setDropdownItems(items)</code>: Populates the list. Expects array of
-          <code>{ name, value }</code> objects.
-        </li>
-      </ul>
-    </div>
+      <div class="card">
+        <div class="section-title">API</div>
+        <ul class="list-compact">
+          <li><code>renderInto(id)</code>: Renders the dropdown into the target container.</li>
+          <li>
+            <code>setDropdownItems(items)</code>: Populates the list. Expects array of
+            <code>{ name, value }</code> objects.
+          </li>
+        </ul>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Events</div>
-      <ul class="list-compact">
-        <li>
-          <strong>item:click</strong>: Emitted when an item is selected. Callback receives the
-          item object.
-        </li>
-        <li>
-          <strong>init</strong>: Emitted when the dropdown is opened for the first time (useful
-          for lazy loading).
-        </li>
-      </ul>
-      <pre><code>dd.on('item:click', (item) => {
+      <div class="card">
+        <div class="section-title">Events</div>
+        <ul class="list-compact">
+          <li>
+            <strong>item:click</strong>: Emitted when an item is selected. Callback receives the
+            item object.
+          </li>
+          <li>
+            <strong>init</strong>: Emitted when the dropdown is opened for the first time (useful
+            for lazy loading).
+          </li>
+        </ul>
+        <pre><code>dd.on('item:click', (item) => {
     console.log(item.name, item.value);
 });</code></pre>
-    </div>
+      </div>
 
-    <h2 class="mt-4">Live Demos</h2>
+      <h2 class="mt-4">Live Demos</h2>
 
-    <div class="card">
-      <div class="d-flex align-items-center justify-content-between">
-        <div class="section-title mb-0">Basic Dropdown</div>
-        <div class="btn-group d-flex">
-          <button class="btn btn-sm btn-outline-secondary" id="demo1-reset">Reset</button>
+      <div class="card">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="section-title mb-0">Basic Dropdown</div>
+          <div class="btn-group d-flex">
+            <button class="btn btn-sm btn-outline-secondary" id="demo1-reset">Reset</button>
+          </div>
+        </div>
+        <div id="demo1" class="demo-box mt-2">
+          <div id="dropdown-demo" class="mt-2 float-end"></div>
+          <small class="text-muted">Click items to see console logs.</small>
         </div>
       </div>
-      <div id="demo1" class="demo-box mt-2">
-        <div id="dropdown-demo" class="mt-2 float-end"></div>
-        <small class="text-muted">Click items to see console logs.</small>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="d-flex align-items-center justify-content-between">
-        <div class="section-title mb-0">With Search & Long List</div>
-        <div class="btn-group d-flex">
-          <button class="btn btn-sm btn-outline-secondary" id="demo2-reset">Reset</button>
+      <div class="card">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="section-title mb-0">With Search & Long List</div>
+          <div class="btn-group d-flex">
+            <button class="btn btn-sm btn-outline-secondary" id="demo2-reset">Reset</button>
+          </div>
+        </div>
+        <div id="demo2" class="demo-box mt-2">
+          <div id="dropdown-demo-2" class="mt-2 float-end"></div>
+          <small class="text-muted">Type to filter results.</small>
         </div>
       </div>
-      <div id="demo2" class="demo-box mt-2">
-        <div id="dropdown-demo-2" class="mt-2 float-end"></div>
-        <small class="text-muted">Type to filter results.</small>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="section-title">Minimal Example</div>
-      <pre><code>&lt;div id="my-dd"&gt;&lt;/div&gt;
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code>&lt;div id="my-dd"&gt;&lt;/div&gt;
 &lt;script type="module"&gt;
   import Dropdown from './components/dropdown.js';
   const d = new Dropdown({ name: 'Pick', options: { search: false } });
@@ -127,50 +130,51 @@ dd.on('item:click', (item) => console.log('Selected:', item));
   d.setDropdownItems([{ name: 'One', value: 1 }, { name: 'Two', value: 2 }]);
 &lt;/script&gt;
       </code></pre>
+      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
 
-  <script type="module">
-    import Dropdown from "../components/dropdown.js";
+    <script type="module">
+      import Dropdown from "../components/dropdown.js";
 
-    // Demo 1: Basic dropdown
-    const dd1 = new Dropdown({
-      name: "Select Item",
-      options: { search: true, maxHeight: "15em" },
-    });
-    dd1.renderInto("dropdown-demo");
-    dd1.setDropdownItems([
-      { name: "Alpha", value: "A" },
-      { name: "Bravo", value: "B" },
-      { name: "Charlie", value: "C" },
-      { name: "Delta", value: "D" },
-    ]);
-    dd1.on("init", () => console.debug("[Demo1] Init fired (first open)"));
-    dd1.on("item:click", (item) => console.debug("[Demo1] Selected", item));
-    document.getElementById("demo1-reset").addEventListener("click", () => {
+      // Demo 1: Basic dropdown
+      const dd1 = new Dropdown({
+        name: "Select Item",
+        options: { search: true, maxHeight: "15em" },
+      });
+      dd1.renderInto("dropdown-demo");
       dd1.setDropdownItems([
         { name: "Alpha", value: "A" },
         { name: "Bravo", value: "B" },
         { name: "Charlie", value: "C" },
         { name: "Delta", value: "D" },
       ]);
-    });
+      dd1.on("init", () => console.debug("[Demo1] Init fired (first open)"));
+      dd1.on("item:click", (item) => console.debug("[Demo1] Selected", item));
+      document.getElementById("demo1-reset").addEventListener("click", () => {
+        dd1.setDropdownItems([
+          { name: "Alpha", value: "A" },
+          { name: "Bravo", value: "B" },
+          { name: "Charlie", value: "C" },
+          { name: "Delta", value: "D" },
+        ]);
+      });
 
-    // Demo 2: Search + long list
-    const dd2 = new Dropdown({ name: "Choose", options: { search: true, maxHeight: "12em" } });
-    dd2.renderInto("dropdown-demo-2");
-    const items = Array.from({ length: 30 }, (_, i) => ({ name: `Item ${i + 1}`, value: i + 1 }));
-    dd2.setDropdownItems(items);
-    dd2.on("init", () => console.debug("[Demo2] Init fired (first open)"));
-    dd2.on("item:click", (item) => console.debug("[Demo2] Selected", item));
-    document
-      .getElementById("demo2-reset")
-      .addEventListener("click", () => dd2.setDropdownItems(items));
-  </script>
-</body>
-
+      // Demo 2: Search + long list
+      const dd2 = new Dropdown({ name: "Choose", options: { search: true, maxHeight: "12em" } });
+      dd2.renderInto("dropdown-demo-2");
+      const items = Array.from({ length: 30 }, (_, i) => ({ name: `Item ${i + 1}`, value: i + 1 }));
+      dd2.setDropdownItems(items);
+      dd2.on("init", () => console.debug("[Demo2] Init fired (first open)"));
+      dd2.on("item:click", (item) => console.debug("[Demo2] Selected", item));
+      document
+        .getElementById("demo2-reset")
+        .addEventListener("click", () => dd2.setDropdownItems(items));
+    </script>
+  </body>
 </html>

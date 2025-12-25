@@ -1,239 +1,243 @@
 <!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tree — Minimal Docs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tree — Minimal Docs</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+  </head>
 
-  <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
-  <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
-</head>
+  <body class="p-3" style="overflow: auto">
+    <div class="container page">
+      <div class="header mb-3">
+        <h1 class="mb-0">Tree</h1>
+        <span class="subtitle">Interactive folder/tree component with state persistence</span>
+      </div>
+      <p class="text-muted mb-3">
+        Lightweight tree view with lazy-loading hooks, context menu, and
+        <strong>automatic state persistence</strong> across refreshes.
+      </p>
 
-<body class="p-3" style="overflow: auto">
-  <div class="container page">
-    <div class="header mb-3">
-      <h1 class="mb-0">Tree</h1>
-      <span class="subtitle">Interactive folder/tree component with state persistence</span>
-    </div>
-    <p class="text-muted mb-3">
-      Lightweight tree view with lazy-loading hooks, context menu, and
-      <strong>automatic state persistence</strong> across refreshes.
-    </p>
-
-    <div class="card">
-      <div class="section-title">Install & Import</div>
-      <p class="mb-2">Use as an ES module.</p>
-      <pre><code>&lt;script type="module"&gt;
+      <div class="card">
+        <div class="section-title">Install & Import</div>
+        <p class="mb-2">Use as an ES module.</p>
+        <pre><code>&lt;script type="module"&gt;
 import Tree from './components/tree.js';
 &lt;/script&gt;
       </code></pre>
-    </div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Quick Start</div>
-      <pre><code>const sample = [
+      <div class="card">
+        <div class="section-title">Quick Start</div>
+        <pre><code>const sample = [
   { name: 'Root', children: [ { name: 'Child A', children: [] } ] }
 ];
 // IDs are automatically generated based on path (e.g. root-Child A)
 const tree = new Tree({ name: 'my-tree', objects: sample });
 tree.renderInto('my-tree-container');
       </code></pre>
-    </div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Options</div>
-      <ul class="list-compact">
-        <li><strong>objects</strong>: Initial JSON tree array with {name, children} nodes.</li>
-        <li>
-          <strong>data_callback</strong>: Optionally supply a callback to load children lazily.
-        </li>
-        <li><strong>contextData</strong>: Array of context menu items.</li>
-      </ul>
-    </div>
+      <div class="card">
+        <div class="section-title">Options</div>
+        <ul class="list-compact">
+          <li><strong>objects</strong>: Initial JSON tree array with {name, children} nodes.</li>
+          <li>
+            <strong>data_callback</strong>: Optionally supply a callback to load children lazily.
+          </li>
+          <li><strong>contextData</strong>: Array of context menu items.</li>
+        </ul>
+      </div>
 
-    <div class="card">
-      <div class="section-title">API</div>
-      <ul class="list-compact">
-        <li><code>renderInto(id)</code>: Renders the component into a container element.</li>
-        <li><code>update(node, data)</code>: Appends new children to a node.</li>
-        <li><code>refresh(node, data)</code>: Replaces children of a node with new data.</li>
-        <li><code>remove(node)</code>: Removes a node from the tree.</li>
-      </ul>
-    </div>
+      <div class="card">
+        <div class="section-title">API</div>
+        <ul class="list-compact">
+          <li><code>renderInto(id)</code>: Renders the component into a container element.</li>
+          <li><code>update(node, data)</code>: Appends new children to a node.</li>
+          <li><code>refresh(node, data)</code>: Replaces children of a node with new data.</li>
+          <li><code>remove(node)</code>: Removes a node from the tree.</li>
+        </ul>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Features</div>
-      <ul class="list-compact">
-        <li>
-          <strong>State Persistence</strong>: Expanded nodes stay expanded even if you refresh the
-          tree (as long as names/structure remain consistent).
-        </li>
-        <li>
-          <strong>Lazy Loading</strong>: Use <code>data_callback</code> to fetch children on
-          expand.
-        </li>
-        <li><strong>Context Menu</strong>: Built-in configurable context menu.</li>
-      </ul>
-    </div>
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li>
+            <strong>State Persistence</strong>: Expanded nodes stay expanded even if you refresh the
+            tree (as long as names/structure remain consistent).
+          </li>
+          <li>
+            <strong>Lazy Loading</strong>: Use <code>data_callback</code> to fetch children on
+            expand.
+          </li>
+          <li><strong>Context Menu</strong>: Built-in configurable context menu.</li>
+        </ul>
+      </div>
 
-    <h2 class="mt-4">Live Demos</h2>
+      <h2 class="mt-4">Live Demos</h2>
 
-    <div class="card">
-      <div class="d-flex align-items-center justify-content-between">
-        <div class="section-title mb-0">Persistent State & Context Menu</div>
-        <div class="btn-group d-flex">
-          <button class="btn btn-sm btn-primary" id="demo1-show">Render</button>
-          <button class="btn btn-sm btn-outline-warning" id="demo1-refresh">
-            Full Refresh (Test Persistence)
-          </button>
-          <button class="btn btn-sm btn-outline-secondary" id="demo1-clear">Clear</button>
+      <div class="card">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="section-title mb-0">Persistent State & Context Menu</div>
+          <div class="btn-group d-flex">
+            <button class="btn btn-sm btn-primary" id="demo1-show">Render</button>
+            <button class="btn btn-sm btn-outline-warning" id="demo1-refresh">
+              Full Refresh (Test Persistence)
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" id="demo1-clear">Clear</button>
+          </div>
+        </div>
+        <p class="small text-muted mt-2">
+          Expand folders, then click "Full Refresh". The tree will re-render but keep folders open.
+        </p>
+        <div id="demo1" class="demo-box mt-2">
+          <div id="tree-demo1" style="position: relative; min-height: 120px"></div>
         </div>
       </div>
-      <p class="small text-muted mt-2">
-        Expand folders, then click "Full Refresh". The tree will re-render but keep folders open.
-      </p>
-      <div id="demo1" class="demo-box mt-2">
-        <div id="tree-demo1" style="position: relative; min-height: 120px"></div>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="d-flex align-items-center justify-content-between">
-        <div class="section-title mb-0">Lazy-load Example</div>
-        <div class="btn-group d-flex">
-          <button class="btn btn-sm btn-primary" id="demo2-show">Render</button>
-          <button class="btn btn-sm btn-outline-secondary" id="demo2-clear">Clear</button>
+      <div class="card">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="section-title mb-0">Lazy-load Example</div>
+          <div class="btn-group d-flex">
+            <button class="btn btn-sm btn-primary" id="demo2-show">Render</button>
+            <button class="btn btn-sm btn-outline-secondary" id="demo2-clear">Clear</button>
+          </div>
+        </div>
+        <div id="demo2" class="demo-box mt-2">
+          <div id="tree-demo2" style="position: relative; min-height: 120px"></div>
         </div>
       </div>
-      <div id="demo2" class="demo-box mt-2">
-        <div id="tree-demo2" style="position: relative; min-height: 120px"></div>
-      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
 
-  <script type="module">
-    import Tree from "../components/tree.js";
+    <script type="module">
+      import Tree from "../components/tree.js";
 
-    const sampleStatic = [
-      {
-        name: "Root A",
-        children: [
-          { name: "Child A1", children: [] },
-          { name: "Child A2", children: [] },
-        ],
-      },
-      {
-        name: "Root B",
-        children: [{ name: "Child B1", children: [] }],
-      },
-    ];
-    function addMoreData() {
-      return [
-        { name: "Root C", children: [] },
-        { name: "Root D", children: [] },
-      ];
-    }
-
-    function refreshData() {
-      return [
-        { name: "Root F", children: [] },
-        { name: "Root G", children: [] },
-      ];
-    }
-
-    // Demo 1: static tree with state persistence
-    let t1 = null;
-
-    function renderT1() {
-      const contextData = [
+      const sampleStatic = [
         {
-          name: "Add Nodes",
-          value: "update-node",
-          callback: (context, node) => {
-            const data = addMoreData();
-            context.update(node, data);
-          },
+          name: "Root A",
+          children: [
+            { name: "Child A1", children: [] },
+            { name: "Child A2", children: [] },
+          ],
         },
         {
-          name: "Refresh Node",
-          value: "refresh-node",
-          callback: (context, node) => {
-            const data = refreshData();
-            context.refresh(node, data);
-          },
-        },
-        {
-          name: "Remove",
-          value: "remove-node",
-          callback: (context, node) => {
-            context.remove(node);
-          },
+          name: "Root B",
+          children: [{ name: "Child B1", children: [] }],
         },
       ];
-
-      // Always create a new instance to test persistence across purely fresh renders
-      if (t1) {
-        document.getElementById("tree-demo1").innerHTML = "";
+      function addMoreData() {
+        return [
+          { name: "Root C", children: [] },
+          { name: "Root D", children: [] },
+        ];
       }
 
-      // We use the same object structure so IDs match
-      t1 = new Tree({
-        name: "demo-tree-1",
-        objects: JSON.parse(JSON.stringify(sampleStatic)),
-        options: { contextData: contextData },
+      function refreshData() {
+        return [
+          { name: "Root F", children: [] },
+          { name: "Root G", children: [] },
+        ];
+      }
+
+      // Demo 1: static tree with state persistence
+      let t1 = null;
+
+      function renderT1() {
+        const contextData = [
+          {
+            name: "Add Nodes",
+            value: "update-node",
+            callback: (context, node) => {
+              const data = addMoreData();
+              context.update(node, data);
+            },
+          },
+          {
+            name: "Refresh Node",
+            value: "refresh-node",
+            callback: (context, node) => {
+              const data = refreshData();
+              context.refresh(node, data);
+            },
+          },
+          {
+            name: "Remove",
+            value: "remove-node",
+            callback: (context, node) => {
+              context.remove(node);
+            },
+          },
+        ];
+
+        // Always create a new instance to test persistence across purely fresh renders
+        if (t1) {
+          document.getElementById("tree-demo1").innerHTML = "";
+        }
+
+        // We use the same object structure so IDs match
+        t1 = new Tree({
+          name: "demo-tree-1",
+          objects: JSON.parse(JSON.stringify(sampleStatic)),
+          options: { contextData: contextData },
+        });
+        t1.renderInto("tree-demo1");
+      }
+
+      document.getElementById("demo1-show").addEventListener("click", () => {
+        renderT1();
       });
-      t1.renderInto("tree-demo1");
-    }
 
-    document.getElementById("demo1-show").addEventListener("click", () => {
-      renderT1();
-    });
-
-    document.getElementById("demo1-refresh").addEventListener("click", () => {
-      // Simulates a full reload of the component
-      console.log("Refreshing tree demonstration");
-      renderT1();
-    });
-
-    document.getElementById("demo1-clear").addEventListener("click", () => {
-      const el = document.getElementById("tree-demo1");
-      el.innerHTML = "";
-      t1 = null;
-    });
-
-    // Demo 2: lazy-load example using data_callback
-    const lazyObjects = [{ name: "Lazy Root", children: [] }];
-    function fakeLoader(node) {
-      // return children for the node (could be a fetch)
-      return [
-        { name: node.name + " - child A", children: [] },
-        { name: node.name + " - child B", children: [] },
-      ];
-    }
-
-    let t2 = null;
-    document.getElementById("demo2-show").addEventListener("click", () => {
-      if (t2 && t2.isRendered && t2.isRendered()) return;
-      t2 = new Tree({
-        name: "demo-tree-2",
-        objects: lazyObjects,
-        options: { data_callback: fakeLoader },
+      document.getElementById("demo1-refresh").addEventListener("click", () => {
+        // Simulates a full reload of the component
+        console.log("Refreshing tree demonstration");
+        renderT1();
       });
-      t2.renderInto("tree-demo2");
-    });
-    document.getElementById("demo2-clear").addEventListener("click", () => {
-      const el = document.getElementById("tree-demo2");
-      el.innerHTML = "";
-      t2 = null;
-    });
-  </script>
-</body>
 
+      document.getElementById("demo1-clear").addEventListener("click", () => {
+        const el = document.getElementById("tree-demo1");
+        el.innerHTML = "";
+        t1 = null;
+      });
+
+      // Demo 2: lazy-load example using data_callback
+      const lazyObjects = [{ name: "Lazy Root", children: [] }];
+      function fakeLoader(node) {
+        // return children for the node (could be a fetch)
+        return [
+          { name: node.name + " - child A", children: [] },
+          { name: node.name + " - child B", children: [] },
+        ];
+      }
+
+      let t2 = null;
+      document.getElementById("demo2-show").addEventListener("click", () => {
+        if (t2 && t2.isRendered && t2.isRendered()) return;
+        t2 = new Tree({
+          name: "demo-tree-2",
+          objects: lazyObjects,
+          options: { data_callback: fakeLoader },
+        });
+        t2.renderInto("tree-demo2");
+      });
+      document.getElementById("demo2-clear").addEventListener("click", () => {
+        const el = document.getElementById("tree-demo2");
+        el.innerHTML = "";
+        t2 = null;
+      });
+    </script>
+  </body>
 </html>

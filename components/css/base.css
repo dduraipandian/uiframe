@@ -1,81 +1,80 @@
 /* START: Utility classes for components */
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .clickable {
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover {
-        filter: brightness(120%);
-    }
+  &:hover {
+    filter: brightness(120%);
+  }
 }
 
 .scrollbar {
-    scrollbar-width: thin;
-    /* scrollbar-color: var(--input-border-color) var(--input-background-color); */
-    /* scrollbar-gutter: stable; or stable both-edges */
+  scrollbar-width: thin;
+  /* scrollbar-color: var(--input-border-color) var(--input-background-color); */
+  /* scrollbar-gutter: stable; or stable both-edges */
 
-    &::-webkit-scrollbar {
-        width: 0.125em !important;
-    }
+  &::-webkit-scrollbar {
+    width: 0.125em !important;
+  }
 }
 
 .disabled {
-    pointer-events: none !important;
-    /* opacity: 0.7 !important; */
-    filter: brightness(60%);
+  pointer-events: none !important;
+  /* opacity: 0.7 !important; */
+  filter: brightness(60%);
 }
 
 .hide {
-    opacity: 0;
+  opacity: 0;
 }
 
 .show {
-    opacity: 100 !important;
+  opacity: 100 !important;
 }
 
 .hover-light:hover {
-    filter: brightness(120%);
+  filter: brightness(120%);
 }
 
 /* during drag reduce selection. It used in the split. */
 .no-select {
-    user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 /* END: Utility classes for components */
 
-
 /* START: DROPDOWN COMPONENT */
 .uiframe-dropdown {
-    .dropdown-title {
-        font-size: var(--bs-body-font-size);
-        background-color: var(--bs-body-bg);
-        color: var(--bs-secondary-color);
+  .dropdown-title {
+    font-size: var(--bs-body-font-size);
+    background-color: var(--bs-body-bg);
+    color: var(--bs-secondary-color);
+  }
+
+  .dropdown-menu {
+    padding: 0 !important;
+
+    .dropdown-item {
+      transition: opacity 0.25s ease-in-out;
+      -moz-transition: opacity 0.25s ease-in-out;
+      -webkit-transition: opacity 0.25s ease-in-out;
+
+      .hide {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      .show {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
     }
-
-    .dropdown-menu {
-        padding: 0 !important;
-
-        .dropdown-item {
-            transition: opacity 0.25s ease-in-out;
-            -moz-transition: opacity 0.25s ease-in-out;
-            -webkit-transition: opacity 0.25s ease-in-out;
-
-            .hide {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            .show {
-                opacity: 1 !important;
-                transform: translateY(0) !important;
-            }
-        }
-    }
+  }
 }
 
 /* END: DROPDOWN COMPONENT */
@@ -84,28 +83,28 @@
 
 /* full-height container */
 .uiframe-split-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 
-    .split-pane {
-        min-height: 130px;
-        /* minimum height to avoid collapsing */
+  .split-pane {
+    min-height: 130px;
+    /* minimum height to avoid collapsing */
+  }
+
+  /* visual divider / drag handle */
+  .split-divider {
+    height: 1px;
+    background-color: var(--bs-secondary-color) !important;
+    z-index: 10000;
+
+    .split-divider-icon {
+      margin-top: -22px;
+      cursor: row-resize;
+      filter: brightness(0.5);
     }
-
-    /* visual divider / drag handle */
-    .split-divider {
-        height: 1px;
-        background-color: var(--bs-secondary-color) !important;
-        z-index: 10000;
-
-        .split-divider-icon {
-            margin-top: -22px;
-            cursor: row-resize;
-            filter: brightness(0.5);
-        }
-    }
+  }
 }
 
 /* END: SPLIT COMPONENT */
@@ -113,79 +112,81 @@
 /* START: TAB COMPONENT */
 
 .uiframe-tab {
-    .nav-link {
-        color: var(--bs-secondary);
-    }
+  .nav-link {
+    color: var(--bs-secondary);
+  }
 }
 
 /* END: TAB COMPONENT */
 
 /* START: TABLE COMPONENT */
 .uiframe-table {
-    .table-col-wrapper {
-        max-width: 250px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+  .table-col-wrapper {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    .json-nested-object {
-        max-width: 300px;
-        overflow: hidden;
-    }
+  .json-nested-object {
+    max-width: 300px;
+    overflow: hidden;
+  }
 
-    tbody tr:hover {
-        cursor: pointer;
-    }
+  tbody tr:hover {
+    cursor: pointer;
+  }
 
-    .table-identifier-link {
-        text-decoration: none;
+  .table-identifier-link {
+    text-decoration: none;
 
-        &:hover {
-            filter: brightness(120%);
-        }
+    &:hover {
+      filter: brightness(120%);
     }
+  }
 }
 
 /* END: TABLE COMPONENT */
 
 /* START: TREE COMPONENT */
 .uiframe-tree {
-    .btn-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35em;
-        width: 100%;
-        background-color: transparent;
-        border: none;
-    }
+  .btn-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+  }
 
-    .btn-toggle::before {
-        content: "";
-        display: inline-block;
-        width: 1.25em;
-        height: 1.25em;
-        background: currentColor;
-        font-size: 0.65em;
-        -webkit-mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e") no-repeat center / contain;
-        mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e") no-repeat center / contain;
-        transition: transform 0.35s ease;
-        transform-origin: center;
-    }
+  .btn-toggle::before {
+    content: "";
+    display: inline-block;
+    width: 1.25em;
+    height: 1.25em;
+    background: currentColor;
+    font-size: 0.65em;
+    -webkit-mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e")
+      no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e")
+      no-repeat center / contain;
+    transition: transform 0.35s ease;
+    transform-origin: center;
+  }
 
-    .btn-toggle[aria-expanded="true"]::before {
-        transform: rotate(90deg);
-    }
+  .btn-toggle[aria-expanded="true"]::before {
+    transform: rotate(90deg);
+  }
 
-    .span-icon {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25em;
-    }
+  .span-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+  }
 
-    .span-icon svg {
-        width: 1em;
-        height: 1em;
-    }
+  .span-icon svg {
+    width: 1em;
+    height: 1em;
+  }
 }
 
 /* END: TREE COMPONENT */
@@ -194,133 +195,135 @@
 /* Flow Container - The stage */
 /* Container must handle overflow and cursor */
 .uiframe-flow-container {
-    position: relative;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  /* Canvas transforms for pan/zoom */
+  .flow-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    user-select: none;
-    cursor: grab;
+    transform-origin: 0 0;
+    /* Dot Grid Pattern */
+    background-image: radial-gradient(#c1c1c4 1.4px, transparent 1.4px);
+    background-size: 24px 24px;
 
-    &:active {
+    /* Nodes - absolute positioning required */
+    .flow-node {
+      position: absolute;
+      display: flex;
+      z-index: 1;
+      cursor: grab;
+
+      /* --bs-focus-ring-width: 0.125rem; */
+
+      &:active {
         cursor: grabbing;
-    }
+      }
 
-    /* Canvas transforms for pan/zoom */
-    .flow-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        transform-origin: 0 0;
-        /* Dot Grid Pattern */
-        background-image: radial-gradient(#c1c1c4 1.4px, transparent 1.4px);
-        background-size: 24px 24px;
+      &.selected {
+        z-index: 10;
+        outline: 0;
 
-        /* Nodes - absolute positioning required */
-        .flow-node {
-            position: absolute;
-            display: flex;
-            z-index: 1;
-            cursor: grab;
+        /* Hard coded focus right as it needs to be persisted */
+        box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0)
+          var(--bs-focus-ring-width) var(--bs-focus-ring-color);
 
-            /* --bs-focus-ring-width: 0.125rem; */
-
-            &:active {
-                cursor: grabbing;
-            }
-
-            &.selected {
-                z-index: 10;
-                outline: 0;
-
-                /* Hard coded focus right as it needs to be persisted */
-                box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color);
-
-                .node-close {
-                    display: block;
-                }
-            }
-
-            .node-close {
-                right: 0;
-                position: absolute;
-                font-size: .5rem;
-                display: none;
-                border: var(--bs-border-width) var(--bs-border-style) #212529 !important;
-            }
-
-            /* Ports - functional layout */
-            .flow-ports-column {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                width: 0;
-                position: relative;
-                z-index: 2;
-                overflow: visible;
-
-                &.flow-ports-out {
-                    left: -2px;
-                }
-
-                &.flow-ports-in {
-                    left: 2px;
-                }
-
-                .flow-port {
-                    width: 10px;
-                    height: 10px;
-                    background: var(--bs-body-bg);
-                    border-radius: 50%;
-                    margin: 8px 0;
-                    z-index: 2;
-                    cursor: crosshair;
-                    position: relative;
-                    border: var(--bs-border-width) solid var(--bs-border-color);
-                }
-
-                .flow-port:hover {
-                    transform: scale(1.5);
-                    --bs-focus-ring-width: 1px;
-                    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color);
-                }
-            }
+        .node-close {
+          display: block;
         }
-    }
+      }
 
-    /* SVG layer for connections */
-    .flow-connections {
+      .node-close {
+        right: 0;
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        font-size: 0.5rem;
+        display: none;
+        border: var(--bs-border-width) var(--bs-border-style) #212529 !important;
+      }
+
+      /* Ports - functional layout */
+      .flow-ports-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 0;
+        position: relative;
+        z-index: 2;
         overflow: visible;
-        z-index: 0;
-        pointer-events: none;
 
-        /* Connection paths */
-        .flow-connection-path {
-            fill: none;
-            stroke: var(--bs-secondary);
-            stroke-width: 2px;
-            stroke-linecap: round;
-            pointer-events: stroke;
-            transition: stroke 0.2s;
-
-            &:hover {
-                stroke: var(--bs-primary);
-                stroke-width: 3px;
-                cursor: pointer;
-            }
-
-            &.selected {
-                stroke: var(--bs-primary);
-            }
+        &.flow-ports-out {
+          left: -2px;
         }
+
+        &.flow-ports-in {
+          left: 2px;
+        }
+
+        .flow-port {
+          width: 10px;
+          height: 10px;
+          background: var(--bs-body-bg);
+          border-radius: 50%;
+          margin: 8px 0;
+          z-index: 2;
+          cursor: crosshair;
+          position: relative;
+          border: var(--bs-border-width) solid var(--bs-border-color);
+        }
+
+        .flow-port:hover {
+          transform: scale(1.5);
+          --bs-focus-ring-width: 1px;
+          box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0)
+            var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color);
+        }
+      }
     }
+  }
+
+  /* SVG layer for connections */
+  .flow-connections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    z-index: 0;
+    pointer-events: none;
+
+    /* Connection paths */
+    .flow-connection-path {
+      fill: none;
+      stroke: var(--bs-secondary);
+      stroke-width: 2px;
+      stroke-linecap: round;
+      pointer-events: stroke;
+      transition: stroke 0.2s;
+
+      &:hover {
+        stroke: var(--bs-primary);
+        stroke-width: 3px;
+        cursor: pointer;
+      }
+
+      &.selected {
+        stroke: var(--bs-primary);
+      }
+    }
+  }
 }
 
 /* END: FLOW COMPONENT */

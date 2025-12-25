@@ -1,36 +1,39 @@
 <!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Online Status — Minimal Docs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Online Status — Minimal Docs</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+  </head>
 
-  <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
-  <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
-</head>
+  <body class="p-3" style="overflow: auto">
+    <div class="container page">
+      <div class="header mb-3">
+        <h1 class="mb-0">Online</h1>
+        <span class="subtitle">Network status indicator with optional toast notifications</span>
+      </div>
 
-<body class="p-3" style="overflow: auto">
-  <div class="container page">
-    <div class="header mb-3">
-      <h1 class="mb-0">Online</h1>
-      <span class="subtitle">Network status indicator with optional toast notifications</span>
-    </div>
-
-    <div class="card">
-      <div class="section-title">Install & Import</div>
-      <p class="mb-2">Use as an ES module.</p>
-      <pre><code>&lt;script type="module"&gt;
+      <div class="card">
+        <div class="section-title">Install & Import</div>
+        <p class="mb-2">Use as an ES module.</p>
+        <pre><code>&lt;script type="module"&gt;
 import Online from './components/online.js';
 &lt;/script&gt;
       </code></pre>
-    </div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Quick Start</div>
-      <pre><code>const status = new Online({ 
+      <div class="card">
+        <div class="section-title">Quick Start</div>
+        <pre><code>const status = new Online({ 
   name: 'net-status',
   options: {
     notify: true
@@ -38,86 +41,87 @@ import Online from './components/online.js';
 });
 status.renderInto('status-container');
       </code></pre>
-    </div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Options</div>
-      <ul class="list-compact">
-        <li>
-          <strong>notify</strong>: Show toast notification on status change (default:
-          <code>true</code>).
-        </li>
-        <li>
-          <strong>online_text</strong>: Text to show when online (default:
-          <code>'Online.'</code>).
-        </li>
-        <li>
-          <strong>offline_text</strong>: Text to show when offline (default:
-          <code>'Offline.'</code>).
-        </li>
-        <li>
-          <strong>disapear_after</strong>: Toast duration in ms (default: <code>3000</code>).
-        </li>
-      </ul>
-    </div>
+      <div class="card">
+        <div class="section-title">Options</div>
+        <ul class="list-compact">
+          <li>
+            <strong>notify</strong>: Show toast notification on status change (default:
+            <code>true</code>).
+          </li>
+          <li>
+            <strong>online_text</strong>: Text to show when online (default:
+            <code>'Online.'</code>).
+          </li>
+          <li>
+            <strong>offline_text</strong>: Text to show when offline (default:
+            <code>'Offline.'</code>).
+          </li>
+          <li>
+            <strong>disapear_after</strong>: Toast duration in ms (default: <code>3000</code>).
+          </li>
+        </ul>
+      </div>
 
-    <div class="card">
-      <div class="section-title">API</div>
-      <ul class="list-compact">
-        <li><code>renderInto(id)</code>: Renders the status indicator (green/red dot + text).</li>
-        <li>
-          <code>updateStatus()</code>: Manually checks and updates status (automatically called on
-          clear events).
-        </li>
-      </ul>
-    </div>
+      <div class="card">
+        <div class="section-title">API</div>
+        <ul class="list-compact">
+          <li><code>renderInto(id)</code>: Renders the status indicator (green/red dot + text).</li>
+          <li>
+            <code>updateStatus()</code>: Manually checks and updates status (automatically called on
+            clear events).
+          </li>
+        </ul>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Events</div>
-      <p class="mb-2">
-        This component automatically listens to <code>window.ononline</code> and
-        <code>window.onoffline</code>.
-      </p>
-    </div>
+      <div class="card">
+        <div class="section-title">Events</div>
+        <p class="mb-2">
+          This component automatically listens to <code>window.ononline</code> and
+          <code>window.onoffline</code>.
+        </p>
+      </div>
 
-    <div class="card mt-3">
-      <div class="section-title">Demo</div>
-      <p class="text-muted">
-        The badge shows current online state; a toast appears when status changes.
-      </p>
-      <div id="online-container" class="mt-2"></div>
-      <div class="mt-3">
-        <button id="simulate-offline" class="btn btn-sm btn-outline-danger">
-          Simulate Offline
-        </button>
-        <button id="simulate-online" class="btn btn-sm btn-outline-success ms-2">
-          Simulate Online
-        </button>
+      <div class="card mt-3">
+        <div class="section-title">Demo</div>
+        <p class="text-muted">
+          The badge shows current online state; a toast appears when status changes.
+        </p>
+        <div id="online-container" class="mt-2"></div>
+        <div class="mt-3">
+          <button id="simulate-offline" class="btn btn-sm btn-outline-danger">
+            Simulate Offline
+          </button>
+          <button id="simulate-online" class="btn btn-sm btn-outline-success ms-2">
+            Simulate Online
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
 
-  <script type="module">
-    import Online from "../components/online.js";
+    <script type="module">
+      import Online from "../components/online.js";
 
-    const online = new Online({ name: "demo-online", options: { notify: true } });
-    online.renderInto("online-container");
+      const online = new Online({ name: "demo-online", options: { notify: true } });
+      online.renderInto("online-container");
 
-    // Simulation buttons (cannot truly toggle navigator.onLine, so simulate update)
-    document.getElementById("simulate-offline").addEventListener("click", () => {
-      // Simulate offline update by temporarily calling updateStatus with mocked state
-      Object.defineProperty(navigator, "onLine", { value: false, configurable: true });
-      online.updateStatus();
-    });
-    document.getElementById("simulate-online").addEventListener("click", () => {
-      Object.defineProperty(navigator, "onLine", { value: true, configurable: true });
-      online.updateStatus();
-    });
-  </script>
-</body>
-
+      // Simulation buttons (cannot truly toggle navigator.onLine, so simulate update)
+      document.getElementById("simulate-offline").addEventListener("click", () => {
+        // Simulate offline update by temporarily calling updateStatus with mocked state
+        Object.defineProperty(navigator, "onLine", { value: false, configurable: true });
+        online.updateStatus();
+      });
+      document.getElementById("simulate-online").addEventListener("click", () => {
+        Object.defineProperty(navigator, "onLine", { value: true, configurable: true });
+        online.updateStatus();
+      });
+    </script>
+  </body>
 </html>

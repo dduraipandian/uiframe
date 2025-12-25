@@ -37,7 +37,6 @@ body {
   background-color: var(--bg-main);
 }
 
-
 .page {
   max-width: var(--container-max-width);
   margin: 0 auto;

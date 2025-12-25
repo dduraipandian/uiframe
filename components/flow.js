@@ -247,8 +247,9 @@ class Flow extends EmitterComponent {
       port.onmouseup = (e) => this.completeConnection(port, node.id, e);
     });
 
-    nodeEl.querySelector("button.node-close").addEventListener("click",
-      (e) => this.removeNode(e, node.id));
+    nodeEl
+      .querySelector("button.node-close")
+      .addEventListener("click", (e) => this.removeNode(e, node.id));
 
     this.nodes[node.id].el = nodeEl;
     this.canvasEl.appendChild(nodeEl);
@@ -327,15 +328,16 @@ class Flow extends EmitterComponent {
           inputIndex
         );
       }
-      this.cancelConnection(event, nodeId)
+      this.cancelConnection(event, nodeId);
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   cancelConnection(event, nodeId) {
-    console.log(event)
+    console.log(event);
     // ESCAPE key pressed
     if (event.type == "keydown" && event.keyCode != 27) {
-      return
+      return;
     }
 
     this.isConnecting = false;
@@ -397,7 +399,7 @@ class Flow extends EmitterComponent {
       const pathId = `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
       const path = this.svgEl.querySelector(`path[data-id="${pathId}"]`);
       console.log("FLOW: removing node path ", pathId);
-      this.removePath(path, conn)
+      this.removePath(path, conn);
     });
 
     this.nodes[nodeId].el.remove();
@@ -439,7 +441,7 @@ class Flow extends EmitterComponent {
 
     path.onclick = (e) => {
       e.stopPropagation();
-      this.removePath(path, conn)
+      this.removePath(path, conn);
     };
 
     this.svgEl.appendChild(path);

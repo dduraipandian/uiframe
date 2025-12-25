@@ -51,7 +51,6 @@ describe("Flow Component", () => {
     const flow = new Flow({ name: "TestFlow", options: { zoom: 1.5 } });
     flow.renderInto(container);
 
-
     expect(flow.zoom).toBe(1.5);
     const canvas = container.querySelector(".flow-canvas");
     expect(canvas).not.toBeNull();
@@ -62,7 +61,6 @@ describe("Flow Component", () => {
   test("should add nodes to canvas and data structure", () => {
     const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
-
 
     const nodeId = flow.addNode({
       name: "Node 1",
@@ -90,7 +88,6 @@ describe("Flow Component", () => {
     const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
 
-
     const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
     const n2 = flow.addNode({ name: "N2", inputs: 1, outputs: 0 });
 
@@ -113,7 +110,6 @@ describe("Flow Component", () => {
     const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
 
-
     const nodeId = flow.addNode({ name: "Draggable", x: 10, y: 10 });
     const nodeEl = container.querySelector(`#node-${nodeId}`);
 
@@ -135,7 +131,6 @@ describe("Flow Component", () => {
   test("should update connection position on node drag", async () => {
     const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
-
 
     const n1 = flow.addNode({ name: "N1", x: 0, y: 0, outputs: 1 });
     const n2 = flow.addNode({ name: "N2", x: 200, y: 0, inputs: 1 });
@@ -160,7 +155,6 @@ describe("Flow Component", () => {
     const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
 
-
     const dropEvent = new MouseEvent("drop", {
       clientX: 500,
       clientY: 500,
@@ -184,7 +178,6 @@ describe("Flow Component", () => {
   test("should create connection by dragging ports", () => {
     const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
-
 
     const n1 = flow.addNode({ name: "Out", x: 0, y: 0, outputs: 1 });
     const n2 = flow.addNode({ name: "In", x: 200, y: 0, inputs: 1 });
@@ -265,11 +258,11 @@ describe("Flow Component", () => {
     expect(flow.connections.length).toBe(1);
     expect(container.querySelectorAll("path.flow-connection-path").length).toBe(1);
 
-    const pathId = `3:0-4:0`;
+    const pathId = "3:0-4:0";
     const path = flow.svgEl.querySelector(`path[data-id="${pathId}"]`);
     expect(path).not.toBeNull();
 
-    const pathId2 = `1:0-2:0`;
+    const pathId2 = "1:0-2:0";
     const path2 = flow.svgEl.querySelector(`path[data-id="${pathId2}"]`);
     expect(path2).toBeNull();
   });
@@ -279,7 +272,6 @@ describe("Flow Component", () => {
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "Out", x: 0, y: 0, outputs: 1 });
-    const n2 = flow.addNode({ name: "In", x: 200, y: 0, inputs: 1 });
 
     const outPort = container.querySelector(`#node-${n1} .flow-port[data-type="output"]`);
 

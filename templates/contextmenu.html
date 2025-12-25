@@ -1,36 +1,39 @@
 <!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Context Menu — Minimal Docs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Context Menu — Minimal Docs</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+  </head>
 
-  <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
-  <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
-</head>
+  <body class="p-3" style="overflow: auto">
+    <div class="container page">
+      <div class="header mb-3">
+        <h1 class="mb-0">Context Menu</h1>
+        <span class="subtitle">Small context menu built on top of Bootstrap dropdown</span>
+      </div>
 
-<body class="p-3" style="overflow: auto">
-  <div class="container page">
-    <div class="header mb-3">
-      <h1 class="mb-0">Context Menu</h1>
-      <span class="subtitle">Small context menu built on top of Bootstrap dropdown</span>
-    </div>
-
-    <div class="card">
-      <div class="section-title">Install & Import</div>
-      <p class="mb-2">Extends <strong>Dropdown</strong>.</p>
-      <pre><code>&lt;script type="module"&gt;
+      <div class="card">
+        <div class="section-title">Install & Import</div>
+        <p class="mb-2">Extends <strong>Dropdown</strong>.</p>
+        <pre><code>&lt;script type="module"&gt;
 import ContextMenu from './components/contextmenu.js';
 &lt;/script&gt;
       </code></pre>
-    </div>
+      </div>
 
-    <div class="card">
-      <div class="section-title">Quick Start</div>
-      <pre><code>const menu = new ContextMenu({ name: 'My Context Menu' });
+      <div class="card">
+        <div class="section-title">Quick Start</div>
+        <pre><code>const menu = new ContextMenu({ name: 'My Context Menu' });
 menu.renderInto('container-id');
 menu.setDropdownItems([
   { name: 'Edit', value: 'edit' },
@@ -44,105 +47,109 @@ document.getElementById('target').addEventListener('contextmenu', (e) => {
 
 menu.on('item:click', (item) => console.log('Clicked', item));
       </code></pre>
-    </div>
-
-    <div class="card">
-      <div class="section-title">Options</div>
-      <ul class="list-compact">
-        <li><strong>maxHeight</strong>: Max menu height (inherited from Dropdown).</li>
-        <li><strong>search</strong>: Enable search (inherited from Dropdown).</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <div class="section-title">API</div>
-      <ul class="list-compact">
-        <li><code>renderInto(id)</code>: Renders the menu hidden in the container.</li>
-        <li>
-          <code>setDropdownItems(items)</code>: Sets menu items. Items can have an optional
-          <code>callback</code> property.
-        </li>
-        <li>
-          <code>show(context, event)</code>: Shows the menu at the cursor position.
-          <strong>Note:</strong> Target element or parent must have class
-          <code>context-menu-container</code>.
-        </li>
-        <li><code>hide()</code>: Hides the menu.</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <div class="section-title">Events</div>
-      <ul class="list-compact">
-        <li>
-          <strong>item:click</strong>: Emitted when an item is clicked (inherited from Dropdown).
-        </li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <div class="section-title">Demo: Right-click Area</div>
-      <p class="text-muted">Right-click inside the dotted box to open the context menu.</p>
-      <div id="context-demo-area" class="mt-2 p-3 context-menu-container"
-        style="border: 2px dashed var(--bs-border-color); min-height: 120px">
-        Right-click here
       </div>
-      <div id="context-menu-container"></div>
-    </div>
 
-    <div class="card mt-3">
-      <div class="section-title">Demo: Attach to multiple elements</div>
-      <p class="text-muted">You can reuse the same menu for multiple targets.</p>
-      <div class="d-flex gap-2">
-        <div id="target-1" class="p-3 border rounded context-menu-container">
-          Target 1: right-click
+      <div class="card">
+        <div class="section-title">Options</div>
+        <ul class="list-compact">
+          <li><strong>maxHeight</strong>: Max menu height (inherited from Dropdown).</li>
+          <li><strong>search</strong>: Enable search (inherited from Dropdown).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">API</div>
+        <ul class="list-compact">
+          <li><code>renderInto(id)</code>: Renders the menu hidden in the container.</li>
+          <li>
+            <code>setDropdownItems(items)</code>: Sets menu items. Items can have an optional
+            <code>callback</code> property.
+          </li>
+          <li>
+            <code>show(context, event)</code>: Shows the menu at the cursor position.
+            <strong>Note:</strong> Target element or parent must have class
+            <code>context-menu-container</code>.
+          </li>
+          <li><code>hide()</code>: Hides the menu.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Events</div>
+        <ul class="list-compact">
+          <li>
+            <strong>item:click</strong>: Emitted when an item is clicked (inherited from Dropdown).
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Demo: Right-click Area</div>
+        <p class="text-muted">Right-click inside the dotted box to open the context menu.</p>
+        <div
+          id="context-demo-area"
+          class="mt-2 p-3 context-menu-container"
+          style="border: 2px dashed var(--bs-border-color); min-height: 120px"
+        >
+          Right-click here
         </div>
-        <div id="target-2" class="p-3 border rounded context-menu-container">
-          Target 2: right-click
+        <div id="context-menu-container"></div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="section-title">Demo: Attach to multiple elements</div>
+        <p class="text-muted">You can reuse the same menu for multiple targets.</p>
+        <div class="d-flex gap-2">
+          <div id="target-1" class="p-3 border rounded context-menu-container">
+            Target 1: right-click
+          </div>
+          <div id="target-2" class="p-3 border rounded context-menu-container">
+            Target 2: right-click
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-    crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
 
-  <script type="module">
-    import ContextMenu from "../components/contextmenu.js";
+    <script type="module">
+      import ContextMenu from "../components/contextmenu.js";
 
-    const menu = new ContextMenu({ name: "Demo Context Menu", options: { maxHeight: "12em" } });
-    menu.renderInto("context-menu-container");
+      const menu = new ContextMenu({ name: "Demo Context Menu", options: { maxHeight: "12em" } });
+      menu.renderInto("context-menu-container");
 
-    menu.setDropdownItems([
-      { name: "Refresh", value: "refresh" },
-      { name: "Rename", value: "rename" },
-      { name: "Delete", value: "delete" },
-      null,
-      { name: "Properties", value: "props" },
-    ]);
+      menu.setDropdownItems([
+        { name: "Refresh", value: "refresh" },
+        { name: "Rename", value: "rename" },
+        { name: "Delete", value: "delete" },
+        null,
+        { name: "Properties", value: "props" },
+      ]);
 
-    // Right-click demo area
-    const demoArea = document.getElementById("context-demo-area");
-    demoArea.addEventListener("contextmenu", (ev) => {
-      // Pass 'null' as context since we don't have a component instance here
-      menu.show(null, ev);
-    });
-
-    // Attach same menu to multiple targets
-    ["target-1", "target-2"].forEach((id) => {
-      const el = document.getElementById(id);
-      el.addEventListener("contextmenu", (ev) => {
+      // Right-click demo area
+      const demoArea = document.getElementById("context-demo-area");
+      demoArea.addEventListener("contextmenu", (ev) => {
+        // Pass 'null' as context since we don't have a component instance here
         menu.show(null, ev);
       });
-    });
 
-    // Listen to menu item clicks
-    menu.on("item:click", (item) => {
-      console.log("Context menu clicked:", item);
-      alert(`Clicked: ${item.name} (value=${item.value})`);
-    });
-  </script>
-</body>
+      // Attach same menu to multiple targets
+      ["target-1", "target-2"].forEach((id) => {
+        const el = document.getElementById(id);
+        el.addEventListener("contextmenu", (ev) => {
+          menu.show(null, ev);
+        });
+      });
 
+      // Listen to menu item clicks
+      menu.on("item:click", (item) => {
+        console.log("Context menu clicked:", item);
+        alert(`Clicked: ${item.name} (value=${item.value})`);
+      });
+    </script>
+  </body>
 </html>
