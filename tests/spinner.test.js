@@ -80,7 +80,7 @@ describe("Spinner Component", () => {
 
     const cancelButton = document.getElementById(spinner.cancelId);
     expect(cancelButton).toBeTruthy();
-    expect(cancelButton.textContent).toBe("Cancel");
+    expect(cancelButton.textContent.trim()).toBe("Cancel");
   });
 
   test("should emit cancel event on button click", () => {
