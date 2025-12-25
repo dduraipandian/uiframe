@@ -112,8 +112,8 @@ pre code {
 }
 
 code {
-  color: #444;
-  background-color: rgba(0, 0, 0, 0.05);
+  /* color: #444;
+  background-color: rgba(0, 0, 0, 0.05); */
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-size: 0.9em;
