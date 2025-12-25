@@ -50,10 +50,10 @@
 
 
 /* START: DROPDOWN COMPONENT */
-.dropdown {
+.uiframe-dropdown {
     .dropdown-title {
         font-size: var(--bs-body-font-size);
-        background-color: var(--bs-secondary-bg);
+        background-color: var(--bs-body-bg);
         color: var(--bs-secondary-color);
     }
 
@@ -224,12 +224,30 @@
             z-index: 1;
             cursor: grab;
 
+            /* --bs-focus-ring-width: 0.125rem; */
+
             &:active {
                 cursor: grabbing;
             }
 
             &.selected {
                 z-index: 10;
+                outline: 0;
+
+                /* Hard coded focus right as it needs to be persisted */
+                box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color);
+
+                .node-close {
+                    display: block;
+                }
+            }
+
+            .node-close {
+                right: 0;
+                position: absolute;
+                font-size: .5rem;
+                display: none;
+                border: var(--bs-border-width) var(--bs-border-style) #212529 !important;
             }
 
             /* Ports - functional layout */
@@ -265,6 +283,8 @@
 
                 .flow-port:hover {
                     transform: scale(1.5);
+                    --bs-focus-ring-width: 1px;
+                    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color);
                 }
             }
         }
@@ -285,14 +305,14 @@
         .flow-connection-path {
             fill: none;
             stroke: var(--bs-secondary);
-            stroke-width: 3px;
+            stroke-width: 2px;
             stroke-linecap: round;
             pointer-events: stroke;
             transition: stroke 0.2s;
 
             &:hover {
                 stroke: var(--bs-primary);
-                stroke-width: 4px;
+                stroke-width: 3px;
                 cursor: pointer;
             }
 

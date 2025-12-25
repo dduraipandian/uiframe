@@ -200,22 +200,29 @@ class Flow extends EmitterComponent {
     const el = document.createElement("div");
     const inputHtml = `<div class="flow-port" data-type="input" data-node-id="${node.id}" data-index="{{index}}"></div>`;
     const outputHtml = `<div class="flow-port" data-type="output" data-node-id="${node.id}" data-index="{{index}}"></div>`;
+
     const nodeHtml = `
         <div id="node-${node.id}" 
             data-id="${node.id}" 
-            class="flow-node" 
+            class="flow-node rounded" 
             style="top: ${node.y}px; left: ${node.x}px; transform: scale(${this.zoom}); 
-                    width: ${this.nodeWidth}px; height: ${this.nodeHeight}px">
+                    width: ${this.nodeWidth}px; height: fit-content">                        
             <div class="flow-ports-column flow-ports-in">
                 ${Array.from({ length: node.inputs }, (_, i) => inputHtml.replace("{{index}}", i)).join("\n")}
             </div>
-            <div class="flow-node-content card w-100">
+            <div class="flow-node-content card w-100">              
               <div class="card-header">${node.name}</div>
-              <div class="card-body">${node.html}</div>
-            </div>
-            <div class="flow-ports-column flow-ports-out">
+              <div class="card-body">${node.html}</div>              
+            </div>            
+            </button>
+            <div class="flow-ports-column flow-ports-out">                
                 ${Array.from({ length: node.outputs }, (_, i) => outputHtml.replace("{{index}}", i)).join("\n")}
             </div>
+            <button type="button" 
+                data-id="${node.id}"
+                class="btn-danger btn-close node-close border rounded shadow-none m-1" 
+                aria-label="Close">
+            </button>
         </div>
         `;
     el.innerHTML = nodeHtml;
@@ -232,10 +239,6 @@ class Flow extends EmitterComponent {
     });
     hl.registerDragEvent();
 
-    // nodeEl.querySelectorAll(".flow-port .flow-ports-out").forEach((port) => {
-    //     port.onmousedown = (e) => this.onPortMouseDown(e, node.id, port.dataset.type, port.dataset.index);
-    // });
-
     nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach((port) => {
       port.onmousedown = (e) => this.startConnection(port, node.id, e);
     });
@@ -243,6 +246,9 @@ class Flow extends EmitterComponent {
     nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach((port) => {
       port.onmouseup = (e) => this.completeConnection(port, node.id, e);
     });
+
+    nodeEl.querySelector("button.node-close").addEventListener("click",
+      (e) => this.removeNode(e, node.id));
 
     this.nodes[node.id].el = nodeEl;
     this.canvasEl.appendChild(nodeEl);
@@ -293,7 +299,9 @@ class Flow extends EmitterComponent {
 
     // Use addEventListener instead of window.onmousemove to avoid JSDOM redefinition errors
     this._drawConnection = (e) => this.drawConnection(port, nodeId, e);
+    this._cancelConnection = (e) => this.cancelConnection(e, nodeId);
     window.addEventListener("mousemove", this._drawConnection);
+    window.addEventListener("keydown", this._cancelConnection);
 
     // Clear cache for source node to ensure accurate start point
     if (this.nodes[nodeId]) this.nodes[nodeId].portOffsets = {};
@@ -301,7 +309,6 @@ class Flow extends EmitterComponent {
 
   drawConnection(port, nodeId, event) {
     if (this.isConnecting) {
-      console.debug("FLOW: Drawing connection from port: ", port, "nodeId: ", nodeId);
       this.renderTempConnection(port, nodeId, event);
     }
   }
@@ -320,13 +327,24 @@ class Flow extends EmitterComponent {
           inputIndex
         );
       }
-      this.isConnecting = false;
-      this.clearTempConnection();
+      this.cancelConnection(event, nodeId)
+    }
+  }
 
-      if (this._drawConnection) {
-        window.removeEventListener("mousemove", this._drawConnection);
-        this._drawConnection = null;
-      }
+  cancelConnection(event, nodeId) {
+    console.log(event)
+    // ESCAPE key pressed
+    if (event.type == "keydown" && event.keyCode != 27) {
+      return
+    }
+
+    this.isConnecting = false;
+    this.clearTempConnection();
+
+    if (this._drawConnection) {
+      window.removeEventListener("mousemove", this._drawConnection);
+      window.removeEventListener("keydown", this._cancelConnection);
+      this._drawConnection = null;
     }
   }
 
@@ -369,6 +387,23 @@ class Flow extends EmitterComponent {
     this.updateConnections(id);
   }
 
+  removeNode(event, nodeId) {
+    console.log("FLOW: removing node ", nodeId);
+    event.stopPropagation();
+    const id = parseInt(nodeId);
+    const relevant = this.connections.filter((c) => c.outNodeId === id || c.inNodeId === id);
+
+    relevant.forEach((conn) => {
+      const pathId = `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
+      const path = this.svgEl.querySelector(`path[data-id="${pathId}"]`);
+      console.log("FLOW: removing node path ", pathId);
+      this.removePath(path, conn)
+    });
+
+    this.nodes[nodeId].el.remove();
+    delete this.nodes[nodeId];
+  }
+
   addConnection(outNodeId, outPort, inNodeId, inPort) {
     const outId = parseInt(outNodeId);
     const inId = parseInt(inNodeId);
@@ -404,11 +439,15 @@ class Flow extends EmitterComponent {
 
     path.onclick = (e) => {
       e.stopPropagation();
-      this.connections = this.connections.filter((c) => c !== conn);
-      path.remove();
+      this.removePath(path, conn)
     };
 
     this.svgEl.appendChild(path);
+  }
+
+  removePath(path, conn) {
+    this.connections = this.connections.filter((c) => c !== conn);
+    path.remove();
   }
 
   getPortPosition(nodeId, type, index) {
@@ -465,11 +504,10 @@ class Flow extends EmitterComponent {
         const p2 = this.getPortPosition(conn.inNodeId, "input", conn.inPort);
         const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
         path.setAttribute("d", d);
-      } else {
-        this.createConnectionPath(conn);
       }
     });
   }
+
   renderTempConnection(port, nodeId, event) {
     const node = this.nodes[nodeId];
     let path = this.svgEl.querySelector(".flow-connection-temp");
