@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
   </head>
 
-  <body class="p-3" style="overflow: auto">
+  <body class="p-3 template-body">
     <div class="container page">
       <div class="header mb-3">
         <h1 class="mb-0">Context Menu</h1>
@@ -86,11 +86,7 @@ menu.on('item:click', (item) => console.log('Clicked', item));
       <div class="card">
         <div class="section-title">Demo: Right-click Area</div>
         <p class="text-muted">Right-click inside the dotted box to open the context menu.</p>
-        <div
-          id="context-demo-area"
-          class="mt-2 p-3 context-menu-container"
-          style="border: 2px dashed var(--bs-border-color); min-height: 120px"
-        >
+        <div id="context-demo-area" class="mt-2 p-3 context-menu-container demo-area">
           Right-click here
         </div>
         <div id="context-menu-container"></div>

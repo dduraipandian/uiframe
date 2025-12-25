@@ -3,93 +3,120 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>UI Frame Docs</title>
+    <title>UI Frame</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link
-      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="./components/css/__base.css" />
-    <link rel="stylesheet" type="text/css" href="./components/css/doc.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <style>
       :root {
         --navbar-height: 60px;
+        --muted: #6c757d;
+        --border: #e9ecef;
+        --accent: #0d6efd;
       }
-
+      html,
       body {
-        padding-top: var(--navbar-height);
+        height: 100%;
       }
-
+      body {
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial;
+        margin: 0;
+        padding-top: var(--navbar-height);
+        color: #111;
+        background: #fff;
+      }
       .navbar {
         height: var(--navbar-height);
-        border-bottom: 1px solid var(--border-color);
-        z-index: 1030;
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
       }
-
       .navbar-brand {
-        font-weight: 700;
-        letter-spacing: -0.5px;
-      }
-
-      .search-container {
-        padding: 1rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .component-link {
-        padding: 0.6rem 1.25rem;
-        font-size: 0.95rem;
-        color: var(--text-main);
-        text-decoration: none;
-        display: block;
-        transition:
-          background-color 0.2s,
-          color 0.2s;
-      }
-
-      .component-link:hover {
-        background-color: #e9ecef;
-        color: var(--primary-color);
-      }
-
-      .component-link.active {
-        background-color: #e7f1ff;
-        color: var(--primary-color);
         font-weight: 600;
-        border-right: 3px solid var(--primary-color);
       }
-
+      .sidebar-sticky {
+        min-height: calc(100vh - var(--navbar-height));
+        border-right: 1px solid var(--border);
+        background: #fafafa;
+      }
+      .search-container {
+        padding: 0.75rem;
+      }
+      .component-link {
+        padding: 0.6rem 1rem;
+        display: block;
+        color: inherit;
+        text-decoration: none;
+        border-left: 3px solid transparent;
+        transition:
+          background 0.12s,
+          border-color 0.12s;
+      }
+      .component-link:hover {
+        background: #fff;
+      }
+      .component-link.active {
+        background: rgba(13, 110, 253, 0.06);
+        border-left-color: var(--accent);
+        font-weight: 600;
+      }
       .main-content {
         height: calc(100vh - var(--navbar-height));
         overflow: hidden;
       }
-
       .content-pane {
         height: 100%;
-        overflow-y: hidden;
       }
-
+      .content-pane#home-component {
+        overflow: auto;
+      }
       iframe {
         width: 100%;
         height: 100%;
-        border: none;
+        border: 0;
       }
-
       .home-hero {
-        padding: 4rem 2rem;
-        text-align: center;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 12px;
-        margin-bottom: 2rem;
+        padding: 2.5rem;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #fff, #f8f9fb);
+        margin-bottom: 1.5rem;
+      }
+      .feature-icon {
+        width: 48px;
+        height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        font-size: 1.2rem;
+      }
+      .component-card {
+        cursor: pointer;
+      }
+      .card.border-0 {
+        background: transparent;
+      }
+      @media (max-width: 767px) {
+        .sidebar-sticky {
+          border-right: none;
+        }
       }
     </style>
   </head>
@@ -175,10 +202,7 @@
                     Bootstrap 5.
                   </p>
                   <div class="mt-4">
-                    <a
-                      href="#"
-                      class="btn btn-primary btn-lg px-4 me-md-2"
-                      onclick="document.querySelector('.component-link:nth-child(2)').click()"
+                    <a href="#" class="btn btn-primary btn-lg px-4 me-md-2" data-get-started
                       >Get Started</a
                     >
                     <a
@@ -194,14 +218,7 @@
                     <div class="card h-100 border-0 shadow-sm">
                       <div class="card-body text-center p-4">
                         <div
-                          class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto"
-                          style="
-                            width: 3rem;
-                            height: 3rem;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
+                          class="feature-icon bg-primary bg-gradient text-white rounded-3 mb-3 mx-auto d-flex align-items-center justify-content-center"
                         >
                           <i class="bi bi-lightning-fill"></i>
                         </div>
@@ -216,14 +233,7 @@
                     <div class="card h-100 border-0 shadow-sm">
                       <div class="card-body text-center p-4">
                         <div
-                          class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3 mx-auto"
-                          style="
-                            width: 3rem;
-                            height: 3rem;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
+                          class="feature-icon bg-success bg-gradient text-white rounded-3 mb-3 mx-auto d-flex align-items-center justify-content-center"
                         >
                           <i class="bi bi-bootstrap-fill"></i>
                         </div>
@@ -238,14 +248,7 @@
                     <div class="card h-100 border-0 shadow-sm">
                       <div class="card-body text-center p-4">
                         <div
-                          class="feature-icon bg-info bg-gradient text-white rounded-3 mb-3 mx-auto"
-                          style="
-                            width: 3rem;
-                            height: 3rem;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
+                          class="feature-icon bg-info bg-gradient text-white rounded-3 mb-3 mx-auto d-flex align-items-center justify-content-center"
                         >
                           <i class="bi bi-puzzle-fill"></i>
                         </div>
@@ -273,71 +276,79 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="module">
-      const components = {
-        spinner: "A minimal, searchable, animated menu.",
-        dropdown: "A configurable loading overlay.",
-        tab: "Simple, configurable tabs.",
-        table: "Data table with sorting and pagination.",
-        split: "Resizable panes layout.",
-        tree: "Interactive folder/tree component.",
-        contextmenu: "Small context menu built on top of Bootstrap dropdown.",
-        online: "Network status indicator with optional toast notifications.",
-      };
+    <script>
+      (function () {
+        const components = {
+          spinner: "A minimal, searchable, animated menu.",
+          dropdown: "A configurable loading overlay.",
+          tab: "Simple, configurable tabs.",
+          table: "Data table with sorting and pagination.",
+          split: "Resizable panes layout.",
+          tree: "Interactive folder/tree component.",
+          contextmenu: "Small context menu built on top of Bootstrap dropdown.",
+          online: "Network status indicator with optional toast notifications.",
+        };
 
-      const componentNames = Object.keys(components).sort();
+        const componentNames = Object.keys(components).sort();
+        const listTab = document.getElementById("list-tab");
+        const navTabContent = document.getElementById("nav-tabContent");
+        const navigationToComponent = document.getElementById("navigation-to-component");
 
-      componentNames.forEach((component) => {
-        let displayName = component.charAt(0).toUpperCase() + component.slice(1);
+        componentNames.forEach((component) => {
+          const displayName = component[0].toUpperCase() + component.slice(1);
 
-        // Add to Sidebar
-        let lstItem = `<a class="component-link" 
-            id="${component}-component-tab" data-bs-toggle="list"
-            href="#${component}-component" 
-            role="tab" aria-controls="${component}-component">
-            <i class="bi bi-chevron-right small me-2"></i> ${displayName}
-          </a>`;
-        document.getElementById("list-tab").innerHTML += lstItem;
+          const lstItem = `<a class="component-link" id="${component}-component-tab" data-bs-toggle="list" href="#${component}-component" role="tab" aria-controls="${component}-component"><i class="bi bi-chevron-right small me-2"></i> ${displayName}</a>`;
+          listTab.insertAdjacentHTML("beforeend", lstItem);
 
-        // Add to Tab Content
-        let tabItem = `<div class="tab-pane fade h-100 content-pane" id="${component}-component" 
-        role="tabpanel" aria-labelledby="${component}-component-tab">
-        <iframe src="./templates/${component}.html" frameborder="0"></iframe>
-      </div>`;
-        document.getElementById("nav-tabContent").innerHTML += tabItem;
+          const tabItem = `<div class="tab-pane fade h-100 content-pane" id="${component}-component" role="tabpanel" aria-labelledby="${component}-component-tab"><iframe src="./templates/${component}.html" title="${displayName} demo"></iframe></div>`;
+          navTabContent.insertAdjacentHTML("beforeend", tabItem);
 
-        // Add to Home Grid
-        let navToComponent = `
-        <div class="col">
-          <div class="card h-100 border shadow-sm component-card" style="cursor: pointer;" onclick="document.getElementById('${component}-component-tab').click();">
-            <div class="card-body">
-              <h5 class="card-title fw-bold text-primary">${displayName}</h5>
-              <p class="card-text text-muted small">${components[component]}</p>
-            </div>
-          </div>
-        </div>`;
-        document.getElementById("navigation-to-component").innerHTML += navToComponent;
-      });
-
-      // Search functionality
-      $("#component-search").on("input", function () {
-        let value = $(this).val().toLowerCase();
-        $(".component-link").filter(function () {
-          if ($(this).attr("id") === "home-component-tab") return false;
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+          const navToComponent = `<div class="col"><div class="card h-100 border shadow-sm component-card" data-target="#${component}-component"><div class="card-body"><h5 class="card-title fw-bold">${displayName}</h5><p class="card-text text-muted small">${components[component]}</p></div></div></div>`;
+          navigationToComponent.insertAdjacentHTML("beforeend", navToComponent);
         });
-      });
 
-      // Handle active class for sidebar links
-      $(".component-link").on("click", function () {
-        $(".component-link").removeClass("active");
-        $(this).addClass("active");
+        // Search
+        const search = document.getElementById("component-search");
+        search.addEventListener("input", (e) => {
+          const value = e.target.value.toLowerCase();
+          document.querySelectorAll(".component-link").forEach((el) => {
+            if (el.id === "home-component-tab") return;
+            el.style.display = el.textContent.toLowerCase().includes(value) ? "" : "none";
+          });
+        });
 
-        // Reset scroll position of the content pane
-        const targetId = $(this).attr("href");
-        $(`${targetId}`).scrollTop(0);
-      });
+        // Sidebar link activation & delegation
+        listTab.addEventListener("click", (e) => {
+          const link = e.target.closest(".component-link");
+          if (!link) return;
+          document
+            .querySelectorAll(".component-link")
+            .forEach((el) => el.classList.remove("active"));
+          link.classList.add("active");
+          const targetSelector = link.getAttribute("href");
+          const target = document.querySelector(targetSelector);
+          if (target) target.scrollTop = 0;
+        });
+
+        // Cards -> open tab
+        document.getElementById("navigation-to-component").addEventListener("click", (e) => {
+          const card = e.target.closest(".component-card");
+          if (!card) return;
+          const targetSel = card.getAttribute("data-target");
+          const tabLink = document.querySelector(`.component-link[href="${targetSel}"]`);
+          if (tabLink) tabLink.click();
+        });
+
+        // Get Started button behavior
+        const getStarted = document.querySelector("[data-get-started]");
+        if (getStarted) {
+          getStarted.addEventListener("click", (ev) => {
+            ev.preventDefault();
+            const first = document.querySelector(".component-link:not(#home-component-tab)");
+            if (first) first.click();
+          });
+        }
+      })();
     </script>
   </body>
 </html>

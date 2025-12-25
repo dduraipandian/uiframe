@@ -28,6 +28,21 @@
   --input-border-color: var(--border-color);
   --table-header-bg-color: var(--bg-sidebar);
   --dropdown-active-color: var(--text-muted);
+  /* Additional visual tokens */
+  --radius: 8px;
+  --radius-sm: 6px;
+  --radius-xs: 4px;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --card-padding: 1.5rem;
+  --demo-bg: #fafbfc;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --demo-min-height: 150px;
+  --table-demo-height: 400px;
+  --demo-tall-height: 700px;
 }
 
 body {
@@ -49,7 +64,6 @@ body {
   justify-content: space-between;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
 }
 
 .header h1 {
@@ -65,25 +79,25 @@ body {
 
 .card {
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: var(--radius);
+  padding: var(--card-padding);
   margin-bottom: 1.5rem;
   background: var(--bg-main);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   transition: box-shadow 0.2s ease-in-out;
 }
 
 .card:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  box-shadow: var(--shadow-md);
 }
 
 .demo-box {
   position: relative;
   width: 100%;
-  min-height: 150px;
+  min-height: var(--demo-min-height);
   border: 1px solid var(--border-color);
-  background-color: #fafbfc;
-  border-radius: 8px;
+  background-color: var(--demo-bg);
+  border-radius: var(--radius);
   padding: 1.25rem;
 }
 
@@ -97,8 +111,8 @@ body {
 pre {
   background: var(--code-bg);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 1rem;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
   margin: 1rem 0;
   overflow-x: auto;
 }
@@ -115,12 +129,12 @@ code {
   /* color: #444;
   background-color: rgba(0, 0, 0, 0.05); */
   padding: 0.2rem 0.4rem;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   font-size: 0.9em;
 }
 
 .list-compact li {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .list-compact li strong {
@@ -132,9 +146,30 @@ code {
   position: sticky;
   top: var(--navbar-height);
   height: calc(100vh - var(--navbar-height));
-  padding-top: 1.5rem;
+  padding-top: var(--spacing-lg);
   overflow-x: hidden;
   overflow-y: auto;
   background-color: var(--bg-sidebar);
   border-right: 1px solid var(--border-color);
+}
+
+/* Shared template helpers (moved from individual templates) */
+.template-body {
+  overflow: auto;
+}
+.demo-area {
+  border: 2px dashed var(--border-color);
+  min-height: 120px;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+}
+#table-demo {
+  height: var(--table-demo-height);
+}
+.tree-demo {
+  position: relative;
+  min-height: 120px;
+}
+.demo-tall {
+  height: var(--demo-tall-height);
 }
