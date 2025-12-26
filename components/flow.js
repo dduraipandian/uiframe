@@ -321,15 +321,22 @@ class Flow extends EmitterComponent {
       if (target && target.dataset.type === "input") {
         const inputNodeId = parseInt(target.dataset.nodeId);
         const inputIndex = parseInt(target.dataset.index);
-        this.addConnection(
+        this.makeConnection(
           this.connectionStart.nodeId,
           this.connectionStart.index,
           inputNodeId,
-          inputIndex
+          inputIndex,
+          event,
+          nodeId
         );
       }
-      this.cancelConnection(event, nodeId);
     }
+  }
+
+  makeConnection(outNodeId, outPort, inNodeId, inPort, event = null, nodeId = null) {
+    const connected = this.addConnection(outNodeId, outPort, inNodeId, inPort);
+    if (event && connected) this.cancelConnection(event, nodeId);
+    return connected;
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -407,6 +414,10 @@ class Flow extends EmitterComponent {
   }
 
   addConnection(outNodeId, outPort, inNodeId, inPort) {
+    if (!this.doMakeConnection(outNodeId, inNodeId)) {
+      return false;
+    }
+
     const outId = parseInt(outNodeId);
     const inId = parseInt(inNodeId);
     const oPort = parseInt(outPort);
@@ -427,6 +438,7 @@ class Flow extends EmitterComponent {
     Utility.observe(node, () => {
       this.createConnectionPath(connection);
     });
+    return true;
   }
 
   createConnectionPath(conn) {
@@ -535,7 +547,39 @@ class Flow extends EmitterComponent {
   }
 }
 
-class FlowActions extends Flow {
+class FlowDag extends Flow {
+  constructor({ name, options = {} }) {
+    super({ name, options });
+    this.dag = options.dag || true;
+    this.adjacencyList = {};
+  }
+
+  addNodeToAdjacencyList(outNodeId, inNodeId) {
+    if (!this.adjacencyList[outNodeId]) this.adjacencyList[outNodeId] = new Set();
+    this.adjacencyList[outNodeId].add(inNodeId);
+  }
+
+  buildAdjacencyList() {
+    this.connections.forEach((conn) => {
+      this.addNodeToAdjacencyList(conn.outNodeId, conn.inNodeId);
+    });
+    return this.adjacencyList;
+  }
+
+  isNewConnCyclic(outNodeId, inNodeId) {
+    if (this.adjacencyList[inNodeId] && this.adjacencyList[inNodeId].has(outNodeId)) {
+      return true;
+    }
+    this.addNodeToAdjacencyList(outNodeId, inNodeId);
+    return false;
+  }
+
+  doMakeConnection(outNodeId, inNodeId) {
+    return this.dag ? !this.isNewConnCyclic(outNodeId, inNodeId) : true;
+  }
+}
+
+class FlowActions extends FlowDag {
   export() {
     // eslint-disable-next-line no-unused-vars
     const nodesExport = Object.values(this.nodes).map(({ el, ...rest }) => rest);
@@ -567,7 +611,7 @@ class FlowActions extends Flow {
     }
     if (data.connections) {
       data.connections.forEach((c) =>
-        this.addConnection(c.outNodeId, c.outPort, c.inNodeId, c.inPort)
+        this.makeConnection(c.outNodeId, c.outPort, c.inNodeId, c.inPort)
       );
     }
   }
