@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notification — Minimal Docs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+  </head>
+
+  <body class="p-3 template-body">
+    <div class="container page">
+      <div class="header mb-3">
+        <h1 class="mb-0">Notification</h1>
+        <span class="subtitle">Notification + error modal notifications (Bootstrap based)</span>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Install & Import</div>
+        <p class="mb-2">
+          Use as an ES module. The library exports a default `notification` instance.
+        </p>
+        <pre><code>&lt;script type="module"&gt;
+import notification from './components/notification.js';
+&lt;/script&gt;
+      </code></pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Quick Start</div>
+        <pre><code>import notification from './components/notification.js';
+// Basic notifications
+notification.info('Informational message');
+notification.success('Saved successfully');
+notification.warning('Caution: check this');
+// Error with modal details
+notification.error('An error occurred', 'Error Title', { code: 500, message: 'Server error' });
+      </code></pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Demo</div>
+        <p class="text-muted">
+          Trigger different notification types below. Errors include a link to view details in a
+          modal.
+        </p>
+        <div class="mt-2">
+          <button id="btn-info" class="btn btn-sm btn-outline-primary me-2">Show Info</button>
+          <button id="btn-success" class="btn btn-sm btn-outline-success me-2">Show Success</button>
+          <button id="btn-warning" class="btn btn-sm btn-outline-warning me-2">Show Warning</button>
+          <button id="btn-error" class="btn btn-sm btn-outline-danger">Show Error</button>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+
+    <script type="module">
+      import notification from "../components/notification.js";
+
+      document.getElementById("btn-info").addEventListener("click", () => {
+        notification.info("This is an informational toast.");
+      });
+
+      document.getElementById("btn-success").addEventListener("click", () => {
+        notification.success("Operation completed successfully.");
+      });
+
+      document.getElementById("btn-warning").addEventListener("click", () => {
+        notification.warning("This is a warning — check your input.");
+      });
+
+      document.getElementById("btn-error").addEventListener("click", () => {
+        notification.error("Unexpected error occurred", "Server Error", {
+          status: 500,
+          message: "Internal server error",
+        });
+      });
+    </script>
+  </body>
+</html>
