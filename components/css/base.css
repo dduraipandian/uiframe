@@ -322,8 +322,21 @@
       &.selected {
         stroke: var(--bs-primary);
       }
+      &.flow-connection-path-bad {
+        stroke: var(--bs-danger);
+      }
     }
   }
 }
 
 /* END: FLOW COMPONENT */
+
+/* START: NOTIFICATION COMPONENT */
+
+.uiframe-notification-container {
+  .toast {
+    border: none;
+  }
+}
+
+/* END: NOTIFICATION COMPONENT */
