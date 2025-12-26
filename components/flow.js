@@ -550,7 +550,8 @@ class Flow extends EmitterComponent {
 class FlowDag extends Flow {
   constructor({ name, options = {} }) {
     super({ name, options });
-    this.dag = options.dag || true;
+    this.dag = options.dag ?? true;
+    console.log(this.dag)
     this.adjacencyList = {};
   }
 

@@ -140,6 +140,35 @@ describe("Flow Component", () => {
     expect(svg.querySelectorAll("path").length).toBe(2);
   });
 
+  test("should add connections between nodes when cyclic if flow is non-dag", () => {
+    const flow = new Flow({ name: "TestFlow", options: { "dag": false } });
+    flow.renderInto(container);
+
+    const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
+    const n2 = flow.addNode({ name: "N2", inputs: 1, outputs: 0 });
+    const n3 = flow.addNode({ name: "N3", inputs: 1, outputs: 1 });
+
+    let connected = flow.makeConnection(n1, 0, n2, 0);
+    connected = flow.makeConnection(n3, 0, n2, 0);
+
+    connected = flow.makeConnection(n2, 0, n3, 0);
+
+    expect(flow.dag).toBe(false);
+    expect(connected).toBeTruthy();
+
+    expect(flow.connections.length).toBe(3);
+    expect(flow.connections[1]).toEqual({
+      outNodeId: n3,
+      outPort: 0,
+      inNodeId: n2,
+      inPort: 0,
+    });
+
+    // Verify SVG path creation
+    const svg = container.querySelector("svg.flow-connections");
+    expect(svg.querySelectorAll("path").length).toBe(3);
+  });
+
   test("should move node on drag", async () => {
     const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
