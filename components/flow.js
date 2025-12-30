@@ -26,8 +26,8 @@ class DragHandler {
 
   destroy() {
     this.element.removeEventListener("mousedown", this.onHold.bind(this));
-    this.element.removeEventListener("mousemove", this.onMove.bind(this));
-    this.element.removeEventListener("mouseup", this.onRelease.bind(this));
+    window.removeEventListener("mousemove", this.onMove.bind(this));
+    window.removeEventListener("mouseup", this.onRelease.bind(this));
   }
 
   registerDragEvent() {
@@ -48,8 +48,9 @@ class DragHandler {
     this.initialPosition = { x: this.elementX, y: this.elementY };
     this.element.style.cursor = "grabbing";
 
-    this.element.addEventListener("mousemove", this.onMove.bind(this));
-    this.element.addEventListener("mouseup", this.onRelease.bind(this));
+    window.addEventListener("mousemove", this.onMove.bind(this));
+    window.addEventListener("mouseup", this.onRelease.bind(this));
+    this.startRaf();
   }
 
   onMove(e) {
@@ -57,6 +58,8 @@ class DragHandler {
       console.debug("FLOW: Ignoreing Right click on", this.element);
       return;
     }
+    e.stopPropagation();
+
 
     if (!this.isDragging) {
       return;
@@ -67,8 +70,6 @@ class DragHandler {
 
     this.elementX = this.initialPosition.x + dx;
     this.elementY = this.initialPosition.y + dy;
-
-    this.startRaf();
   }
 
   onRelease(e) {
@@ -81,8 +82,8 @@ class DragHandler {
     this.isDragging = false;
     this.element.style.cursor = "grab";
 
-    this.element.removeEventListener("mousemove", this.onMove.bind(this));
-    this.element.removeEventListener("mouseup", this.onRelease.bind(this));
+    window.removeEventListener("mousemove", this.onMove.bind(this));
+    window.removeEventListener("mouseup", this.onRelease.bind(this));
   }
 
   static register(element, onMoveHandler) {
@@ -96,6 +97,7 @@ class DragHandler {
 
     const loop = () => {
       if (!this.isDragging) {
+        cancelAnimationFrame(this.rafId);
         this.rafId = null;
         return;
       }
@@ -241,11 +243,11 @@ class Flow extends EmitterComponent {
     hl.registerDragEvent();
 
     nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach((port) => {
-      port.onmousedown = (e) => this.startConnection(port, node.id, e);
+      port.onmousedown = (e) => this.mouseDownStartConnection(port, node.id, e);
     });
 
     nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach((port) => {
-      port.onmouseup = (e) => this.completeConnection(port, node.id, e);
+      port.onmouseup = (e) => this.mouseUpCompleteConnection(port, node.id, e);
     });
 
     nodeEl
@@ -293,15 +295,15 @@ class Flow extends EmitterComponent {
     this.redrawCanvas();
   }
 
-  startConnection(port, nodeId, event) {
+  mouseDownStartConnection(port, nodeId, event) {
     console.debug("FLOW: Start connection from port: ", port, "nodeId: ", nodeId);
     event.stopPropagation();
     this.isConnecting = true;
     this.connectionStart = { nodeId, index: port.dataset.index };
 
     // Use addEventListener instead of window.onmousemove to avoid JSDOM redefinition errors
-    this._drawConnection = (e) => this.drawConnection(port, nodeId, e);
-    this._cancelConnection = (e) => this.cancelConnection(e, nodeId);
+    this._drawConnection = (e) => this.mouseMoveDrawConnection(port, nodeId, e);
+    this._cancelConnection = (e) => this.keyDownCancelConnection(e, nodeId);
     window.addEventListener("mousemove", this._drawConnection);
     window.addEventListener("keydown", this._cancelConnection);
 
@@ -309,13 +311,13 @@ class Flow extends EmitterComponent {
     if (this.nodes[nodeId]) this.nodes[nodeId].portOffsets = {};
   }
 
-  drawConnection(port, nodeId, event) {
+  mouseMoveDrawConnection(port, nodeId, event) {
     if (this.isConnecting) {
       this.renderTempConnection(port, nodeId, event);
     }
   }
 
-  completeConnection(port, nodeId, event) {
+  mouseUpCompleteConnection(port, nodeId, event) {
     if (this.isConnecting) {
       // Check if dropped on local input port
       const target = event.target.closest(".flow-port");
@@ -336,12 +338,12 @@ class Flow extends EmitterComponent {
 
   makeConnection(outNodeId, outPort, inNodeId, inPort, event = null, nodeId = null) {
     const connected = this.addConnection(outNodeId, outPort, inNodeId, inPort);
-    if (event && connected) this.cancelConnection(event, nodeId);
+    if (event && connected) this.keyDownCancelConnection(event, nodeId);
     return connected;
   }
 
   // eslint-disable-next-line no-unused-vars
-  cancelConnection(event, nodeId) {
+  keyDownCancelConnection(event, nodeId) {
     console.log(event);
     // ESCAPE key pressed
     if (event.type == "keydown" && event.keyCode != 27) {
@@ -553,10 +555,12 @@ class Flow extends EmitterComponent {
     const path = this.svgEl.querySelector(".flow-connection-temp");
     if (path) path.remove();
   }
+
   badTempConnection() {
     const path = this.svgEl.querySelector(".flow-connection-temp");
     if (path) path.classList.add("flow-connection-path-bad");
   }
+
   clearBadTempConnection() {
     const path = this.svgEl.querySelector(".flow-connection-temp.flow-connection-path-bad");
     if (path) path.classList.remove("flow-connection-path-bad");
