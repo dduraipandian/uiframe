@@ -6,10 +6,12 @@ class DragHandler {
     element,
     onMoveHandler,
     initialPosition = { x: 0, y: 0 },
-    startDragPosition = { x: 0, y: 0 }
+    startDragPosition = { x: 0, y: 0 },
+    zoom = 1
   ) {
     this.element = element;
     this.onMoveHandler = onMoveHandler;
+    this.zoomGetter = typeof zoom === "function" ? zoom : () => zoom;
 
     this.isDragging = false;
     this.dragStartPosition = startDragPosition;
@@ -63,8 +65,9 @@ class DragHandler {
       return;
     }
 
-    const dx = e.clientX - this.dragStartPosition.x;
-    const dy = e.clientY - this.dragStartPosition.y;
+    const zoom = this.zoomGetter();
+    const dx = (e.clientX - this.dragStartPosition.x) / zoom;
+    const dy = (e.clientY - this.dragStartPosition.y) / zoom;
 
     this.elementX = this.initialPosition.x + dx;
     this.elementY = this.initialPosition.y + dy;
@@ -84,8 +87,14 @@ class DragHandler {
     window.removeEventListener("mouseup", this.onRelease.bind(this));
   }
 
-  static register(element, onMoveHandler) {
-    const dragHandler = new DragHandler(element, onMoveHandler);
+  static register(element, onMoveHandler, zoom = 1) {
+    const dragHandler = new DragHandler(
+      element,
+      onMoveHandler,
+      { x: 0, y: 0 },
+      { x: 0, y: 0 },
+      zoom
+    );
     dragHandler.registerDragEvent();
     return dragHandler;
   }
@@ -155,6 +164,11 @@ class Flow extends EmitterComponent {
                     style="transform: translate(${this.canvasX}px, ${this.canvasY}px) scale(${this.zoom})">
                 <svg id="${this.id}-svg" class="flow-connections"></svg>
                 </div>
+                <ul class="list-group flow-toolbar list-group-horizontal-sm" style="width: fit-content;">
+                  <a href="#" class="list-group-item list-group-item-action"><i class="bi bi-plus-lg"></i></a>                  
+                  <a href="#" class="list-group-item list-group-item-action"><i class="bi bi-justify"></i></a>
+                  <a href="#" class="list-group-item list-group-item-action"><i class="bi bi-dash-lg"></i></a>
+                </ul>
             </div>
         `;
   }
@@ -206,7 +220,7 @@ class Flow extends EmitterComponent {
         <div id="node-${node.id}" 
             data-id="${node.id}" 
             class="flow-node rounded" 
-            style="top: ${node.y}px; left: ${node.x}px; transform: scale(${this.zoom}); 
+            style="top: ${node.y}px; left: ${node.x}px; 
                     width: ${this.nodeWidth}px; height: fit-content">                        
             <div class="flow-ports-column flow-ports-in">
                 ${Array.from({ length: node.inputs }, (_, i) => inputHtml.replace("{{index}}", i)).join("\n")}
@@ -234,10 +248,16 @@ class Flow extends EmitterComponent {
     nodeEl.onmousedown = (e) => this.onNodeClick(e, node.id);
 
     // register drap handler
-    const hl = new DragHandler(nodeEl, this.redrawNodeWithXY.bind(this, node.id), {
-      x: this.nodes[node.id].x,
-      y: this.nodes[node.id].y,
-    });
+    const hl = new DragHandler(
+      nodeEl,
+      this.redrawNodeWithXY.bind(this, node.id),
+      {
+        x: this.nodes[node.id].x,
+        y: this.nodes[node.id].y,
+      },
+      { x: 0, y: 0 },
+      () => this.zoom
+    );
     hl.registerDragEvent();
 
     nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach((port) => {

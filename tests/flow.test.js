@@ -408,4 +408,28 @@ describe("Flow Component", () => {
     const path = flow.svgEl.querySelector("path");
     expect(path).toBeNull();
   });
+
+  test("should move node at correct speed when zoomed", async () => {
+    const zoom = 0.5;
+    const flow = new Flow({ name: "TestFlow", options: { zoom } });
+    flow.renderInto(container);
+
+    const n1 = flow.addNode({ name: "N1", x: 100, y: 100 });
+    const nodeEl = container.querySelector(`#node-${n1}`);
+
+    // Start drag
+    nodeEl.dispatchEvent(new MouseEvent("mousedown", { clientX: 0, clientY: 0, bubbles: true }));
+
+    // Move mouse 100px. At 0.5 zoom, the node should move 200 logical units.
+    window.dispatchEvent(new MouseEvent("mousemove", { clientX: 100, clientY: 100 }));
+
+    // Wait for RAF
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    expect(flow.nodes[n1].x).toBe(100 + 100 / zoom); // 100 + 200 = 300
+    expect(flow.nodes[n1].y).toBe(100 + 100 / zoom); // 100 + 200 = 300
+
+    // Release
+    window.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+  });
 });
