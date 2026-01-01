@@ -642,8 +642,8 @@ class FlowDag extends Flow {
       for (const vNeighbor of virtualNeighbors) {
         if (this.isCyclic(vNeighbor, visited, stack)) {
           this.tempCyclicCache[cacheKey] = true;
-          return false
-        };
+          return false;
+        }
       }
     }
 
