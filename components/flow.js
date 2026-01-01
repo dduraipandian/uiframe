@@ -1,5 +1,4 @@
 import { EmitterComponent } from "./base.js";
-import Utility from "./utils.js";
 import notification from "./notification.js";
 
 class DragHandler {
@@ -394,7 +393,7 @@ class Flow extends EmitterComponent {
     // I spent hours to find this out with trial and error.
     this.nodes[id].el.style.top = `${y}px`;
     this.nodes[id].el.style.left = `${x}px`;
-    this.nodes[id].portOffsets = {};
+
     this.updateConnections(id);
   }
 
@@ -438,12 +437,7 @@ class Flow extends EmitterComponent {
     const connection = { outNodeId: outId, outPort: oPort, inNodeId: inId, inPort: iPort };
     this.connections.push(connection);
 
-    // This is important to ensure that the connection is created after the node is rendered
-    // when it is added programmatically, not from the drawing
-    const node = this.canvasEl.querySelector(`#node-${outId}`);
-    Utility.observe(node, () => {
-      this.createConnectionPath(connection);
-    });
+    this.createConnectionPath(connection);
     return true;
   }
 
@@ -478,29 +472,15 @@ class Flow extends EmitterComponent {
     const portEl = node.el.querySelector(`.flow-port[data-type="${type}"][data-index="${index}"]`);
     if (!portEl) return { x: node.x, y: node.y };
 
-    // Cache port offset calculations to avoid expensive DOM measurements
-    const cacheKey = `${type}-${index}`;
-    if (!node.portOffsets) {
-      node.portOffsets = {};
-    }
+    const portRect = portEl.getBoundingClientRect();
+    const nodeRect = node.el.getBoundingClientRect();
 
-    if (!node.portOffsets[cacheKey]) {
-      const portRect = portEl.getBoundingClientRect();
-      const nodeRect = node.el.getBoundingClientRect();
+    const offsetX = (portRect.left - nodeRect.left + portRect.width / 2) / this.zoom;
+    const offsetY = (portRect.top - nodeRect.top + portRect.height / 2) / this.zoom;
 
-      // Cache the offset relative to the node
-      // IMPORTANT: Divide by zoom to get the logical offset in the transform coordinate space
-      node.portOffsets[cacheKey] = {
-        x: (portRect.left - nodeRect.left + portRect.width / 2) / this.zoom,
-        y: (portRect.top - nodeRect.top + portRect.height / 2) / this.zoom,
-      };
-    }
-
-    // Return cached offset + current node position
-    const offset = node.portOffsets[cacheKey];
     return {
-      x: node.x + offset.x,
-      y: node.y + offset.y,
+      x: node.x + offsetX,
+      y: node.y + offsetY,
     };
   }
 

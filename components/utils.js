@@ -63,21 +63,6 @@ class Utility {
     }
     return false;
   }
-
-  static observe(element, callback, root = null) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) callback();
-        });
-      },
-      {
-        root: root,
-        threshold: 0.1, // fire when 10% of the element is visible
-      }
-    );
-    observer.observe(element);
-  }
 }
 
 export default Utility;
