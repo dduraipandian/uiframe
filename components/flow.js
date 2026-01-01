@@ -136,6 +136,7 @@ class Flow extends EmitterComponent {
 
     this.options = options;
     this.zoom = options.zoom || 1;
+    this.originalZoom = this.zoom;
     this.canvasX = options.canvas?.x || 0;
     this.canvasY = options.canvas?.y || 0;
 
@@ -151,6 +152,10 @@ class Flow extends EmitterComponent {
     this.gridFactor = 24;
     this.nodeWidth = 200;
     this.nodeHeight = 90;
+
+    this.zoomInEl = null;
+    this.zoomOutEl = null;
+    this.zoomResetEl = null;
   }
 
   /**
@@ -164,10 +169,10 @@ class Flow extends EmitterComponent {
                     style="transform: translate(${this.canvasX}px, ${this.canvasY}px) scale(${this.zoom})">
                 <svg id="${this.id}-svg" class="flow-connections"></svg>
                 </div>
-                <ul class="list-group flow-toolbar list-group-horizontal-sm" style="width: fit-content;">
-                  <a href="#" class="list-group-item list-group-item-action"><i class="bi bi-plus-lg"></i></a>                  
-                  <a href="#" class="list-group-item list-group-item-action"><i class="bi bi-justify"></i></a>
-                  <a href="#" class="list-group-item list-group-item-action"><i class="bi bi-dash-lg"></i></a>
+                <ul class="list-group flow-toolbar list-group-horizontal-sm zoom-actions" style="width: fit-content;">
+                  <a href="#" class="list-group-item list-group-item-action" id="${this.id}-zoomin" data-action="zoomin"><i class="bi bi-plus-lg"></i></a>                  
+                  <a href="#" class="list-group-item list-group-item-action" id="${this.id}-zoomreset" data-action="zoomreset"><i class="bi bi-justify"></i></a>
+                  <a href="#" class="list-group-item list-group-item-action" id="${this.id}-zoomout" data-action="zoomout"><i class="bi bi-dash-lg"></i></a>
                 </ul>
             </div>
         `;
@@ -189,6 +194,43 @@ class Flow extends EmitterComponent {
     // Drop listener for adding new nodes from outside
     this.containerEl.addEventListener("dragover", (e) => e.preventDefault());
     this.containerEl.addEventListener("drop", this.onDrop.bind(this));
+
+    this.zoomInEl = this.containerEl.querySelector(`#${this.id}-zoomin`);
+    this.zoomOutEl = this.containerEl.querySelector(`#${this.id}-zoomout`);
+    this.zoomResetEl = this.containerEl.querySelector(`#${this.id}-zoomreset`);
+    this.zoomInEl.addEventListener("click", this.onZoomAction.bind(this));
+    this.zoomOutEl.addEventListener("click", this.onZoomAction.bind(this));
+    this.zoomResetEl.addEventListener("click", this.onZoomAction.bind(this));
+  }
+
+  onZoomAction(e) {
+    e.preventDefault();
+    const action = e.currentTarget.dataset.action;
+    switch (action) {
+      case "zoomin":
+        this.zoom += 0.1;
+        break;
+      case "zoomout":
+        this.zoom -= 0.1;
+        break;
+      case "zoomreset":
+        this.zoom = this.originalZoom;
+        break;
+    }
+    this.redrawCanvas();
+  }
+
+  zoomChangeUpdate() {
+    if (this.zoom === this.originalZoom) {
+      this.zoomInEl.classList.remove("active");
+      this.zoomOutEl.classList.remove("active");
+    } else if (this.zoom > this.originalZoom) {
+      this.zoomInEl.classList.add("active");
+      this.zoomOutEl.classList.remove("active");
+    } else {
+      this.zoomInEl.classList.remove("active");
+      this.zoomOutEl.classList.add("active");
+    }
   }
 
   /**
@@ -400,6 +442,7 @@ class Flow extends EmitterComponent {
     this.containerEl.style.backgroundPosition = `${x}px ${y}px`;
 
     this.containerEl.style.backgroundImage = `radial-gradient(#c1c1c4 ${1.5 * this.zoom}px, transparent ${1.5 * this.zoom}px)`;
+    this.zoomChangeUpdate();
   }
 
   redrawNodeWithXY(id, x, y) {
