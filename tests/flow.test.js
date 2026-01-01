@@ -172,8 +172,7 @@ describe("Flow Component", () => {
     let path3 = flow.svgEl.querySelector(`path[data-id="${pathId3}"]`);
     expect(path3).toBeNull();
 
-    let pathId4 = "4:1-2:0";
-    let path4 = flow.svgEl.querySelector(`.flow-connection-temp`);
+    let path4 = flow.svgEl.querySelector(".flow-connection-temp");
     expect(path4.classList.contains("flow-connection-path-bad")).toBeTruthy();
 
     // Press ESC key to cancel

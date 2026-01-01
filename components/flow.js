@@ -557,6 +557,7 @@ class Flow extends EmitterComponent {
     this.clearBadTempConnection();
   }
 
+  // eslint-disable-next-line no-unused-vars
   badTempConnection(outNodeId, outPort, inNodeId, inPort) {
     const path = this.svgEl.querySelector(".flow-connection-temp");
     if (path) path.classList.add("flow-connection-path-bad");
