@@ -132,6 +132,66 @@ describe("Flow Component", () => {
     expect(notification.warning).toHaveBeenCalled();
   });
 
+  test("should cancel connection on ESC keydown while drawing and bad connection to be cleared", () => {
+    const flow = new Flow({ name: "TestFlow" });
+    flow.renderInto(container);
+
+    const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
+    const n2 = flow.addNode({ name: "N2", inputs: 1, outputs: 1 });
+    const n3 = flow.addNode({ name: "N3", inputs: 1, outputs: 2 });
+    const n4 = flow.addNode({ name: "N4", inputs: 1, outputs: 1 });
+
+    flow.makeConnection(n1, 0, n2, 0);
+    flow.makeConnection(n2, 0, n3, 0);
+    flow.makeConnection(n3, 1, n4, 0);
+    flow.makeConnection(n4, 1, n4, 0);
+
+    const outPort = container.querySelector(`#node-${n4} .flow-port[data-type="output"]`);
+    const inPort = container.querySelector(`#node-${n2} .flow-port[data-type="input"]`);
+
+    // Start drag from output
+    outPort.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+    expect(flow.isConnecting).toBe(true);
+
+    // Move mouse
+    window.dispatchEvent(new MouseEvent("mousemove", { clientX: 100, clientY: 100 }));
+    expect(container.querySelector(".flow-connection-temp")).not.toBeNull();
+
+    // Release on input
+    inPort.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+
+    let pathId = "2:0-3:0";
+    let path = flow.svgEl.querySelector(`path[data-id="${pathId}"]`);
+    expect(path.classList.contains("flow-connection-path-bad")).toBeTruthy();
+
+    let pathId2 = "3:1-4:0";
+    let path2 = flow.svgEl.querySelector(`path[data-id="${pathId2}"]`);
+    expect(path2.classList.contains("flow-connection-path-bad")).toBeTruthy();
+
+    let pathId3 = "4:1-2:0";
+    let path3 = flow.svgEl.querySelector(`path[data-id="${pathId3}"]`);
+    expect(path3).toBeNull();
+
+    let pathId4 = "4:1-2:0";
+    let path4 = flow.svgEl.querySelector(`.flow-connection-temp`);
+    expect(path4.classList.contains("flow-connection-path-bad")).toBeTruthy();
+
+    // Press ESC key to cancel
+    window.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 27, bubbles: true }));
+
+    // Verify connection was cancelled
+    expect(flow.isConnecting).toBe(false);
+    expect(container.querySelector(".flow-connection-temp")).toBeNull();
+
+    pathId = "2:0-3:0";
+    path = flow.svgEl.querySelector(`path[data-id="${pathId}"]`);
+    expect(path.classList.contains("flow-connection-path-bad")).not.toBeTruthy();
+
+    pathId2 = "3:1-4:0";
+    path2 = flow.svgEl.querySelector(`path[data-id="${pathId2}"]`);
+    expect(path2.classList.contains("flow-connection-path-bad")).not.toBeTruthy();
+  });
+
   test("should add connections between nodes when cyclic if flow is non-dag", () => {
     const flow = new Flow({ name: "TestFlow", options: { dag: false } });
     flow.renderInto(container);

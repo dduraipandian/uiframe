@@ -418,7 +418,7 @@ class Flow extends EmitterComponent {
   addConnection(outNodeId, outPort, inNodeId, inPort) {
     if (!this.doMakeConnection(outNodeId, inNodeId)) {
       notification.warning("This connection will create cyclic flow.");
-      this.badTempConnection();
+      this.badTempConnection(outNodeId, outPort, inNodeId, inPort);
       this.badConnection = true;
       return false;
     }
@@ -554,16 +554,41 @@ class Flow extends EmitterComponent {
   clearTempConnection() {
     const path = this.svgEl.querySelector(".flow-connection-temp");
     if (path) path.remove();
+    this.clearBadTempConnection();
   }
 
-  badTempConnection() {
+  badTempConnection(outNodeId, outPort, inNodeId, inPort) {
     const path = this.svgEl.querySelector(".flow-connection-temp");
     if (path) path.classList.add("flow-connection-path-bad");
+
+    const cacheKey = `${outNodeId}->${inNodeId}`;
+    let stack = this.tempStackCache[cacheKey];
+    console.log(stack);
+    if (stack.length > 1) {
+      let pos = 0;
+      while (pos < stack.length - 1) {
+        this.connections.forEach((conn) => {
+          if (conn.outNodeId === stack[pos] && conn.inNodeId === stack[pos + 1]) {
+            console.log(conn);
+            const tp = this.svgEl.querySelector(
+              `path[data-id="${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}"]`
+            );
+            tp.classList.add("flow-connection-path-bad");
+          }
+        });
+        pos++;
+      }
+    }
   }
 
+  // bad connection path (cyclic in DAG) will be cleared on below scenario
+  // 1. drawing new (temp) connection
+  // 2. cancel drawing connection this.keyDownCancelConnection
   clearBadTempConnection() {
-    const path = this.svgEl.querySelector(".flow-connection-temp.flow-connection-path-bad");
-    if (path) path.classList.remove("flow-connection-path-bad");
+    const paths = this.svgEl.querySelectorAll(".flow-connection-path-bad");
+    paths.forEach((path) => {
+      path.classList.remove("flow-connection-path-bad");
+    });
   }
 }
 
@@ -575,6 +600,7 @@ class FlowDag extends Flow {
     this.adjacencyList = {};
     this.nonCyclicCache = {};
     this.tempCyclicCache = {};
+    this.tempStackCache = {};
   }
 
   addNodeToAdjacencyList(outNodeId, inNodeId) {
@@ -605,17 +631,24 @@ class FlowDag extends Flow {
   }
 
   isCyclic(node, visited, stack) {
-    if (stack.has(node)) return true; // cycle found
+    if (stack.includes(node)) {
+      // cycle found
+      // adding last node to stack to show the cycle in the UI
+      stack.push(node);
+      return true;
+    }
     if (visited.has(node)) return false;
 
     visited.add(node);
-    stack.add(node);
+    stack.push(node);
+
+    console.log(stack);
 
     for (const neighbor of this.adjacencyList[node] || new Set()) {
       if (this.isCyclic(neighbor, visited, stack)) return true;
     }
 
-    stack.delete(node);
+    stack.pop();
     return false;
   }
 
@@ -630,15 +663,16 @@ class FlowDag extends Flow {
       return false;
     }
 
+    this.tempStackCache[cacheKey] = [];
+    let stack = this.tempStackCache[cacheKey];
     const visited = new Set();
-    const stack = new Set();
 
     if (this.dag) {
       let virtualNeighbors = new Set(this.adjacencyList[outNodeId] || new Set());
       virtualNeighbors.add(inNodeId);
 
       visited.add(outNodeId);
-      stack.add(outNodeId);
+      stack.push(outNodeId);
       for (const vNeighbor of virtualNeighbors) {
         if (this.isCyclic(vNeighbor, visited, stack)) {
           this.tempCyclicCache[cacheKey] = true;
@@ -670,6 +704,7 @@ class FlowDag extends Flow {
   addConnNonCyclicCache(outNodeId, inNodeId) {
     const cacheKey = `${outNodeId}->${inNodeId}`;
     this.nonCyclicCache[cacheKey] = false;
+    delete this.tempStackCache[cacheKey];
   }
 }
 
