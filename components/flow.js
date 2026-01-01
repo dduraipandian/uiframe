@@ -467,6 +467,7 @@ class Flow extends EmitterComponent {
   }
 
   removePath(path, conn) {
+    this.removeConnCyclicCache(conn.outNodeId, conn.inNodeId);
     this.connections = this.connections.filter((c) => c !== conn);
     path.remove();
   }
@@ -573,6 +574,8 @@ class FlowDag extends Flow {
     this.dag = options.dag ?? true;
     console.log(this.dag);
     this.adjacencyList = {};
+    this.nonCyclicCache = {};
+    this.tempCyclicCache = {};
   }
 
   addNodeToAdjacencyList(outNodeId, inNodeId) {
@@ -618,9 +621,19 @@ class FlowDag extends Flow {
   }
 
   doMakeConnection(outNodeId, inNodeId) {
-    console.log(this.adjacencyList);
+    const cacheKey = `${outNodeId}->${inNodeId}`;
+
+    if (this.nonCyclicCache[cacheKey] !== undefined) {
+      return !this.nonCyclicCache[cacheKey];
+    }
+
+    if (this.tempCyclicCache[cacheKey] !== undefined) {
+      return false;
+    }
+
     const visited = new Set();
     const stack = new Set();
+
     if (this.dag) {
       let virtualNeighbors = new Set(this.adjacencyList[outNodeId] || new Set());
       virtualNeighbors.add(inNodeId);
@@ -628,12 +641,36 @@ class FlowDag extends Flow {
       visited.add(outNodeId);
       stack.add(outNodeId);
       for (const vNeighbor of virtualNeighbors) {
-        if (this.isCyclic(vNeighbor, visited, stack)) return false;
+        if (this.isCyclic(vNeighbor, visited, stack)) {
+          this.tempCyclicCache[cacheKey] = true;
+          return false
+        };
       }
     }
 
     this.addNodeToAdjacencyList(outNodeId, inNodeId);
+
+    // add to cache only when we make a connection
+    // if the connection is cyclic, connection from the graph can be removed and updated again to create new connection.
+    this.addConnNonCyclicCache(outNodeId, inNodeId);
     return true;
+  }
+
+  removeConnCyclicCache(outNodeId, inNodeId) {
+    const cacheKey = `${outNodeId}->${inNodeId}`;
+    console.log(this.adjacencyList, this.adjacencyList[outNodeId]);
+    this.adjacencyList[outNodeId].delete(inNodeId);
+    delete this.nonCyclicCache[cacheKey];
+
+    // remove all temporary cyclic cache.
+    // This is partial fix for now, as we need to traverse the graph to remove the affected temporary connection cache.
+    // Efficient when no connections are removed to make a DAG.
+    this.tempCyclicCache = {};
+  }
+
+  addConnNonCyclicCache(outNodeId, inNodeId) {
+    const cacheKey = `${outNodeId}->${inNodeId}`;
+    this.nonCyclicCache[cacheKey] = false;
   }
 }
 
