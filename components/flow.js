@@ -1,5 +1,8 @@
 import { EmitterComponent } from "./base.js";
 import notification from "./notification.js";
+import FlowNodeManager from "./flow/node.js";
+import FlowConnectionManager from "./flow/connection.js";
+import * as Constant from "./flow/constants.js";
 
 class DragHandler {
   constructor(
@@ -141,7 +144,7 @@ class Flow extends EmitterComponent {
     this.canvasY = options.canvas?.y || 0;
 
     this.nodes = {}; // { id: { id, x, y, inputs, outputs, data, el } }
-    this.connections = []; // [ { outputNodeId, outputPort, inputNodeId, inputPort } ]
+    // this.connections = []; // [ { outputNodeId, outputPort, inputNodeId, inputPort } ]
     this.nodeIdCounter = 1;
 
     // DOM References
@@ -156,6 +159,9 @@ class Flow extends EmitterComponent {
     this.zoomInEl = null;
     this.zoomOutEl = null;
     this.zoomResetEl = null;
+
+    this.nodeManager = null;
+    this.connectionManager = null;
   }
 
   /**
@@ -201,6 +207,30 @@ class Flow extends EmitterComponent {
     this.zoomInEl.addEventListener("click", this.onZoomAction.bind(this));
     this.zoomOutEl.addEventListener("click", this.onZoomAction.bind(this));
     this.zoomResetEl.addEventListener("click", this.onZoomAction.bind(this));
+
+    this.nodeManager = new FlowNodeManager({
+      name: this.name + "-flow-node-manager",
+      canvasContainer: this.canvasEl,
+      options: this.options
+    });
+    this.connectionManager = new FlowConnectionManager({
+      name: this.name + "-flow-connection-manager",
+      connectionContainer: this.svgEl,
+      nodeManager: this.nodeManager,
+      options: this.options
+    });
+
+    this.nodeManager.on(Constant.NODE_MOVED_EVENT, ({ id, x, y }) => {
+      console.debug("Node is moved: ", id, x, y)
+      this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
+      this.connectionManager.updateConnections?.(id);
+    });
+
+    this.connectionManager.on(Constant.CONNECTION_ADDED_EVENT, (connection) => {
+      console.debug("Connection is added: ", connection)
+      this.emit(Constant.CONNECTION_ADDED_EVENT, connection);
+      this.createConnectionPath(connection);
+    });
   }
 
   onZoomAction(e) {
@@ -244,78 +274,8 @@ class Flow extends EmitterComponent {
    * @param {string} params.html - Inner HTML content.
    * @returns {number} The new node ID.
    */
-  addNode({ name, inputs = 1, outputs = 1, x = 0, y = 0, html = "" }) {
-    const id = this.nodeIdCounter++;
-    const node = { id, name, inputs, outputs, x, y, html };
-
-    this.nodes[id] = node;
-    this.renderNode(node);
-    return id;
-  }
-
-  renderNode(node) {
-    const el = document.createElement("div");
-    const inputHtml = `<div class="flow-port" data-type="input" data-node-id="${node.id}" data-index="{{index}}"></div>`;
-    const outputHtml = `<div class="flow-port" data-type="output" data-node-id="${node.id}" data-index="{{index}}"></div>`;
-
-    const nodeHtml = `
-        <div id="node-${node.id}" 
-            data-id="${node.id}" 
-            class="flow-node rounded" 
-            style="top: ${node.y}px; left: ${node.x}px; 
-                    width: ${this.nodeWidth}px; height: fit-content">                        
-            <div class="flow-ports-column flow-ports-in">
-                ${Array.from({ length: node.inputs }, (_, i) => inputHtml.replace("{{index}}", i)).join("\n")}
-            </div>
-            <div class="flow-node-content card w-100">              
-              <div class="card-header">${node.name}</div>
-              <div class="card-body">${node.html}</div>              
-            </div>            
-            </button>
-            <div class="flow-ports-column flow-ports-out">                
-                ${Array.from({ length: node.outputs }, (_, i) => outputHtml.replace("{{index}}", i)).join("\n")}
-            </div>
-            <button type="button" 
-                data-id="${node.id}"
-                class="btn-danger btn-close node-close border rounded shadow-none m-1" 
-                aria-label="Close">
-            </button>
-        </div>
-        `;
-    el.innerHTML = nodeHtml;
-
-    const nodeEl = el.querySelector(`#node-${node.id}`);
-
-    nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
-    nodeEl.onmousedown = (e) => this.onNodeClick(e, node.id);
-
-    // register drap handler
-    const hl = new DragHandler(
-      nodeEl,
-      this.redrawNodeWithXY.bind(this, node.id),
-      {
-        x: this.nodes[node.id].x,
-        y: this.nodes[node.id].y,
-      },
-      { x: 0, y: 0 },
-      () => this.zoom
-    );
-    hl.registerDragEvent();
-
-    nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach((port) => {
-      port.onmousedown = (e) => this.mouseDownStartConnection(port, node.id, e);
-    });
-
-    nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach((port) => {
-      port.onmouseup = (e) => this.mouseUpCompleteConnection(port, node.id, e);
-    });
-
-    nodeEl
-      .querySelector("button.node-close")
-      .addEventListener("click", (e) => this.removeNode(e, node.id));
-
-    this.nodes[node.id].el = nodeEl;
-    this.canvasEl.appendChild(nodeEl);
+  addNode(params) {
+    return this.nodeManager.addNode(params);
   }
 
   onDrop(e) {
@@ -464,7 +424,7 @@ class Flow extends EmitterComponent {
     console.log("FLOW: removing node ", nodeId);
     event.stopPropagation();
     const id = parseInt(nodeId);
-    const relevant = this.connections.filter((c) => c.outNodeId === id || c.inNodeId === id);
+    const relevant = this.connectionManager.connections.filter((c) => c.outNodeId === id || c.inNodeId === id);
 
     relevant.forEach((conn) => {
       const pathId = `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
@@ -475,101 +435,6 @@ class Flow extends EmitterComponent {
 
     this.nodes[nodeId].el.remove();
     delete this.nodes[nodeId];
-  }
-
-  addConnection(outNodeId, outPort, inNodeId, inPort) {
-    if (!this.doMakeConnection(outNodeId, inNodeId)) {
-      notification.warning("This connection will create cyclic flow.");
-      this.badTempConnection(outNodeId, outPort, inNodeId, inPort);
-      this.badConnection = true;
-      return false;
-    }
-
-    this.badConnection = false;
-    const outId = parseInt(outNodeId);
-    const inId = parseInt(inNodeId);
-    const oPort = parseInt(outPort);
-    const iPort = parseInt(inPort);
-
-    const exists = this.connections.some(
-      (c) =>
-        c.outNodeId === outId && c.outPort === oPort && c.inNodeId === inId && c.inPort === iPort
-    );
-    if (exists) return;
-
-    const connection = { outNodeId: outId, outPort: oPort, inNodeId: inId, inPort: iPort };
-    this.connections.push(connection);
-
-    this.createConnectionPath(connection);
-    return true;
-  }
-
-  createConnectionPath(conn) {
-    const p1 = this.getPortPosition(conn.outNodeId, "output", conn.outPort);
-    const p2 = this.getPortPosition(conn.inNodeId, "input", conn.inPort);
-
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
-    path.setAttribute("d", d);
-    path.setAttribute("class", "flow-connection-path");
-    path.dataset.id = `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
-
-    path.onclick = (e) => {
-      e.stopPropagation();
-      this.removePath(path, conn);
-    };
-
-    this.svgEl.appendChild(path);
-  }
-
-  removePath(path, conn) {
-    this.removeConnCyclicCache(conn.outNodeId, conn.inNodeId);
-    this.connections = this.connections.filter((c) => c !== conn);
-    path.remove();
-  }
-
-  getPortPosition(nodeId, type, index) {
-    const node = this.nodes[nodeId];
-    if (!node || !node.el) return { x: 0, y: 0 };
-
-    const portEl = node.el.querySelector(`.flow-port[data-type="${type}"][data-index="${index}"]`);
-    if (!portEl) return { x: node.x, y: node.y };
-
-    const portRect = portEl.getBoundingClientRect();
-    const nodeRect = node.el.getBoundingClientRect();
-
-    const offsetX = (portRect.left - nodeRect.left + portRect.width / 2) / this.zoom;
-    const offsetY = (portRect.top - nodeRect.top + portRect.height / 2) / this.zoom;
-
-    return {
-      x: node.x + offsetX,
-      y: node.y + offsetY,
-    };
-  }
-
-  getBazierPath(x1, y1, x2, y2) {
-    const curvature = 0.5;
-    const hx1 = x1 + Math.abs(x2 - x1) * curvature;
-    const hx2 = x2 - Math.abs(x2 - x1) * curvature;
-
-    return `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2} ${y2}`;
-  }
-
-  updateConnections(nodeId) {
-    const id = parseInt(nodeId);
-    const relevant = this.connections.filter((c) => c.outNodeId === id || c.inNodeId === id);
-
-    relevant.forEach((conn) => {
-      const path = this.svgEl.querySelector(
-        `path[data-id="${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}"]`
-      );
-      if (path) {
-        const p1 = this.getPortPosition(conn.outNodeId, "output", conn.outPort);
-        const p2 = this.getPortPosition(conn.inNodeId, "input", conn.inPort);
-        const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
-        path.setAttribute("d", d);
-      }
-    });
   }
 
   renderTempConnection(port, nodeId, event) {
@@ -585,13 +450,13 @@ class Flow extends EmitterComponent {
       this.clearBadTempConnection();
     }
 
-    const p1 = this.getPortPosition(node.id, "output", port.dataset.index);
+    const p1 = this.connectionManager.getPortPosition(node.id, "output", port.dataset.index);
 
     const rect = this.canvasEl.getBoundingClientRect();
     const mouseX = (event.clientX - rect.left) / this.zoom;
     const mouseY = (event.clientY - rect.top) / this.zoom;
 
-    path.setAttribute("d", this.getBazierPath(p1.x, p1.y, mouseX, mouseY));
+    path.setAttribute("d", this.connectionManager.getBazierPath(p1.x, p1.y, mouseX, mouseY));
   }
 
   clearTempConnection() {
@@ -611,7 +476,7 @@ class Flow extends EmitterComponent {
     if (stack.length > 1) {
       let pos = 0;
       while (pos < stack.length - 1) {
-        this.connections.forEach((conn) => {
+        this.connectionManager.connections.forEach((conn) => {
           if (conn.outNodeId === stack[pos] && conn.inNodeId === stack[pos + 1]) {
             console.log(conn);
             const tp = this.svgEl.querySelector(
@@ -653,7 +518,7 @@ class FlowDag extends Flow {
   }
 
   buildAdjacencyList() {
-    this.connections.forEach((conn) => {
+    this.connectionManager.connections.forEach((conn) => {
       this.addNodeToAdjacencyList(conn.outNodeId, conn.inNodeId);
     });
     return this.adjacencyList;
@@ -758,7 +623,7 @@ class FlowActions extends FlowDag {
     const nodesExport = Object.values(this.nodes).map(({ el, ...rest }) => rest);
     return {
       nodes: nodesExport,
-      connections: this.connections,
+      connections: this.connectionManager.connections,
       zoom: this.zoom,
       canvas: { x: this.canvasX, y: this.canvasY },
     };
