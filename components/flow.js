@@ -223,13 +223,17 @@ class Flow extends EmitterComponent {
     this.nodeManager.on(Constant.NODE_MOVED_EVENT, ({ id, x, y }) => {
       console.debug("Node is moved: ", id, x, y)
       this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
-      this.connectionManager.updateConnections?.(id);
+      this.connectionManager.updateConnections(id);
     });
 
-    this.connectionManager.on(Constant.CONNECTION_ADDED_EVENT, (connection) => {
-      console.debug("Connection is added: ", connection)
-      this.emit(Constant.CONNECTION_ADDED_EVENT, connection);
-      this.createConnectionPath(connection);
+    this.connectionManager.on(Constant.CONNECTION_CREATED_EVENT, (connection) => {
+      console.debug("Connection is created: ", connection)
+      this.emit(Constant.CONNECTION_CREATED_EVENT, connection);
+    });
+
+    this.connectionManager.on(Constant.CONNECTION_CLICKED_EVENT, (connection) => {
+      console.debug("Connection is clicked: ", connection)
+      this.emit(Constant.CONNECTION_CLICKED_EVENT, connection);
     });
   }
 
@@ -430,7 +434,7 @@ class Flow extends EmitterComponent {
       const pathId = `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
       const path = this.svgEl.querySelector(`path[data-id="${pathId}"]`);
       console.log("FLOW: removing node path ", pathId);
-      this.removePath(path, conn);
+      this.connectionManager.removeConnection(conn);
     });
 
     this.nodes[nodeId].el.remove();

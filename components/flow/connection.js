@@ -91,12 +91,17 @@ class FlowConnectionManager extends EmitterComponent {
         const connection = { outNodeId: outId, outPort: oPort, inNodeId: inId, inPort: iPort };
         this.connections.push(connection);
 
-        // this.createConnectionPath(connection);
-        this.emit(Constant.CONNECTION_ADDED_EVENT, connection);
+        this.createConnectionPath(connection);
+        this.emit(Constant.CONNECTION_CREATED_EVENT, connection);
         return true;
     }
 
+    getConnectionKey(conn) {
+        return `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
+    }
+
     createConnectionPath(conn) {
+        const key = this.getConnectionKey(conn);
         const p1 = this.getPortPosition(conn.outNodeId, "output", conn.outPort);
         const p2 = this.getPortPosition(conn.inNodeId, "input", conn.inPort);
 
@@ -104,14 +109,16 @@ class FlowConnectionManager extends EmitterComponent {
         const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
         path.setAttribute("d", d);
         path.setAttribute("class", "flow-connection-path");
-        path.dataset.id = `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
+        path.dataset.id = key;
 
         path.onclick = (e) => {
             e.stopPropagation();
-            this.removePath(path, conn);
+            // this.removePath(path, conn);
+            this.emit(Constant.CONNECTION_CLICKED_EVENT, conn);
         };
 
         this.svgEl.appendChild(path);
+        this.pathMap.set(key, path);
     }
 
     updateConnections(nodeId) {
@@ -119,26 +126,28 @@ class FlowConnectionManager extends EmitterComponent {
         const relevant = this.connections.filter((c) => c.outNodeId === id || c.inNodeId === id);
 
         relevant.forEach((conn) => {
-            // const path = this.svgEl.querySelector(
-            //     `path[data-id="${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}"]`
-            // );
-            // if (path) {
-            //     const p1 = this.getPortPosition(conn.outNodeId, "output", conn.outPort);
-            //     const p2 = this.getPortPosition(conn.inNodeId, "input", conn.inPort);
-            //     const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
-            //     path.setAttribute("d", d);
-            // }
+            const key = this.getConnectionKey(conn);
+            const path = this.pathMap.get(key);
+            if (!path) return;
+
+            const p1 = this.getPortPosition(conn.outNodeId, "output", conn.outPort);
+            const p2 = this.getPortPosition(conn.inNodeId, "input", conn.inPort);
+            const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
+            path.setAttribute("d", d);
+
             this.emit(Constant.CONNECTION_UPDATED_EVENT, conn);
         });
     }
 
-    // removePath(path, conn) {
-    //     this.removeConnCyclicCache(conn.outNodeId, conn.inNodeId);
-    //     this.connections = this.connections.filter((c) => c !== conn);
-    //     path.remove();
-    // }
-
     removeConnection(conn) {
+        const key = this.getConnectionKey(conn);
+        const path = this.pathMap.get(key);
+
+        if (path) {
+            path.remove();
+            this.pathMap.delete(key);
+        }
+
         this.connections = this.connections.filter(c => c !== conn);
         this.emit(Constant.CONNECTION_REMOVED_EVENT, conn);
     }
