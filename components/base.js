@@ -24,6 +24,7 @@ class Component {
     this.rendered = false;
 
     this.parentContainer = null;
+    this.onlyChild = null;
   }
 
   /**
@@ -31,29 +32,38 @@ class Component {
    * @param {HTMLElement|string} container - The element or string ID of the container to render into.
    * @throws {Error} If the container is not found or is invalid.
    */
-  renderInto(container) {
+  renderInto(container, onlyChild = false) {
+    this.onlyChild = onlyChild;
+    let containerElement;
     if (this.isRendered()) {
       console.warn(`'${this.name}' component is already rendered.`);
       return;
     }
 
     if (typeof container === "string") {
-      container = document.getElementById(container);
-      if (!container) {
+      containerElement = document.getElementById(container);
+      if (!containerElement) {
         throw new Error(`Container with id ${container} not found`);
       }
     } else if (!(container instanceof HTMLElement)) {
       throw new Error("Container must be a valid HTMLElement or a string ID.");
+    } else {
+      containerElement = container;
     }
 
-    if (!container.id) {
+    if (!containerElement.id) {
       throw new Error("Container must have a valid id.");
     }
 
-    this.parentContainer = container;
+    this.parentContainer = containerElement;
     this.createContainer();
-    this.parentContainer.appendChild(this.container);
-    console.log("DOM is rendered into container ", container.id);
+
+    if (this.onlyChild) {
+      this.parentContainer.replaceChildren(this.container);
+    } else {
+      this.parentContainer.appendChild(this.container);
+    }
+    console.log("DOM is rendered into container ", containerElement.id);
     this.rendered = true;
   }
 
