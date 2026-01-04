@@ -134,10 +134,11 @@ class Flow extends EmitterComponent {
    * @param {number} [options.options.zoom=1] - Initial zoom level.
    * @param {Object} [options.options.canvas={x:0, y:0}] - Initial pan position.
    */
-  constructor({ name, options = {} }) {
+  constructor({ name, options = {}, validators = [] }) {
     super({ name });
 
     this.options = options;
+    this.validators = validators;
     this.zoom = options.zoom || 1;
     this.originalZoom = this.zoom;
     this.canvasX = options.canvas?.x || 0;
@@ -229,12 +230,36 @@ class Flow extends EmitterComponent {
     this.connectionManager.on(Constant.CONNECTION_CREATED_EVENT, (connection) => {
       console.debug("Connection is created: ", connection)
       this.emit(Constant.CONNECTION_CREATED_EVENT, connection);
+
+      this.validators.forEach(v =>
+        v.onConnectionAdded?.({ outNodeId, inNodeId })
+      );
     });
 
     this.connectionManager.on(Constant.CONNECTION_CLICKED_EVENT, (connection) => {
       console.debug("Connection is clicked: ", connection)
       this.emit(Constant.CONNECTION_CLICKED_EVENT, connection);
     });
+
+    this.connectionManager.on(Constant.CONNECTION_REMOVED_EVENT, (connection) => {
+      console.debug("Connection is removed: ", connection)
+      this.emit(Constant.CONNECTION_REMOVED_EVENT, connection);
+
+      this.validators.forEach(v =>
+        v.onConnectionRemoved?.({ outNodeId, inNodeId })
+      );
+    });
+  }
+
+  highlightCycle(stack) {
+    if (!stack || stack.length < 2) return;
+
+    for (let pos = 0; pos < stack.length - 1; pos++) {
+      const conn = this.connectionManager.connections.find(c => c.outNodeId === stack[pos] && c.inNodeId === stack[pos + 1]);
+      if (conn) {
+        this.connectionManager.markPathBad(conn);
+      }
+    }
   }
 
   onZoomAction(e) {
@@ -363,9 +388,24 @@ class Flow extends EmitterComponent {
   }
 
   makeConnection(outNodeId, outPort, inNodeId, inPort, event = null, nodeId = null) {
-    const connected = this.connectionManager.addConnection(outNodeId, outPort, inNodeId, inPort);
-    if (event && connected) this.keyDownCancelConnection(event, nodeId);
-    return connected;
+    // const connected = this.connectionManager.addConnection(outNodeId, outPort, inNodeId, inPort);
+    // if (event && connected) this.keyDownCancelConnection(event, nodeId);
+    // return connected;
+
+    for (const validator of this.validators) {
+      // multiple connection validators will cause issues
+      const result = validator.onConnectionAttempt({ outNodeId, inNodeId });
+      if (!result.valid) {
+        this.notification.warning("This connection will create cyclic flow.");
+        this.connectionManager.markTempPathBad();
+
+        if (result.stack) {
+          this.highlightCycle(result.stack);
+        }
+        return false;
+      }
+    }
+    return true;
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -429,123 +469,7 @@ class Flow extends EmitterComponent {
   }
 }
 
-class FlowDag extends Flow {
-  constructor({ name, options = {} }) {
-    super({ name, options });
-    this.dag = options.dag ?? true;
-    console.log(this.dag);
-    this.adjacencyList = {};
-    this.nonCyclicCache = {};
-    this.tempCyclicCache = {};
-    this.tempStackCache = {};
-  }
-
-  addNodeToAdjacencyList(outNodeId, inNodeId) {
-    if (!this.adjacencyList[outNodeId]) this.adjacencyList[outNodeId] = new Set();
-    this.adjacencyList[outNodeId].add(inNodeId);
-  }
-
-  buildAdjacencyList() {
-    this.connectionManager.connections.forEach((conn) => {
-      this.addNodeToAdjacencyList(conn.outNodeId, conn.inNodeId);
-    });
-    return this.adjacencyList;
-  }
-
-  isNewConnCyclic(outNodeId, inNodeId, visited, stack) {
-    visited.add(outNodeId);
-    stack.push(outNodeId);
-    if (this.adjacencyList[inNodeId] && this.adjacencyList[inNodeId].has(outNodeId)) {
-      return true;
-    }
-    for (const neighbor of this.adjacencyList[outNodeId]) {
-      if (this.isNewConnCyclic(neighbor, inNodeId, visited, stack)) {
-        return true;
-      }
-    }
-    stack.pop();
-    return false;
-  }
-
-  isCyclic(node, visited, stack) {
-    if (stack.includes(node)) {
-      // cycle found
-      // adding last node to stack to show the cycle in the UI
-      stack.push(node);
-      return true;
-    }
-    if (visited.has(node)) return false;
-
-    visited.add(node);
-    stack.push(node);
-
-    console.log(stack);
-
-    for (const neighbor of this.adjacencyList[node] || new Set()) {
-      if (this.isCyclic(neighbor, visited, stack)) return true;
-    }
-
-    stack.pop();
-    return false;
-  }
-
-  doMakeConnection(outNodeId, inNodeId) {
-    const cacheKey = `${outNodeId}->${inNodeId}`;
-
-    if (this.nonCyclicCache[cacheKey] !== undefined) {
-      return !this.nonCyclicCache[cacheKey];
-    }
-
-    if (this.tempCyclicCache[cacheKey] !== undefined) {
-      return false;
-    }
-
-    this.tempStackCache[cacheKey] = [];
-    let stack = this.tempStackCache[cacheKey];
-    const visited = new Set();
-
-    if (this.dag) {
-      let virtualNeighbors = new Set(this.adjacencyList[outNodeId] || new Set());
-      virtualNeighbors.add(inNodeId);
-
-      visited.add(outNodeId);
-      stack.push(outNodeId);
-      for (const vNeighbor of virtualNeighbors) {
-        if (this.isCyclic(vNeighbor, visited, stack)) {
-          this.tempCyclicCache[cacheKey] = true;
-          return false;
-        }
-      }
-    }
-
-    this.addNodeToAdjacencyList(outNodeId, inNodeId);
-
-    // add to cache only when we make a connection
-    // if the connection is cyclic, connection from the graph can be removed and updated again to create new connection.
-    this.addConnNonCyclicCache(outNodeId, inNodeId);
-    return true;
-  }
-
-  removeConnCyclicCache(outNodeId, inNodeId) {
-    const cacheKey = `${outNodeId}->${inNodeId}`;
-    console.log(this.adjacencyList, this.adjacencyList[outNodeId]);
-    this.adjacencyList[outNodeId].delete(inNodeId);
-    delete this.nonCyclicCache[cacheKey];
-
-    // remove all temporary cyclic cache.
-    // This is partial fix for now, as we need to traverse the graph to remove the affected temporary connection cache.
-    // Efficient when no connections are removed to make a DAG.
-    this.tempCyclicCache = {};
-  }
-
-  addConnNonCyclicCache(outNodeId, inNodeId) {
-    const cacheKey = `${outNodeId}->${inNodeId}`;
-    this.nonCyclicCache[cacheKey] = false;
-    delete this.tempStackCache[cacheKey];
-  }
-}
-
-class FlowActions extends FlowDag {
+class FlowActions extends Flow {
   export() {
     // eslint-disable-next-line no-unused-vars
     const nodesExport = Object.values(this.nodes).map(({ el, ...rest }) => rest);
