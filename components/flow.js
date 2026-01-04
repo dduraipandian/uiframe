@@ -24,6 +24,7 @@ class Flow extends EmitterComponent {
 
     this.options = options;
     this.validators = validators;
+    this.notification = notification
     this.serializer = new FlowSerializer();
     this.zoom = options.zoom || 1;
     this.originalZoom = this.zoom;

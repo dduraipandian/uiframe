@@ -1,26 +1,13 @@
-import { Flow } from "../components/flow.js";
-import notification from "../components/notification.js";
-
-jest.mock("../components/notification.js");
+import Flow from "../components/flow.js";
+import DagValidator from "../components/flow/plugins/dag-validator.js";
 
 describe("Flow Component", () => {
   let container;
+  let mockNotification;
+
   beforeEach(() => {
-    // Mock IntersectionObserver
-    global.IntersectionObserver = class IntersectionObserver {
-      constructor(callback) {
-        this.callback = callback;
-      }
-      observe(element) {
-        // Trigger callback immediately for tests
-        this.callback([{ isIntersecting: true, target: element }]);
-      }
-      unobserve() {
-        return null;
-      }
-      disconnect() {
-        return null;
-      }
+    mockNotification = {
+      warning: jest.fn(),
     };
 
     // Mock requestAnimationFrame
@@ -50,7 +37,10 @@ describe("Flow Component", () => {
   });
 
   test("should initialize correctly", () => {
-    const flow = new Flow({ name: "TestFlow", options: { zoom: 1.5 } });
+    const flow = new Flow({
+      name: "TestFlow",
+      options: { zoom: 1.5, notification: mockNotification, validators: [], }
+    });
     flow.renderInto(container);
 
     expect(flow.zoom).toBe(1.5);
@@ -61,7 +51,7 @@ describe("Flow Component", () => {
   });
 
   test("should add nodes to canvas and data structure", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification });
     flow.renderInto(container);
 
     const nodeId = flow.addNode({
@@ -73,10 +63,11 @@ describe("Flow Component", () => {
       html: "Content",
     });
 
+    const node = flow.nodeManager.nodes[nodeId];
     // Check data
-    expect(flow.nodes[nodeId]).toBeDefined();
-    expect(flow.nodes[nodeId].inputs).toBe(1);
-    expect(flow.nodes[nodeId].outputs).toBe(2);
+    expect(node).toBeDefined();
+    expect(node.inputs).toBe(1);
+    expect(node.outputs).toBe(2);
 
     // Check DOM
     const nodeEl = container.querySelector(`#node-${nodeId}`);
@@ -87,16 +78,16 @@ describe("Flow Component", () => {
   });
 
   test("should add connections between nodes", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
     const n2 = flow.addNode({ name: "N2", inputs: 1, outputs: 0 });
 
-    flow.makeConnection(n1, 0, n2, 0);
+    flow.addConnection(n1, 0, n2, 0);
 
-    expect(flow.connections.length).toBe(1);
-    expect(flow.connections[0]).toEqual({
+    expect(flow.connectionManager.connections.length).toBe(1);
+    expect(flow.connectionManager.connections[0]).toEqual({
       outNodeId: n1,
       outPort: 0,
       inNodeId: n2,
@@ -109,7 +100,7 @@ describe("Flow Component", () => {
   });
 
   test("should not add connections between nodes when cyclic", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
@@ -117,23 +108,23 @@ describe("Flow Component", () => {
     const n3 = flow.addNode({ name: "N3", inputs: 1, outputs: 2 });
     const n4 = flow.addNode({ name: "N4", inputs: 1, outputs: 1 });
 
-    let connected = flow.makeConnection(n1, 0, n2, 0);
-    connected = flow.makeConnection(n2, 0, n3, 0);
+    let connected = flow.addConnection(n1, 0, n2, 0);
+    connected = flow.addConnection(n2, 0, n3, 0);
     expect(connected).toBeTruthy();
 
-    flow.makeConnection(n3, 1, n4, 0);
+    flow.addConnection(n3, 1, n4, 0);
 
-    connected = flow.makeConnection(n4, 0, n2, 0);
+    connected = flow.addConnection(n4, 0, n2, 0);
     expect(connected).not.toBeTruthy();
 
-    expect(flow.connections.length).toBe(3);
+    expect(flow.connectionManager.connections.length).toBe(3);
 
     // Verify notification was called
-    expect(notification.warning).toHaveBeenCalled();
+    expect(mockNotification.warning).toHaveBeenCalled();
   });
 
   test("should cancel connection on ESC keydown while drawing and bad connection to be cleared", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
@@ -141,10 +132,10 @@ describe("Flow Component", () => {
     const n3 = flow.addNode({ name: "N3", inputs: 1, outputs: 2 });
     const n4 = flow.addNode({ name: "N4", inputs: 1, outputs: 1 });
 
-    flow.makeConnection(n1, 0, n2, 0);
-    flow.makeConnection(n2, 0, n3, 0);
-    flow.makeConnection(n3, 1, n4, 0);
-    flow.makeConnection(n4, 1, n4, 0);
+    flow.addConnection(n1, 0, n2, 0);
+    flow.addConnection(n2, 0, n3, 0);
+    flow.addConnection(n3, 1, n4, 0);
+    flow.addConnection(n4, 1, n4, 0);
 
     const outPort = container.querySelector(`#node-${n4} .flow-port[data-type="output"]`);
     const inPort = container.querySelector(`#node-${n2} .flow-port[data-type="input"]`);
@@ -192,23 +183,23 @@ describe("Flow Component", () => {
   });
 
   test("should add connections between nodes when cyclic if flow is non-dag", () => {
-    const flow = new Flow({ name: "TestFlow", options: { dag: false } });
+    const flow = new Flow({ name: "TestFlow" });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
     const n2 = flow.addNode({ name: "N2", inputs: 1, outputs: 0 });
     const n3 = flow.addNode({ name: "N3", inputs: 1, outputs: 1 });
 
-    let connected = flow.makeConnection(n1, 0, n2, 0);
-    connected = flow.makeConnection(n3, 0, n2, 0);
+    let connected = flow.addConnection(n1, 0, n2, 0);
+    connected = flow.addConnection(n3, 0, n2, 0);
 
-    connected = flow.makeConnection(n2, 0, n3, 0);
+    connected = flow.addConnection(n2, 0, n3, 0);
 
-    expect(flow.dag).toBe(false);
+    expect(flow.validators.length).toBe(0);
     expect(connected).toBeTruthy();
 
-    expect(flow.connections.length).toBe(3);
-    expect(flow.connections[1]).toEqual({
+    expect(flow.connectionManager.connections.length).toBe(3);
+    expect(flow.connectionManager.connections[1]).toEqual({
       outNodeId: n3,
       outPort: 0,
       inNodeId: n2,
@@ -221,7 +212,7 @@ describe("Flow Component", () => {
   });
 
   test("should move node on drag", async () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const nodeId = flow.addNode({ name: "Draggable", x: 10, y: 10 });
@@ -234,8 +225,8 @@ describe("Flow Component", () => {
     // Wait for RAF
     await new Promise((resolve) => setTimeout(resolve, 10));
 
-    expect(flow.nodes[nodeId].x).toBe(60); // 10 + 50
-    expect(flow.nodes[nodeId].y).toBe(60); // 10 + 50
+    expect(flow.nodeManager.nodes[nodeId].x).toBe(60); // 10 + 50
+    expect(flow.nodeManager.nodes[nodeId].y).toBe(60); // 10 + 50
     expect(nodeEl.style.left).toBe("60px");
     expect(nodeEl.style.top).toBe("60px");
 
@@ -243,12 +234,12 @@ describe("Flow Component", () => {
   });
 
   test("should update connection position on node drag", async () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", x: 0, y: 0, outputs: 1 });
     const n2 = flow.addNode({ name: "N2", x: 200, y: 0, inputs: 1 });
-    flow.makeConnection(n1, 0, n2, 0);
+    flow.addConnection(n1, 0, n2, 0);
 
     const path = container.querySelector("path.flow-connection-path");
     const initialD = path.getAttribute("d");
@@ -266,7 +257,7 @@ describe("Flow Component", () => {
   });
 
   test("should create node on drop", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const dropEvent = new MouseEvent("drop", {
@@ -284,13 +275,13 @@ describe("Flow Component", () => {
     const containerEl = container.querySelector(".uiframe-flow-container");
     containerEl.dispatchEvent(dropEvent);
 
-    const nodes = Object.values(flow.nodes);
+    const nodes = Object.values(flow.nodeManager.nodes);
     expect(nodes.find((n) => n.name === "Dropped Node")).toBeDefined();
     expect(container.querySelector(".card-header").textContent).toBe("Dropped Node");
   });
 
   test("should create connection by dragging ports", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "Out", x: 0, y: 0, outputs: 1 });
@@ -310,23 +301,24 @@ describe("Flow Component", () => {
     // Release on input
     inPort.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 
-    expect(flow.connections.length).toBe(1);
-    expect(flow.connections[0].outNodeId).toBe(n1);
-    expect(flow.connections[0].inNodeId).toBe(n2);
+    expect(flow.connectionManager.connections.length).toBe(1);
+    expect(flow.connectionManager.connections[0].outNodeId).toBe(n1);
+    expect(flow.connectionManager.connections[0].inNodeId).toBe(n2);
     expect(container.querySelector(".flow-connection-temp")).toBeNull();
   });
 
+
   test("should remove connection when clicking on path", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", x: 0, y: 0, inputs: 0, outputs: 1 });
     const n2 = flow.addNode({ name: "N2", x: 200, y: 0, inputs: 1, outputs: 0 });
 
-    flow.makeConnection(n1, 0, n2, 0);
+    flow.addConnection(n1, 0, n2, 0);
 
     // Verify initial state
-    expect(flow.connections.length).toBe(1);
+    expect(flow.connectionManager.connections.length).toBe(1);
     const path = container.querySelector("path.flow-connection-path");
     expect(path).not.toBeNull();
 
@@ -334,17 +326,17 @@ describe("Flow Component", () => {
     path.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
     // Verify connection was removed
-    expect(flow.connections.length).toBe(0);
+    expect(flow.connectionManager.connections.length).toBe(0);
     expect(container.querySelector("path.flow-connection-path")).toBeNull();
 
     // Verify nodes still exist
-    expect(Object.keys(flow.nodes).length).toBe(2);
+    expect(Object.keys(flow.nodeManager.nodes).length).toBe(2);
     expect(container.querySelector(`#node-${n1}`)).not.toBeNull();
     expect(container.querySelector(`#node-${n2}`)).not.toBeNull();
   });
 
   test("should remove node", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", x: 0, y: 0, inputs: 0, outputs: 1 });
@@ -352,12 +344,12 @@ describe("Flow Component", () => {
     const n3 = flow.addNode({ name: "N3", x: 400, y: 0, inputs: 1, outputs: 1 });
     const n4 = flow.addNode({ name: "N4", x: 600, y: 0, inputs: 1, outputs: 0 });
 
-    flow.makeConnection(n1, 0, n2, 0);
-    flow.makeConnection(n2, 0, n3, 0);
-    flow.makeConnection(n3, 0, n4, 0);
+    flow.addConnection(n1, 0, n2, 0);
+    flow.addConnection(n2, 0, n3, 0);
+    flow.addConnection(n3, 0, n4, 0);
 
-    expect(Object.keys(flow.nodes).length).toBe(4);
-    expect(flow.connections.length).toBe(3);
+    expect(Object.keys(flow.nodeManager.nodes).length).toBe(4);
+    expect(flow.connectionManager.connections.length).toBe(3);
     expect(container.querySelectorAll(".flow-node").length).toBe(4);
     expect(container.querySelectorAll("path.flow-connection-path").length).toBe(3);
 
@@ -366,10 +358,10 @@ describe("Flow Component", () => {
 
     closeBtn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
-    expect(flow.nodes[n2]).toBeUndefined();
-    expect(Object.keys(flow.nodes).length).toBe(3);
+    expect(flow.nodeManager.nodes[n2]).toBeUndefined();
+    expect(Object.keys(flow.nodeManager.nodes).length).toBe(3);
     expect(container.querySelector(`#node-${n2}`)).toBeNull();
-    expect(flow.connections.length).toBe(1);
+    expect(flow.connectionManager.connections.length).toBe(1);
     expect(container.querySelectorAll("path.flow-connection-path").length).toBe(1);
 
     const pathId = "3:0-4:0";
@@ -382,7 +374,7 @@ describe("Flow Component", () => {
   });
 
   test("should cancel connection on ESC keydown while drawing", () => {
-    const flow = new Flow({ name: "TestFlow" });
+    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "Out", x: 0, y: 0, outputs: 1 });
@@ -403,7 +395,7 @@ describe("Flow Component", () => {
     // Verify connection was cancelled
     expect(flow.isConnecting).toBe(false);
     expect(container.querySelector(".flow-connection-temp")).toBeNull();
-    expect(flow.connections.length).toBe(0);
+    expect(flow.connectionManager.connections.length).toBe(0);
 
     const path = flow.svgEl.querySelector("path");
     expect(path).toBeNull();
@@ -426,10 +418,11 @@ describe("Flow Component", () => {
     // Wait for RAF
     await new Promise((resolve) => setTimeout(resolve, 10));
 
-    expect(flow.nodes[n1].x).toBe(100 + 100 / zoom); // 100 + 200 = 300
-    expect(flow.nodes[n1].y).toBe(100 + 100 / zoom); // 100 + 200 = 300
+    expect(flow.nodeManager.nodes[n1].x).toBe(100 + 100 / zoom); // 100 + 200 = 300
+    expect(flow.nodeManager.nodes[n1].y).toBe(100 + 100 / zoom); // 100 + 200 = 300
 
     // Release
     window.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
   });
+
 });
