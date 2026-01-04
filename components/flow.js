@@ -1,5 +1,5 @@
 import { EmitterComponent } from "./base.js";
-import notification from "./notification.js";
+import FlowCanvas from "./flow/canvas.js";
 import FlowNodeManager from "./flow/node.js";
 import FlowConnectionManager from "./flow/connection.js";
 import FlowSerializer from "./flow/serializer.js";
@@ -171,45 +171,22 @@ class Flow extends EmitterComponent {
    * Returns component HTML structure.
    */
   html() {
-    return `
-            <div id="${this.id}-flow-container" class="uiframe-flow-container">
-                <div id="${this.id}-canvas" 
-                    class="flow-canvas" 
-                    style="transform: translate(${this.canvasX}px, ${this.canvasY}px) scale(${this.zoom})">
-                <svg id="${this.id}-svg" class="flow-connections"></svg>
-                </div>
-                <ul class="list-group flow-toolbar list-group-horizontal-sm zoom-actions" style="width: fit-content;">
-                  <a href="#" class="list-group-item list-group-item-action" id="${this.id}-zoomin" data-action="zoomin"><i class="bi bi-plus-lg"></i></a>                  
-                  <a href="#" class="list-group-item list-group-item-action" id="${this.id}-zoomreset" data-action="zoomreset"><i class="bi bi-justify"></i></a>
-                  <a href="#" class="list-group-item list-group-item-action" id="${this.id}-zoomout" data-action="zoomout"><i class="bi bi-dash-lg"></i></a>
-                </ul>
-            </div>
-        `;
+    return ``;
   }
 
   init() {
-    this.containerEl = this.container.querySelector(`#${this.id}-flow-container`);
-    this.canvasEl = this.container.querySelector(`#${this.id}-canvas`);
-    this.svgEl = this.container.querySelector(`#${this.id}-svg`);
+    this.container.classList.add("uiframe-flow-container");
 
-    // canvas container drag handler
-    DragHandler.register(this.containerEl, this.redrawCanvasWithXY.bind(this));
-
-    // passive: false to allow preventDefault to be called. It is false by default except for Safari.
-    this.containerEl.addEventListener("wheel", this.onCanvasWheelZoom.bind(this), {
-      passive: false,
+    this.canvas = new FlowCanvas({
+      name: this.name + "-canvas",
+      options: this.options
     });
 
-    // Drop listener for adding new nodes from outside
-    this.containerEl.addEventListener("dragover", (e) => e.preventDefault());
-    this.containerEl.addEventListener("drop", this.onDrop.bind(this));
+    this.canvas.renderInto(this.container);
 
-    this.zoomInEl = this.containerEl.querySelector(`#${this.id}-zoomin`);
-    this.zoomOutEl = this.containerEl.querySelector(`#${this.id}-zoomout`);
-    this.zoomResetEl = this.containerEl.querySelector(`#${this.id}-zoomreset`);
-    this.zoomInEl.addEventListener("click", this.onZoomAction.bind(this));
-    this.zoomOutEl.addEventListener("click", this.onZoomAction.bind(this));
-    this.zoomResetEl.addEventListener("click", this.onZoomAction.bind(this));
+    this.containerEl = this.container;
+    this.canvasEl = this.canvas.canvasEl;
+    this.svgEl = this.canvas.svgEl;
 
     this.nodeManager = new FlowNodeManager({
       name: this.name + "-flow-node-manager",
@@ -223,10 +200,24 @@ class Flow extends EmitterComponent {
       options: this.options
     });
 
+    this.canvas.on("canvas:zoom", ({ data }) => {
+      this.zoom = data.zoom;
+      this.connectionManager.zoom = data.zoom;
+      this.nodeManager.zoom = data.zoom;
+    });
+
     this.nodeManager.on(Constant.NODE_MOVED_EVENT, ({ id, x, y }) => {
       console.debug("Node is moved: ", id, x, y)
       this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
       this.connectionManager.updateConnections(id);
+    });
+
+    this.nodeManager.on("port:connect:start", ({ nodeId, portIndex, event }) => {
+      this.mouseDownStartConnection({ dataset: { index: portIndex } }, nodeId, event);
+    });
+
+    this.nodeManager.on("port:connect:end", ({ nodeId, portIndex, event }) => {
+      this.mouseUpCompleteConnection({ dataset: { index: portIndex } }, nodeId, event);
     });
 
     this.connectionManager.on(Constant.CONNECTION_CREATED_EVENT, (connection) => {
@@ -248,7 +239,10 @@ class Flow extends EmitterComponent {
       this.emit(Constant.CONNECTION_REMOVED_EVENT, connection);
 
       this.validators.forEach(v =>
-        v.onConnectionRemoved?.({ outNodeId, inNodeId })
+        v.onConnectionRemoved?.({
+          outNodeId: connection.outNodeId,
+          inNodeId: connection.inNodeId
+        })
       );
     });
   }
@@ -279,19 +273,6 @@ class Flow extends EmitterComponent {
         break;
     }
     this.redrawCanvas();
-  }
-
-  zoomChangeUpdate() {
-    if (this.zoom === this.originalZoom) {
-      this.zoomInEl.classList.remove("active");
-      this.zoomOutEl.classList.remove("active");
-    } else if (this.zoom > this.originalZoom) {
-      this.zoomInEl.classList.add("active");
-      this.zoomOutEl.classList.remove("active");
-    } else {
-      this.zoomInEl.classList.remove("active");
-      this.zoomOutEl.classList.add("active");
-    }
   }
 
   /**
@@ -333,17 +314,6 @@ class Flow extends EmitterComponent {
     } catch (err) {
       console.error("Invalid drop data", err);
     }
-  }
-
-  // handling mouse left click on port in the node
-  onCanvasWheelZoom(e) {
-    e.preventDefault();
-    console.log("FLOW: Wheel on canvas with deltaY: ", e.deltaY);
-
-    const delta = e.deltaY > 0 ? -0.1 : 0.1;
-    const newZoom = Math.max(0.1, Math.min(this.zoom + delta, 3));
-    this.zoom = newZoom;
-    this.redrawCanvas();
   }
 
   mouseDownStartConnection(port, nodeId, event) {
@@ -395,10 +365,9 @@ class Flow extends EmitterComponent {
     // return connected;
 
     for (const validator of this.validators) {
-      // multiple connection validators will cause issues
       const result = validator.onConnectionAttempt({ outNodeId, inNodeId });
       if (!result.valid) {
-        this.notification?.warning("This connection will create cyclic flow.");
+        this.notification?.warning(result.message);
         this.connectionManager.markTempPathBad();
 
         if (result.stack) {
@@ -407,7 +376,21 @@ class Flow extends EmitterComponent {
         return false;
       }
     }
-    return true;
+
+    const created = this.connectionManager.addConnection(
+      outNodeId,
+      outPort,
+      inNodeId,
+      inPort
+    );
+
+    if (created) {
+      this.validators.forEach(v =>
+        v.onConnectionAdded?.({ outNodeId, inNodeId })
+      );
+    }
+
+    return created;
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -438,21 +421,6 @@ class Flow extends EmitterComponent {
     this.redrawCanvasWithXY(this.canvasX, this.canvasY);
   }
 
-  redrawCanvasWithXY(x, y) {
-    this.canvasX = x;
-    this.canvasY = y;
-
-    this.canvasEl.style.transform = `translate(${x}px, ${y}px) scale(${this.zoom})`;
-
-    // updating grid size (dot dots)
-    const gridSize = this.gridFactor * this.zoom;
-    this.containerEl.style.backgroundSize = `${gridSize}px ${gridSize}px`;
-    this.containerEl.style.backgroundPosition = `${x}px ${y}px`;
-
-    this.containerEl.style.backgroundImage = `radial-gradient(#c1c1c4 ${1.5 * this.zoom}px, transparent ${1.5 * this.zoom}px)`;
-    this.zoomChangeUpdate();
-  }
-
   removeNode(event, nodeId) {
     console.log("FLOW: removing node ", nodeId);
     event.stopPropagation();
@@ -469,6 +437,7 @@ class Flow extends EmitterComponent {
     this.nodes[nodeId].el.remove();
     delete this.nodes[nodeId];
   }
+
   export() {
     return this.serializer.export(this);
   }
