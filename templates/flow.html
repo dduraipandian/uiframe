@@ -112,16 +112,14 @@
       import { notification } from "../index.js";
       import { DagValidator } from "../index.js";
 
-      const validators = [
-        new DagValidator(),
-      ];
+      const validators = [new DagValidator()];
 
       // Initialize Flow
       const flow = new Flow({
-        name: "MyFlow", 
-        options: { zoom: 0.8 }, 
-        notification: notification, 
-        validators: validators 
+        name: "MyFlow",
+        options: { zoom: 0.8 },
+        notification: notification,
+        validators: validators,
       });
       flow.renderInto("flow-wrapper");
 

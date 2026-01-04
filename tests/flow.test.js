@@ -39,7 +39,7 @@ describe("Flow Component", () => {
   test("should initialize correctly", () => {
     const flow = new Flow({
       name: "TestFlow",
-      options: { zoom: 1.5, notification: mockNotification, validators: [], }
+      options: { zoom: 1.5, notification: mockNotification, validators: [] },
     });
     flow.renderInto(container);
 
@@ -100,7 +100,11 @@ describe("Flow Component", () => {
   });
 
   test("should not add connections between nodes when cyclic", () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
@@ -124,7 +128,11 @@ describe("Flow Component", () => {
   });
 
   test("should cancel connection on ESC keydown while drawing and bad connection to be cleared", () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", inputs: 0, outputs: 1 });
@@ -212,7 +220,11 @@ describe("Flow Component", () => {
   });
 
   test("should move node on drag", async () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const nodeId = flow.addNode({ name: "Draggable", x: 10, y: 10 });
@@ -234,7 +246,11 @@ describe("Flow Component", () => {
   });
 
   test("should update connection position on node drag", async () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", x: 0, y: 0, outputs: 1 });
@@ -257,7 +273,11 @@ describe("Flow Component", () => {
   });
 
   test("should create node on drop", () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const dropEvent = new MouseEvent("drop", {
@@ -281,7 +301,11 @@ describe("Flow Component", () => {
   });
 
   test("should create connection by dragging ports", () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "Out", x: 0, y: 0, outputs: 1 });
@@ -307,9 +331,12 @@ describe("Flow Component", () => {
     expect(container.querySelector(".flow-connection-temp")).toBeNull();
   });
 
-
   test("should remove connection when clicking on path", () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", x: 0, y: 0, inputs: 0, outputs: 1 });
@@ -336,7 +363,11 @@ describe("Flow Component", () => {
   });
 
   test("should remove node", () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "N1", x: 0, y: 0, inputs: 0, outputs: 1 });
@@ -374,7 +405,11 @@ describe("Flow Component", () => {
   });
 
   test("should cancel connection on ESC keydown while drawing", () => {
-    const flow = new Flow({ name: "TestFlow", notification: mockNotification, validators: [new DagValidator()] });
+    const flow = new Flow({
+      name: "TestFlow",
+      notification: mockNotification,
+      validators: [new DagValidator()],
+    });
     flow.renderInto(container);
 
     const n1 = flow.addNode({ name: "Out", x: 0, y: 0, outputs: 1 });
@@ -424,5 +459,4 @@ describe("Flow Component", () => {
     // Release
     window.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
   });
-
 });

@@ -2,56 +2,57 @@ import { EmitterComponent } from "../base.js";
 import DragHandler from "./utils.js";
 import * as Constant from "./constants.js";
 
+// eslint-disable-next-line no-unused-vars
 class FlowNode extends EmitterComponent {
-    constructor({ nodeId, inputs = 1, outputs = 1, x = 0, y = 0, html = "", options = {} }) {
-        super({ name: `node-${nodeId}` });
+  constructor({ nodeId, inputs = 1, outputs = 1, x = 0, y = 0, html = "", options = {} }) {
+    super({ name: `node-${nodeId}` });
 
-        this.x = x;
-        this.y = y;
-        this.nodeId = nodeId;
-        this.inputs = inputs;
-        this.outputs = outputs;
-        this.contentHtml = html;
-        this.options = options;
-    }
+    this.x = x;
+    this.y = y;
+    this.nodeId = nodeId;
+    this.inputs = inputs;
+    this.outputs = outputs;
+    this.contentHtml = html;
+    this.options = options;
+  }
 }
 
 class FlowNodeManager extends EmitterComponent {
-    constructor({ name, canvasContainer, options = {} }) {
-        super({ name: name + "-flow-node-manager" });
-        this.options = options;
-        this.zoom = options.zoom || 1;
-        this.originalZoom = this.zoom;
+  constructor({ name, canvasContainer, options = {} }) {
+    super({ name: name + "-flow-node-manager" });
+    this.options = options;
+    this.zoom = options.zoom || 1;
+    this.originalZoom = this.zoom;
 
-        this.nodes = {};
-        this.nodeIdCounter = 1;
-        this.nodeWidth = options.nodeWidth || 200;
-        this.nodeHeight = options.nodeHeight || 90;
-        this.selectedNodeId = null;
-        this.canvasContainer = canvasContainer;
-    }
+    this.nodes = {};
+    this.nodeIdCounter = 1;
+    this.nodeWidth = options.nodeWidth || 200;
+    this.nodeHeight = options.nodeHeight || 90;
+    this.selectedNodeId = null;
+    this.canvasContainer = canvasContainer;
+  }
 
-    dropNode(data) {
-        const posX = (data.x - this.nodeWidth / 2) / this.zoom;
-        const posY = (data.y - this.nodeHeight / 2) / this.zoom;
-        this.addNode({ ...data, x: posX, y: posY });
-    }
+  dropNode(data) {
+    const posX = (data.x - this.nodeWidth / 2) / this.zoom;
+    const posY = (data.y - this.nodeHeight / 2) / this.zoom;
+    this.addNode({ ...data, x: posX, y: posY });
+  }
 
-    addNode({ name, inputs = 1, outputs = 1, x = 0, y = 0, html = "" }) {
-        const id = this.nodeIdCounter++;
-        const node = { id, name, inputs, outputs, x, y, contentHtml: html };
+  addNode({ name, inputs = 1, outputs = 1, x = 0, y = 0, html = "" }) {
+    const id = this.nodeIdCounter++;
+    const node = { id, name, inputs, outputs, x, y, contentHtml: html };
 
-        this.nodes[id] = node;
-        this.renderNode(node);
-        return id;
-    }
+    this.nodes[id] = node;
+    this.renderNode(node);
+    return id;
+  }
 
-    renderNode(node) {
-        const el = document.createElement("div");
-        const inputHtml = `<div class="flow-port" data-type="input" data-node-id="${node.id}" data-index="{{index}}"></div>`;
-        const outputHtml = `<div class="flow-port" data-type="output" data-node-id="${node.id}" data-index="{{index}}"></div>`;
+  renderNode(node) {
+    const el = document.createElement("div");
+    const inputHtml = `<div class="flow-port" data-type="input" data-node-id="${node.id}" data-index="{{index}}"></div>`;
+    const outputHtml = `<div class="flow-port" data-type="output" data-node-id="${node.id}" data-index="{{index}}"></div>`;
 
-        const nodeHtml = `
+    const nodeHtml = `
         <div id="node-${node.id}" 
             data-id="${node.id}" 
             class="flow-node rounded" 
@@ -74,100 +75,98 @@ class FlowNodeManager extends EmitterComponent {
             </button>
         </div>
         `;
-        el.innerHTML = nodeHtml;
+    el.innerHTML = nodeHtml;
 
-        const nodeEl = el.querySelector(`#node-${node.id}`);
+    const nodeEl = el.querySelector(`#node-${node.id}`);
 
-        nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
-        nodeEl.onmousedown = (e) => this.onNodeClick(e, node.id);
+    nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
+    nodeEl.onmousedown = (e) => this.onNodeClick(e, node.id);
 
-        // register drap handler
-        const hl = new DragHandler(
-            nodeEl,
-            this.redrawNodeWithXY.bind(this, node.id),
-            {
-                x: this.nodes[node.id].x,
-                y: this.nodes[node.id].y,
-            },
-            { x: 0, y: 0 },
-            () => this.zoom
-        );
-        hl.registerDragEvent();
+    // register drap handler
+    const hl = new DragHandler(
+      nodeEl,
+      this.redrawNodeWithXY.bind(this, node.id),
+      {
+        x: this.nodes[node.id].x,
+        y: this.nodes[node.id].y,
+      },
+      { x: 0, y: 0 },
+      () => this.zoom
+    );
+    hl.registerDragEvent();
 
-        nodeEl
-            .querySelector("button.node-close")
-            .addEventListener("click", (e) => this.removeNode(e, node.id));
+    nodeEl
+      .querySelector("button.node-close")
+      .addEventListener("click", (e) => this.removeNode(e, node.id));
 
-
-        nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach(port => {
-            port.onmousedown = (e) => {
-                this.emit("port:connect:start", {
-                    nodeId: node.id,
-                    portIndex: port.dataset.index,
-                    event: e
-                });
-            };
+    nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach((port) => {
+      port.onmousedown = (e) => {
+        this.emit("port:connect:start", {
+          nodeId: node.id,
+          portIndex: port.dataset.index,
+          event: e,
         });
+      };
+    });
 
-        nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach(port => {
-            port.onmouseup = (e) => {
-                this.emit("port:connect:end", {
-                    nodeId: node.id,
-                    portIndex: port.dataset.index,
-                    event: e
-                });
-            };
+    nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach((port) => {
+      port.onmouseup = (e) => {
+        this.emit("port:connect:end", {
+          nodeId: node.id,
+          portIndex: port.dataset.index,
+          event: e,
         });
+      };
+    });
 
-        this.nodes[node.id].el = nodeEl;
-        this.canvasContainer.appendChild(nodeEl);
+    this.nodes[node.id].el = nodeEl;
+    this.canvasContainer.appendChild(nodeEl);
+  }
+
+  reset() {
+    Object.values(this.nodes).forEach((n) => {
+      n.el?.remove();
+    });
+    this.nodes = {};
+    this.nodeIdCounter = 1;
+    this.selectedNodeId = null;
+  }
+
+  redrawNodeWithXY(id, x, y) {
+    this.nodes[id].x = x;
+    this.nodes[id].y = y;
+
+    // https://stackoverflow.com/questions/7108941/css-transform-vs-position
+    // Changing transform will trigger a redraw in compositor layer only for the animated element
+    // (subsequent elements in DOM will not be redrawn). I want DOM to be redraw to make connection attached to the port.
+    // so using position top/left to keep the position intact, not for the animation.
+    // I spent hours to find this out with trial and error.
+    this.nodes[id].el.style.top = `${y}px`;
+    this.nodes[id].el.style.left = `${x}px`;
+
+    // this.updateConnections(id);
+    this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
+  }
+
+  // handling mouse left click on node
+  onNodeClick(e, id) {
+    if (this.selectedNodeId && this.nodes[this.selectedNodeId]) {
+      this.nodes[this.selectedNodeId].el.classList.remove("selected");
     }
+    this.nodes[id].el.classList.add("selected");
+    this.selectedNodeId = id;
+  }
 
-    reset() {
-        Object.values(this.nodes).forEach(n => {
-            n.el?.remove();
-        });
-        this.nodes = {};
-        this.nodeIdCounter = 1;
-        this.selectedNodeId = null;
-    }
+  removeNode(event, nodeId) {
+    console.debug("FLOW: removing node ", nodeId);
+    event.stopPropagation();
+    const id = parseInt(nodeId);
 
-    redrawNodeWithXY(id, x, y) {
-        this.nodes[id].x = x;
-        this.nodes[id].y = y;
+    this.emit(Constant.NODE_REMOVED_EVENT, { id });
 
-        // https://stackoverflow.com/questions/7108941/css-transform-vs-position
-        // Changing transform will trigger a redraw in compositor layer only for the animated element
-        // (subsequent elements in DOM will not be redrawn). I want DOM to be redraw to make connection attached to the port.
-        // so using position top/left to keep the position intact, not for the animation.
-        // I spent hours to find this out with trial and error.
-        this.nodes[id].el.style.top = `${y}px`;
-        this.nodes[id].el.style.left = `${x}px`;
-
-        // this.updateConnections(id);
-        this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
-    }
-
-    // handling mouse left click on node
-    onNodeClick(e, id) {
-        if (this.selectedNodeId && this.nodes[this.selectedNodeId]) {
-            this.nodes[this.selectedNodeId].el.classList.remove("selected");
-        }
-        this.nodes[id].el.classList.add("selected");
-        this.selectedNodeId = id;
-    }
-
-    removeNode(event, nodeId) {
-        console.debug("FLOW: removing node ", nodeId);
-        event.stopPropagation();
-        const id = parseInt(nodeId);
-
-        this.emit(Constant.NODE_REMOVED_EVENT, { id });
-
-        this.nodes[nodeId].el.remove();
-        delete this.nodes[nodeId];
-    }
+    this.nodes[nodeId].el.remove();
+    delete this.nodes[nodeId];
+  }
 }
-
 
 export default FlowNodeManager;

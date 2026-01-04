@@ -5,7 +5,6 @@ import FlowConnectionManager from "./flow/connection.js";
 import FlowSerializer from "./flow/serializer.js";
 import * as Constant from "./flow/constants.js";
 
-
 /**
  * A lightweight Flow/Node editor component inspired by Drawflow, and freeform.
  * features: zoom, pan, draggable nodes, input/output ports, bezier connections.
@@ -24,7 +23,7 @@ class Flow extends EmitterComponent {
 
     this.options = options;
     this.validators = validators;
-    this.notification = notification
+    this.notification = notification;
     this.serializer = new FlowSerializer();
     this.zoom = options.zoom || 1;
     this.originalZoom = this.zoom;
@@ -56,7 +55,7 @@ class Flow extends EmitterComponent {
    * Returns component HTML structure.
    */
   html() {
-    return ``;
+    return "";
   }
 
   init() {
@@ -64,7 +63,7 @@ class Flow extends EmitterComponent {
 
     this.canvas = new FlowCanvas({
       name: this.name + "-canvas",
-      options: this.options
+      options: this.options,
     });
 
     this.canvas.renderInto(this.container);
@@ -76,14 +75,14 @@ class Flow extends EmitterComponent {
     this.nodeManager = new FlowNodeManager({
       name: this.name + "-flow-node-manager",
       canvasContainer: this.canvasEl,
-      options: this.options
+      options: this.options,
     });
 
     this.connectionManager = new FlowConnectionManager({
       name: this.name + "-flow-connection-manager",
       connectionContainer: this.svgEl,
       nodeManager: this.nodeManager,
-      options: this.options
+      options: this.options,
     });
 
     this.canvas.on("canvas:zoom", ({ data }) => {
@@ -93,19 +92,19 @@ class Flow extends EmitterComponent {
     });
 
     this.canvas.on("node:dropped", ({ data }) => {
-      console.debug("Node is dropped: ", data)
+      console.debug("Node is dropped: ", data);
       this.emit(Constant.NODE_DROPPED_EVENT, data);
       this.nodeManager.dropNode(data);
     });
 
     this.nodeManager.on(Constant.NODE_MOVED_EVENT, ({ id, x, y }) => {
-      console.debug("Node is moved: ", id, x, y)
+      console.debug("Node is moved: ", id, x, y);
       this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
       this.connectionManager.updateConnections(id);
     });
 
     this.nodeManager.on(Constant.NODE_REMOVED_EVENT, ({ id }) => {
-      console.debug("Node is removed: ", id)
+      console.debug("Node is removed: ", id);
       this.emit(Constant.NODE_REMOVED_EVENT, { id });
       this.removeNode(id);
     });
@@ -119,31 +118,31 @@ class Flow extends EmitterComponent {
     });
 
     this.connectionManager.on(Constant.CONNECTION_CREATED_EVENT, (connection) => {
-      console.debug("Connection is created: ", connection)
+      console.debug("Connection is created: ", connection);
       this.emit(Constant.CONNECTION_CREATED_EVENT, connection);
 
-      this.validators.forEach(v =>
+      this.validators.forEach((v) =>
         v.onConnectionAdded?.({
           outNodeId: connection.outNodeId,
-          inNodeId: connection.inNodeId
+          inNodeId: connection.inNodeId,
         })
       );
     });
 
     this.connectionManager.on(Constant.CONNECTION_CLICKED_EVENT, (connection) => {
-      console.debug("Connection is clicked: ", connection)
+      console.debug("Connection is clicked: ", connection);
       this.emit(Constant.CONNECTION_CLICKED_EVENT, connection);
       this.connectionManager.removeConnection(connection);
     });
 
     this.connectionManager.on(Constant.CONNECTION_REMOVED_EVENT, (connection) => {
-      console.debug("Connection is removed: ", connection)
+      console.debug("Connection is removed: ", connection);
       this.emit(Constant.CONNECTION_REMOVED_EVENT, connection);
 
-      this.validators.forEach(v =>
+      this.validators.forEach((v) =>
         v.onConnectionRemoved?.({
           outNodeId: connection.outNodeId,
-          inNodeId: connection.inNodeId
+          inNodeId: connection.inNodeId,
         })
       );
     });
@@ -153,7 +152,9 @@ class Flow extends EmitterComponent {
     if (!stack || stack.length < 2) return;
 
     for (let pos = 0; pos < stack.length - 1; pos++) {
-      const conn = this.connectionManager.connections.find(c => c.outNodeId === stack[pos] && c.inNodeId === stack[pos + 1]);
+      const conn = this.connectionManager.connections.find(
+        (c) => c.outNodeId === stack[pos] && c.inNodeId === stack[pos + 1]
+      );
       if (conn) {
         this.connectionManager.markPathBad(conn);
       }
@@ -236,17 +237,10 @@ class Flow extends EmitterComponent {
       }
     }
 
-    const created = this.connectionManager.addConnection(
-      outNodeId,
-      outPort,
-      inNodeId,
-      inPort
-    );
+    const created = this.connectionManager.addConnection(outNodeId, outPort, inNodeId, inPort);
 
     if (created) {
-      this.validators.forEach(v =>
-        v.onConnectionAdded?.({ outNodeId, inNodeId })
-      );
+      this.validators.forEach((v) => v.onConnectionAdded?.({ outNodeId, inNodeId }));
       if (event) this.keyDownCancelConnection(event, nodeId);
     }
 
