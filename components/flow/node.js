@@ -104,6 +104,15 @@ class FlowNodeManager extends EmitterComponent {
         this.canvasContainer.appendChild(nodeEl);
     }
 
+    reset() {
+        Object.values(this.nodes).forEach(n => {
+            n.el?.remove();
+        });
+        this.nodes = {};
+        this.nodeIdCounter = 1;
+        this.selectedNodeId = null;
+    }
+
     redrawNodeWithXY(id, x, y) {
         this.nodes[id].x = x;
         this.nodes[id].y = y;

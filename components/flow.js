@@ -2,6 +2,7 @@ import { EmitterComponent } from "./base.js";
 import notification from "./notification.js";
 import FlowNodeManager from "./flow/node.js";
 import FlowConnectionManager from "./flow/connection.js";
+import FlowSerializer from "./flow/serializer.js";
 import * as Constant from "./flow/constants.js";
 
 class DragHandler {
@@ -139,6 +140,7 @@ class Flow extends EmitterComponent {
 
     this.options = options;
     this.validators = validators;
+    this.serializer = new FlowSerializer();
     this.zoom = options.zoom || 1;
     this.originalZoom = this.zoom;
     this.canvasX = options.canvas?.x || 0;
@@ -467,44 +469,13 @@ class Flow extends EmitterComponent {
     this.nodes[nodeId].el.remove();
     delete this.nodes[nodeId];
   }
-}
-
-class FlowActions extends Flow {
   export() {
-    // eslint-disable-next-line no-unused-vars
-    const nodesExport = Object.values(this.nodes).map(({ el, ...rest }) => rest);
-    return {
-      nodes: nodesExport,
-      connections: this.connectionManager.connections,
-      zoom: this.zoom,
-      canvas: { x: this.canvasX, y: this.canvasY },
-    };
+    return this.serializer.export(this);
   }
 
   import(data) {
-    this.canvasEl.innerHTML = `<svg id="${this.id}-svg" class="flow-connections"></svg>`;
-    this.svgEl = this.canvasEl.querySelector("svg");
-    this.nodes = {};
-    this.connections = [];
-    this.nodeIdCounter = 1;
-
-    this.zoom = data.zoom || 1;
-    this.canvasX = data.canvas?.x || 0;
-    this.canvasY = data.canvas?.y || 0;
-    this.redrawCanvas();
-
-    if (data.nodes) {
-      data.nodes.forEach((n) => {
-        this.addNode(n);
-        if (n.id >= this.nodeIdCounter) this.nodeIdCounter = n.id + 1;
-      });
-    }
-    if (data.connections) {
-      data.connections.forEach((c) =>
-        this.makeConnection(c.outNodeId, c.outPort, c.inNodeId, c.inPort)
-      );
-    }
+    this.serializer.import(this, data);
   }
 }
 
-export { FlowActions as Flow };
+export default Flow;

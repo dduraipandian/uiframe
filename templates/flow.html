@@ -109,9 +109,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module">
       import { Flow } from "../index.js";
+      import { notification } from "../index.js";
+      import { DagValidator } from "../index.js";
+
+      const validators = [
+        new DagValidator(),
+      ];
 
       // Initialize Flow
-      const flow = new Flow({ name: "MyFlow", options: { zoom: 0.8 } });
+      const flow = new Flow({
+        name: "MyFlow", 
+        options: { zoom: 0.8 }, 
+        notification: notification, 
+        validators: validators 
+      });
       flow.renderInto("flow-wrapper");
 
       // Setup global access for drag handlers

@@ -100,6 +100,13 @@ class FlowConnectionManager extends EmitterComponent {
         return true;
     }
 
+    reset() {
+        this.connections = [];
+        this.pathMap.forEach(path => path.remove());
+        this.pathMap.clear();
+        this.clearTempPath?.();
+    }
+
     getConnectionKey(conn) {
         return `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
     }
