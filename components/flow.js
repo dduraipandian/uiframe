@@ -49,6 +49,7 @@ class Flow extends EmitterComponent {
 
     this.nodeManager = null;
     this.connectionManager = null;
+    this.rafId = null;
   }
 
   /**
@@ -151,6 +152,7 @@ class Flow extends EmitterComponent {
   highlightCycle(stack) {
     if (!stack || stack.length < 2) return;
 
+    // TODO: need to fix O(n^2) time complexity
     for (let pos = 0; pos < stack.length - 1; pos++) {
       const conn = this.connectionManager.connections.find(
         (c) => c.outNodeId === stack[pos] && c.inNodeId === stack[pos + 1]
@@ -187,15 +189,31 @@ class Flow extends EmitterComponent {
     this._cancelConnection = (e) => this.keyDownCancelConnection(e, nodeId);
     window.addEventListener("mousemove", this._drawConnection);
     window.addEventListener("keydown", this._cancelConnection);
+
+    this.startRaf(() => {
+      const samePreviousPos =
+        this.connectionStart.prevX == this.connectionStart.x &&
+        this.connectionStart.prevY == this.connectionStart.y;
+      if (this.connectionStart.x && this.connectionStart.y && !samePreviousPos) {
+        this.connectionManager.prevX = this.connectionStart.x;
+        this.connectionManager.prevY = this.connectionStart.y;
+        this.connectionManager.updateTempConnection(this.connectionStart.x, this.connectionStart.y);
+      }
+    });
   }
 
   mouseMoveDrawConnection(port, nodeId, event) {
     if (this.isConnecting) {
-      const rect = this.canvasEl.getBoundingClientRect();
+      if (!this._canvasRect) {
+        this._canvasRect = this.canvasEl.getBoundingClientRect();
+      }
+      const rect = this._canvasRect;
       const x = (event.clientX - rect.left) / this.zoom;
       const y = (event.clientY - rect.top) / this.zoom;
 
-      this.connectionManager.updateTempConnection(x, y);
+      // this.connectionManager.updateTempConnection(x, y);
+      this.connectionStart.x = x;
+      this.connectionStart.y = y;
     }
   }
 
@@ -275,6 +293,36 @@ class Flow extends EmitterComponent {
 
   import(data) {
     this.serializer.import(this, data);
+  }
+
+  startRaf(rafn) {
+    if (this.rafId) return;
+
+    const loop = () => {
+      if (!this.isConnecting) {
+        cancelAnimationFrame(this.rafId);
+        this.rafId = null;
+        this._canvasRect = null;
+        return;
+      }
+
+      // DOM update happens ONLY here
+      rafn();
+      this.rafId = requestAnimationFrame(loop);
+    };
+
+    this.rafId = requestAnimationFrame(loop);
+  }
+
+  destroy() {
+    this.isConnecting = false;
+
+    if (this._drawConnection) {
+      window.removeEventListener("mousemove", this._drawConnection);
+      window.removeEventListener("keydown", this._cancelConnection);
+    }
+
+    cancelAnimationFrame(this.rafId);
   }
 }
 

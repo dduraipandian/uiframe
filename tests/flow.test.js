@@ -127,7 +127,7 @@ describe("Flow Component", () => {
     expect(mockNotification.warning).toHaveBeenCalled();
   });
 
-  test("should cancel connection on ESC keydown while drawing and bad connection to be cleared", () => {
+  test("should cancel connection on ESC keydown while drawing and bad connection to be cleared", async () => {
     const flow = new Flow({
       name: "TestFlow",
       notification: mockNotification,
@@ -143,7 +143,7 @@ describe("Flow Component", () => {
     flow.addConnection(n1, 0, n2, 0);
     flow.addConnection(n2, 0, n3, 0);
     flow.addConnection(n3, 1, n4, 0);
-    flow.addConnection(n4, 1, n4, 0);
+    flow.addConnection(n4, 0, n2, 0);
 
     const outPort = container.querySelector(`#node-${n4} .flow-port[data-type="output"]`);
     const inPort = container.querySelector(`#node-${n2} .flow-port[data-type="input"]`);
@@ -154,6 +154,10 @@ describe("Flow Component", () => {
 
     // Move mouse
     window.dispatchEvent(new MouseEvent("mousemove", { clientX: 100, clientY: 100 }));
+
+    // Wait for RAF
+    await new Promise((resolve) => setTimeout(resolve, 1));
+
     expect(container.querySelector(".flow-connection-temp")).not.toBeNull();
 
     // Release on input
@@ -300,7 +304,7 @@ describe("Flow Component", () => {
     expect(container.querySelector(".card-header").textContent).toBe("Dropped Node");
   });
 
-  test("should create connection by dragging ports", () => {
+  test("should create connection by dragging ports", async () => {
     const flow = new Flow({
       name: "TestFlow",
       notification: mockNotification,
@@ -320,6 +324,10 @@ describe("Flow Component", () => {
 
     // Move mouse
     window.dispatchEvent(new MouseEvent("mousemove", { clientX: 100, clientY: 100 }));
+
+    // Wait for RAF
+    await new Promise((resolve) => setTimeout(resolve, 1));
+
     expect(container.querySelector(".flow-connection-temp")).not.toBeNull();
 
     // Release on input
@@ -404,7 +412,7 @@ describe("Flow Component", () => {
     expect(path2).toBeNull();
   });
 
-  test("should cancel connection on ESC keydown while drawing", () => {
+  test("should cancel connection on ESC keydown while drawing", async () => {
     const flow = new Flow({
       name: "TestFlow",
       notification: mockNotification,
@@ -422,6 +430,10 @@ describe("Flow Component", () => {
 
     // Move mouse to draw temp connection
     window.dispatchEvent(new MouseEvent("mousemove", { clientX: 100, clientY: 100 }));
+
+    // Wait for RAF
+    await new Promise((resolve) => setTimeout(resolve, 1));
+
     expect(container.querySelector(".flow-connection-temp")).not.toBeNull();
 
     // Press ESC key to cancel
