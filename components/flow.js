@@ -134,7 +134,7 @@ class Flow extends EmitterComponent {
    * @param {number} [options.options.zoom=1] - Initial zoom level.
    * @param {Object} [options.options.canvas={x:0, y:0}] - Initial pan position.
    */
-  constructor({ name, options = {}, validators = [] }) {
+  constructor({ name, options = {}, validators = [], notification = null }) {
     super({ name });
 
     this.options = options;
@@ -396,7 +396,7 @@ class Flow extends EmitterComponent {
       // multiple connection validators will cause issues
       const result = validator.onConnectionAttempt({ outNodeId, inNodeId });
       if (!result.valid) {
-        this.notification.warning("This connection will create cyclic flow.");
+        this.notification?.warning("This connection will create cyclic flow.");
         this.connectionManager.markTempPathBad();
 
         if (result.stack) {

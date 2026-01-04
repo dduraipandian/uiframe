@@ -8,4 +8,7 @@ export { default as ContextMenu } from "./components/contextmenu.js";
 export { default as Online } from "./components/online.js";
 export { default as SplitPane } from "./components/split.js";
 export { Flow } from "./components/flow.js";
+export { default as FlowCanvas } from "./components/flow/canvas.js";
 export { default as Utility } from "./components/utils.js";
+export { default as notification } from "./components/notification.js";
+export { default as DagValidator } from "./components/flow/plugins/dag-validator.js";
