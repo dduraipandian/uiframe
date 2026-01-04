@@ -323,21 +323,22 @@ class Flow extends EmitterComponent {
     console.debug("FLOW: Start connection from port: ", port, "nodeId: ", nodeId);
     event.stopPropagation();
     this.isConnecting = true;
-    this.connectionStart = { nodeId, index: port.dataset.index };
 
+    this.connectionManager.beginTempConnection(nodeId, port.dataset.index);
     // Use addEventListener instead of window.onmousemove to avoid JSDOM redefinition errors
     this._drawConnection = (e) => this.mouseMoveDrawConnection(port, nodeId, e);
     this._cancelConnection = (e) => this.keyDownCancelConnection(e, nodeId);
     window.addEventListener("mousemove", this._drawConnection);
     window.addEventListener("keydown", this._cancelConnection);
-
-    // Clear cache for source node to ensure accurate start point
-    if (this.nodes[nodeId]) this.nodes[nodeId].portOffsets = {};
   }
 
   mouseMoveDrawConnection(port, nodeId, event) {
     if (this.isConnecting) {
-      this.renderTempConnection(port, nodeId, event);
+      const rect = this.canvasEl.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / this.zoom;
+      const y = (event.clientY - rect.top) / this.zoom;
+
+      this.connectionManager.updateTempConnection(x, y);
     }
   }
 
@@ -348,7 +349,7 @@ class Flow extends EmitterComponent {
       if (target && target.dataset.type === "input") {
         const inputNodeId = parseInt(target.dataset.nodeId);
         const inputIndex = parseInt(target.dataset.index);
-        this.makeConnection(
+        const connected = this.makeConnection(
           this.connectionStart.nodeId,
           this.connectionStart.index,
           inputNodeId,
@@ -356,12 +357,13 @@ class Flow extends EmitterComponent {
           event,
           nodeId
         );
+        if (connected) this.connectionManager.endTempConnection();
       }
     }
   }
 
   makeConnection(outNodeId, outPort, inNodeId, inPort, event = null, nodeId = null) {
-    const connected = this.addConnection(outNodeId, outPort, inNodeId, inPort);
+    const connected = this.connectionManager.addConnection(outNodeId, outPort, inNodeId, inPort);
     if (event && connected) this.keyDownCancelConnection(event, nodeId);
     return connected;
   }
@@ -409,21 +411,6 @@ class Flow extends EmitterComponent {
     this.zoomChangeUpdate();
   }
 
-  redrawNodeWithXY(id, x, y) {
-    this.nodes[id].x = x;
-    this.nodes[id].y = y;
-
-    // https://stackoverflow.com/questions/7108941/css-transform-vs-position
-    // Changing transform will trigger a redraw in compositor layer only for the animated element
-    // (subsequent elements in DOM will not be redrawn). I want DOM to be redraw to make connection attached to the port.
-    // so using position top/left to keep the position intact, not for the animation.
-    // I spent hours to find this out with trial and error.
-    this.nodes[id].el.style.top = `${y}px`;
-    this.nodes[id].el.style.left = `${x}px`;
-
-    this.updateConnections(id);
-  }
-
   removeNode(event, nodeId) {
     console.log("FLOW: removing node ", nodeId);
     event.stopPropagation();
@@ -439,69 +426,6 @@ class Flow extends EmitterComponent {
 
     this.nodes[nodeId].el.remove();
     delete this.nodes[nodeId];
-  }
-
-  renderTempConnection(port, nodeId, event) {
-    // re-sets bad connection if there is any cyclic and path is already cleared.
-    const node = this.nodes[nodeId];
-    let path = this.svgEl.querySelector(".flow-connection-temp");
-    if (!path) {
-      path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("class", "flow-connection-path selected flow-connection-temp");
-      path.style.pointerEvents = "none";
-      this.svgEl.appendChild(path);
-    } else {
-      this.clearBadTempConnection();
-    }
-
-    const p1 = this.connectionManager.getPortPosition(node.id, "output", port.dataset.index);
-
-    const rect = this.canvasEl.getBoundingClientRect();
-    const mouseX = (event.clientX - rect.left) / this.zoom;
-    const mouseY = (event.clientY - rect.top) / this.zoom;
-
-    path.setAttribute("d", this.connectionManager.getBazierPath(p1.x, p1.y, mouseX, mouseY));
-  }
-
-  clearTempConnection() {
-    const path = this.svgEl.querySelector(".flow-connection-temp");
-    if (path) path.remove();
-    this.clearBadTempConnection();
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  badTempConnection(outNodeId, outPort, inNodeId, inPort) {
-    const path = this.svgEl.querySelector(".flow-connection-temp");
-    if (path) path.classList.add("flow-connection-path-bad");
-
-    const cacheKey = `${outNodeId}->${inNodeId}`;
-    let stack = this.tempStackCache[cacheKey];
-    console.log(stack);
-    if (stack.length > 1) {
-      let pos = 0;
-      while (pos < stack.length - 1) {
-        this.connectionManager.connections.forEach((conn) => {
-          if (conn.outNodeId === stack[pos] && conn.inNodeId === stack[pos + 1]) {
-            console.log(conn);
-            const tp = this.svgEl.querySelector(
-              `path[data-id="${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}"]`
-            );
-            tp.classList.add("flow-connection-path-bad");
-          }
-        });
-        pos++;
-      }
-    }
-  }
-
-  // bad connection path (cyclic in DAG) will be cleared on below scenario
-  // 1. drawing new (temp) connection
-  // 2. cancel drawing connection this.keyDownCancelConnection
-  clearBadTempConnection() {
-    const paths = this.svgEl.querySelectorAll(".flow-connection-path-bad");
-    paths.forEach((path) => {
-      path.classList.remove("flow-connection-path-bad");
-    });
   }
 }
 

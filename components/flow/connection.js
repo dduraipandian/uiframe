@@ -66,6 +66,10 @@ class FlowConnectionManager extends EmitterComponent {
 
         this.connections = [];
         this.pathMap = new Map();
+
+        this.tempPath = null;
+        this.badPaths = new Set();
+        this.tempSource = null;
     }
 
     addConnection(outNodeId, outPort, inNodeId, inPort) {
@@ -117,7 +121,7 @@ class FlowConnectionManager extends EmitterComponent {
             this.emit(Constant.CONNECTION_CLICKED_EVENT, conn);
         };
 
-        this.svgEl.appendChild(path);
+        this.connectionContainer.appendChild(path);
         this.pathMap.set(key, path);
     }
 
@@ -177,6 +181,86 @@ class FlowConnectionManager extends EmitterComponent {
         const hx2 = x2 - Math.abs(x2 - x1) * curvature;
 
         return `M ${x1} ${y1} C ${hx1} ${y1} ${hx2} ${y2} ${x2} ${y2}`;
+    }
+
+    beginTempConnection(fromNodeId, fromPortIndex) {
+        this.tempSource = { nodeId: fromNodeId, portIndex: fromPortIndex };
+    }
+
+    endTempConnection() {
+        this.tempSource = null;
+        this.clearTempPath();
+    }
+
+    updateTempConnection(mouseX, mouseY) {
+        if (!this.tempSource) return;
+
+        const { nodeId, portIndex } = this.tempSource;
+        const p1 = this.getPortPosition(nodeId, "output", portIndex);
+
+        this.createTempPath(p1, { x: mouseX, y: mouseY });
+    }
+
+    createTempPath(p1, p2) {
+        if (!this.tempPath) {
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("class", "flow-connection-path selected flow-connection-temp");
+            path.style.pointerEvents = "none";
+            this.connectionContainer.appendChild(path);
+            this.tempPath = path;
+        }
+
+        const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
+        this.tempPath.setAttribute("d", d);
+    }
+
+    clearTempPath() {
+        if (this.tempPath) {
+            this.tempPath.remove();
+            this.tempPath = null;
+        }
+        this.clearBadPaths();
+    }
+
+    markPathBad(conn) {
+        this.markTempPathBad();
+        this.markExistingPathBad(conn);
+    }
+
+    markTempPathBad() {
+        if (this.tempPath) {
+            this.tempPath.classList.add("flow-connection-path-bad");
+        }
+    }
+
+    markExistingPathBad(conn) {
+        const key = this.getConnectionKey(conn);
+        const path = this.pathMap.get(key);
+        if (path) {
+            path.classList.add("flow-connection-path-bad");
+            this.badPaths.add(path);
+        }
+    }
+
+    // bad connection path (cyclic in DAG) will be cleared on below scenario
+    // 1. drawing new (temp) connection
+    // 2. cancel drawing connection this.keyDownCancelConnection
+    clearBadPaths() {
+        this.clearTempPathBad();
+        this.clearExistingBadPaths();
+    }
+
+    clearTempPathBad() {
+        if (this.tempPath) {
+            this.tempPath.classList.remove("flow-connection-path-bad");
+        }
+    }
+
+    clearExistingBadPaths() {
+        this.badPaths.forEach(path => {
+            path.classList.remove("flow-connection-path-bad");
+        });
+        this.badPaths.clear();
     }
 }
 
