@@ -5,122 +5,6 @@ import FlowConnectionManager from "./flow/connection.js";
 import FlowSerializer from "./flow/serializer.js";
 import * as Constant from "./flow/constants.js";
 
-class DragHandler {
-  constructor(
-    element,
-    onMoveHandler,
-    initialPosition = { x: 0, y: 0 },
-    startDragPosition = { x: 0, y: 0 },
-    zoom = 1
-  ) {
-    this.element = element;
-    this.onMoveHandler = onMoveHandler;
-    this.zoomGetter = typeof zoom === "function" ? zoom : () => zoom;
-
-    this.isDragging = false;
-    this.dragStartPosition = startDragPosition;
-    this.initialPosition = initialPosition;
-
-    this.elementX = this.initialPosition.x;
-    this.elementY = this.initialPosition.y;
-
-    this.rafId = null;
-
-    this.MOUSE_RIGHT_CLICK = 2;
-  }
-
-  destroy() {
-    this.element.removeEventListener("mousedown", this.onHold.bind(this));
-    window.removeEventListener("mousemove", this.onMove.bind(this));
-    window.removeEventListener("mouseup", this.onRelease.bind(this));
-  }
-
-  registerDragEvent() {
-    // Canvas Panning Listeners for click and drag, draggable will not work
-    // as it will go to initial position when click is released
-    this.element.addEventListener("mousedown", this.onHold.bind(this));
-  }
-
-  onHold(e) {
-    if (e.button === this.MOUSE_RIGHT_CLICK) {
-      console.debug("FLOW: Ignoreing Right click on ", this.element);
-      return;
-    }
-
-    e.stopPropagation();
-    this.isDragging = true;
-    this.dragStartPosition = { x: e.clientX, y: e.clientY };
-    this.initialPosition = { x: this.elementX, y: this.elementY };
-    this.element.style.cursor = "grabbing";
-
-    window.addEventListener("mousemove", this.onMove.bind(this));
-    window.addEventListener("mouseup", this.onRelease.bind(this));
-    this.startRaf();
-  }
-
-  onMove(e) {
-    if (e.button === this.MOUSE_RIGHT_CLICK) {
-      console.debug("FLOW: Ignoreing Right click on", this.element);
-      return;
-    }
-    e.stopPropagation();
-
-    if (!this.isDragging) {
-      return;
-    }
-
-    const zoom = this.zoomGetter();
-    const dx = (e.clientX - this.dragStartPosition.x) / zoom;
-    const dy = (e.clientY - this.dragStartPosition.y) / zoom;
-
-    this.elementX = this.initialPosition.x + dx;
-    this.elementY = this.initialPosition.y + dy;
-  }
-
-  onRelease(e) {
-    if (e.button === this.MOUSE_RIGHT_CLICK) {
-      console.debug("FLOW: Ignoreing right click on", this.element);
-      return;
-    }
-
-    e.stopPropagation();
-    this.isDragging = false;
-    this.element.style.cursor = "grab";
-
-    window.removeEventListener("mousemove", this.onMove.bind(this));
-    window.removeEventListener("mouseup", this.onRelease.bind(this));
-  }
-
-  static register(element, onMoveHandler, zoom = 1) {
-    const dragHandler = new DragHandler(
-      element,
-      onMoveHandler,
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-      zoom
-    );
-    dragHandler.registerDragEvent();
-    return dragHandler;
-  }
-
-  startRaf() {
-    if (this.rafId) return;
-
-    const loop = () => {
-      if (!this.isDragging) {
-        cancelAnimationFrame(this.rafId);
-        this.rafId = null;
-        return;
-      }
-
-      // DOM update happens ONLY here
-      this.onMoveHandler(this.elementX, this.elementY);
-      this.rafId = requestAnimationFrame(loop);
-    };
-
-    this.rafId = requestAnimationFrame(loop);
-  }
-}
 
 /**
  * A lightweight Flow/Node editor component inspired by Drawflow, and freeform.
@@ -193,6 +77,7 @@ class Flow extends EmitterComponent {
       canvasContainer: this.canvasEl,
       options: this.options
     });
+
     this.connectionManager = new FlowConnectionManager({
       name: this.name + "-flow-connection-manager",
       connectionContainer: this.svgEl,
@@ -206,10 +91,22 @@ class Flow extends EmitterComponent {
       this.nodeManager.zoom = data.zoom;
     });
 
+    this.canvas.on("node:dropped", ({ data }) => {
+      console.debug("Node is dropped: ", data)
+      this.emit(Constant.NODE_DROPPED_EVENT, data);
+      this.nodeManager.dropNode(data);
+    });
+
     this.nodeManager.on(Constant.NODE_MOVED_EVENT, ({ id, x, y }) => {
       console.debug("Node is moved: ", id, x, y)
       this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
       this.connectionManager.updateConnections(id);
+    });
+
+    this.nodeManager.on(Constant.NODE_REMOVED_EVENT, ({ id }) => {
+      console.debug("Node is removed: ", id)
+      this.emit(Constant.NODE_REMOVED_EVENT, { id });
+      this.removeNode(id);
     });
 
     this.nodeManager.on("port:connect:start", ({ nodeId, portIndex, event }) => {
@@ -225,13 +122,17 @@ class Flow extends EmitterComponent {
       this.emit(Constant.CONNECTION_CREATED_EVENT, connection);
 
       this.validators.forEach(v =>
-        v.onConnectionAdded?.({ outNodeId, inNodeId })
+        v.onConnectionAdded?.({
+          outNodeId: connection.outNodeId,
+          inNodeId: connection.inNodeId
+        })
       );
     });
 
     this.connectionManager.on(Constant.CONNECTION_CLICKED_EVENT, (connection) => {
       console.debug("Connection is clicked: ", connection)
       this.emit(Constant.CONNECTION_CLICKED_EVENT, connection);
+      this.connectionManager.removeConnection(connection);
     });
 
     this.connectionManager.on(Constant.CONNECTION_REMOVED_EVENT, (connection) => {
@@ -258,23 +159,6 @@ class Flow extends EmitterComponent {
     }
   }
 
-  onZoomAction(e) {
-    e.preventDefault();
-    const action = e.currentTarget.dataset.action;
-    switch (action) {
-      case "zoomin":
-        this.zoom += 0.1;
-        break;
-      case "zoomout":
-        this.zoom -= 0.1;
-        break;
-      case "zoomreset":
-        this.zoom = this.originalZoom;
-        break;
-    }
-    this.redrawCanvas();
-  }
-
   /**
    * Add a new node to the flow.
    * @param {Object} params
@@ -290,37 +174,11 @@ class Flow extends EmitterComponent {
     return this.nodeManager.addNode(params);
   }
 
-  onDrop(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    try {
-      const raw = e.dataTransfer.getData("application/json");
-      if (!raw) return;
-
-      const data = JSON.parse(raw);
-      const rect = this.containerEl.getBoundingClientRect();
-      const x = (e.clientX - rect.left - this.canvasX - this.nodeWidth / 2) / this.zoom;
-      const y = (e.clientY - rect.top - this.canvasY - this.nodeHeight / 2) / this.zoom;
-
-      this.addNode({
-        name: data.name,
-        inputs: data.inputs,
-        outputs: data.outputs,
-        x,
-        y,
-        html: data.html,
-      });
-    } catch (err) {
-      console.error("Invalid drop data", err);
-    }
-  }
-
   mouseDownStartConnection(port, nodeId, event) {
     console.debug("FLOW: Start connection from port: ", port, "nodeId: ", nodeId);
     event.stopPropagation();
     this.isConnecting = true;
-
+    this.connectionStart = { nodeId, index: port.dataset.index };
     this.connectionManager.beginTempConnection(nodeId, port.dataset.index);
     // Use addEventListener instead of window.onmousemove to avoid JSDOM redefinition errors
     this._drawConnection = (e) => this.mouseMoveDrawConnection(port, nodeId, e);
@@ -346,7 +204,7 @@ class Flow extends EmitterComponent {
       if (target && target.dataset.type === "input") {
         const inputNodeId = parseInt(target.dataset.nodeId);
         const inputIndex = parseInt(target.dataset.index);
-        const connected = this.makeConnection(
+        const connected = this.addConnection(
           this.connectionStart.nodeId,
           this.connectionStart.index,
           inputNodeId,
@@ -359,7 +217,7 @@ class Flow extends EmitterComponent {
     }
   }
 
-  makeConnection(outNodeId, outPort, inNodeId, inPort, event = null, nodeId = null) {
+  addConnection(outNodeId, outPort, inNodeId, inPort, event = null, nodeId = null) {
     // const connected = this.connectionManager.addConnection(outNodeId, outPort, inNodeId, inPort);
     // if (event && connected) this.keyDownCancelConnection(event, nodeId);
     // return connected;
@@ -388,6 +246,7 @@ class Flow extends EmitterComponent {
       this.validators.forEach(v =>
         v.onConnectionAdded?.({ outNodeId, inNodeId })
       );
+      if (event) this.keyDownCancelConnection(event, nodeId);
     }
 
     return created;
@@ -402,7 +261,7 @@ class Flow extends EmitterComponent {
     }
 
     this.isConnecting = false;
-    this.clearTempConnection();
+    this.connectionManager.clearTempPath();
 
     if (this._drawConnection) {
       window.removeEventListener("mousemove", this._drawConnection);
@@ -411,31 +270,8 @@ class Flow extends EmitterComponent {
     }
   }
 
-  // handling mouse left click on node
-  onNodeClick(e, id) {
-    this.canvasEl.querySelectorAll(".flow-node").forEach((n) => n.classList.remove("selected"));
-    this.nodes[id].el.classList.add("selected");
-  }
-
-  redrawCanvas() {
-    this.redrawCanvasWithXY(this.canvasX, this.canvasY);
-  }
-
-  removeNode(event, nodeId) {
-    console.log("FLOW: removing node ", nodeId);
-    event.stopPropagation();
-    const id = parseInt(nodeId);
-    const relevant = this.connectionManager.connections.filter((c) => c.outNodeId === id || c.inNodeId === id);
-
-    relevant.forEach((conn) => {
-      const pathId = `${conn.outNodeId}:${conn.outPort}-${conn.inNodeId}:${conn.inPort}`;
-      const path = this.svgEl.querySelector(`path[data-id="${pathId}"]`);
-      console.log("FLOW: removing node path ", pathId);
-      this.connectionManager.removeConnection(conn);
-    });
-
-    this.nodes[nodeId].el.remove();
-    delete this.nodes[nodeId];
+  removeNode(nodeId) {
+    this.connectionManager.removeRelatedConnections(nodeId);
   }
 
   export() {

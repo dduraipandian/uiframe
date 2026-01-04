@@ -1,6 +1,6 @@
 import { EmitterComponent } from "../base.js";
 import DragHandler from "./utils.js";
-import * as Constant from "./flow/constants.js";
+import * as Constant from "./constants.js";
 
 class FlowNode extends EmitterComponent {
     constructor({ nodeId, inputs = 1, outputs = 1, x = 0, y = 0, html = "", options = {} }) {
@@ -29,6 +29,12 @@ class FlowNodeManager extends EmitterComponent {
         this.nodeHeight = options.nodeHeight || 90;
         this.selectedNodeId = null;
         this.canvasContainer = canvasContainer;
+    }
+
+    dropNode(data) {
+        const posX = (data.x - this.nodeWidth / 2) / this.zoom;
+        const posY = (data.y - this.nodeHeight / 2) / this.zoom;
+        this.addNode({ ...data, x: posX, y: posY });
     }
 
     addNode({ name, inputs = 1, outputs = 1, x = 0, y = 0, html = "" }) {
@@ -72,8 +78,8 @@ class FlowNodeManager extends EmitterComponent {
 
         const nodeEl = el.querySelector(`#node-${node.id}`);
 
-        // nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
-        // nodeEl.onmousedown = (e) => this.onNodeClick(e, node.id);
+        nodeEl.onclick = (e) => this.onNodeClick(e, node.id);
+        nodeEl.onmousedown = (e) => this.onNodeClick(e, node.id);
 
         // register drap handler
         const hl = new DragHandler(
@@ -88,17 +94,30 @@ class FlowNodeManager extends EmitterComponent {
         );
         hl.registerDragEvent();
 
-        // nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach((port) => {
-        //     port.onmousedown = (e) => this.mouseDownStartConnection(port, node.id, e);
-        // });
+        nodeEl
+            .querySelector("button.node-close")
+            .addEventListener("click", (e) => this.removeNode(e, node.id));
 
-        // nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach((port) => {
-        //     port.onmouseup = (e) => this.mouseUpCompleteConnection(port, node.id, e);
-        // });
 
-        // nodeEl
-        //     .querySelector("button.node-close")
-        //     .addEventListener("click", (e) => this.removeNode(e, node.id));
+        nodeEl.querySelectorAll(".flow-ports-out .flow-port").forEach(port => {
+            port.onmousedown = (e) => {
+                this.emit("port:connect:start", {
+                    nodeId: node.id,
+                    portIndex: port.dataset.index,
+                    event: e
+                });
+            };
+        });
+
+        nodeEl.querySelectorAll(".flow-ports-in .flow-port").forEach(port => {
+            port.onmouseup = (e) => {
+                this.emit("port:connect:end", {
+                    nodeId: node.id,
+                    portIndex: port.dataset.index,
+                    event: e
+                });
+            };
+        });
 
         this.nodes[node.id].el = nodeEl;
         this.canvasContainer.appendChild(nodeEl);
@@ -127,6 +146,26 @@ class FlowNodeManager extends EmitterComponent {
 
         // this.updateConnections(id);
         this.emit(Constant.NODE_MOVED_EVENT, { id, x, y });
+    }
+
+    // handling mouse left click on node
+    onNodeClick(e, id) {
+        if (this.selectedNodeId && this.nodes[this.selectedNodeId]) {
+            this.nodes[this.selectedNodeId].el.classList.remove("selected");
+        }
+        this.nodes[id].el.classList.add("selected");
+        this.selectedNodeId = id;
+    }
+
+    removeNode(event, nodeId) {
+        console.debug("FLOW: removing node ", nodeId);
+        event.stopPropagation();
+        const id = parseInt(nodeId);
+
+        this.emit(Constant.NODE_REMOVED_EVENT, { id });
+
+        this.nodes[nodeId].el.remove();
+        delete this.nodes[nodeId];
     }
 }
 

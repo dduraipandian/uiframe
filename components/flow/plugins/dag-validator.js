@@ -1,4 +1,4 @@
-import { FlowValidator } from "./base.js";
+import FlowValidator from "./base.js";
 
 class DagValidator extends FlowValidator {
     constructor({ enabled = true } = {}) {
@@ -11,6 +11,7 @@ class DagValidator extends FlowValidator {
     }
 
     onConnectionAttempt({ outNodeId, inNodeId }) {
+        const message = "This connection will create cyclic flow.";
         if (!this.enabled) return { valid: true };
 
         const cacheKey = `${outNodeId}->${inNodeId}`;
@@ -20,7 +21,7 @@ class DagValidator extends FlowValidator {
         }
 
         if (this.tempCyclicCache[cacheKey]) {
-            return { valid: false, stack: this.tempStackCache[cacheKey] };
+            return { valid: false, stack: this.tempStackCache[cacheKey], message };
         }
 
         this.tempStackCache[cacheKey] = [];
@@ -36,7 +37,7 @@ class DagValidator extends FlowValidator {
         for (const neighbor of virtualNeighbors) {
             if (this.#isCyclic(neighbor, visited, stack)) {
                 this.tempCyclicCache[cacheKey] = true;
-                return { valid: false, stack };
+                return { valid: false, stack, message };
             }
         }
 

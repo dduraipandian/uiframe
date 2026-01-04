@@ -163,6 +163,14 @@ class FlowConnectionManager extends EmitterComponent {
         this.emit(Constant.CONNECTION_REMOVED_EVENT, conn);
     }
 
+    removeRelatedConnections(nodeId) {
+        const relevant = this.connections.filter((c) => c.outNodeId === nodeId || c.inNodeId === nodeId);
+
+        relevant.forEach((conn) => {
+            this.removeConnection(conn);
+        });
+    }
+
     getPortPosition(nodeId, type, index) {
         const node = this.nodes[nodeId];
         if (!node || !node.el) return { x: 0, y: 0 };
@@ -215,12 +223,17 @@ class FlowConnectionManager extends EmitterComponent {
             path.style.pointerEvents = "none";
             this.connectionContainer.appendChild(path);
             this.tempPath = path;
+        } else {
+            this.clearBadPaths()
         }
 
         const d = this.getBazierPath(p1.x, p1.y, p2.x, p2.y);
         this.tempPath.setAttribute("d", d);
     }
 
+    // bad connection path (cyclic in DAG) will be cleared on below scenario
+    // 1. drawing new (temp) connection
+    // 2. cancel drawing connection this.keyDownCancelConnection
     clearTempPath() {
         if (this.tempPath) {
             this.tempPath.remove();
@@ -237,6 +250,7 @@ class FlowConnectionManager extends EmitterComponent {
     markTempPathBad() {
         if (this.tempPath) {
             this.tempPath.classList.add("flow-connection-path-bad");
+            this.badPaths.add(this.tempPath);
         }
     }
 
@@ -249,21 +263,7 @@ class FlowConnectionManager extends EmitterComponent {
         }
     }
 
-    // bad connection path (cyclic in DAG) will be cleared on below scenario
-    // 1. drawing new (temp) connection
-    // 2. cancel drawing connection this.keyDownCancelConnection
     clearBadPaths() {
-        this.clearTempPathBad();
-        this.clearExistingBadPaths();
-    }
-
-    clearTempPathBad() {
-        if (this.tempPath) {
-            this.tempPath.classList.remove("flow-connection-path-bad");
-        }
-    }
-
-    clearExistingBadPaths() {
         this.badPaths.forEach(path => {
             path.classList.remove("flow-connection-path-bad");
         });
@@ -271,4 +271,4 @@ class FlowConnectionManager extends EmitterComponent {
     }
 }
 
-export default FlowConnection;
+export default FlowConnectionManager;

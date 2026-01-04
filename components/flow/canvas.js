@@ -35,12 +35,13 @@ class FlowCanvas extends EmitterComponent {
     }
 
     init() {
+        this.containerEl = this.parentContainer
         this.canvasEl = this.container.querySelector(`#${this.canvasId}`);
         this.svgEl = this.container.querySelector(`#${this.id}-svg`);
         this.container = this.canvasEl;
 
         // canvas container drag handler
-        DragHandler.register(this.parentContainer, this.redrawCanvasWithXY.bind(this));
+        DragHandler.register(this.containerEl, this.redrawCanvasWithXY.bind(this));
 
         // passive: false to allow preventDefault to be called. It is false by default except for Safari.
         if (this.enableZoomActions) {
@@ -88,7 +89,7 @@ class FlowCanvas extends EmitterComponent {
         const delta = e.deltaY > 0 ? -0.1 : 0.1;
         const newZoom = Math.max(0.1, Math.min(this.zoom + delta, 3));
         this.zoom = newZoom;
-        // this.redrawCanvas();
+        this.redrawCanvas();
         this.emit("canvas:zoom", { data: { zoom: this.zoom, x: this.canvasX, y: this.canvasY, delta: delta, originalZoom: this.originalZoom } });
     }
 
@@ -102,8 +103,8 @@ class FlowCanvas extends EmitterComponent {
 
             const data = JSON.parse(raw);
             const rect = this.containerEl.getBoundingClientRect();
-            const x = (e.clientX - rect.left - this.canvasX - this.nodeWidth / 2) / this.zoom;
-            const y = (e.clientY - rect.top - this.canvasY - this.nodeHeight / 2) / this.zoom;
+            const x = e.clientX - rect.left - this.canvasX;
+            const y = e.clientY - rect.top - this.canvasY;
 
             // this.addNode({
             //     name: data.name,
@@ -113,6 +114,7 @@ class FlowCanvas extends EmitterComponent {
             //     y,
             //     html: data.html,
             // });
+            this.emit("node:dropped", { data: { x, y, ...data } });
             console.debug("FLOW - DROP: ", data, x, y);
         } catch (err) {
             console.error("Invalid drop data", err);

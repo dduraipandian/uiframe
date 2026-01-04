@@ -1,4 +1,6 @@
 export const NODE_MOVED_EVENT = "node:moved";
+export const NODE_DROPPED_EVENT = "node:dropped";
+export const NODE_REMOVED_EVENT = "node:removed";
 
 // Connection Events
 export const CONNECTION_CREATED_EVENT = "connection:created";
