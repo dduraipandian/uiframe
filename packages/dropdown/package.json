@@ -1,0 +1,25 @@
+{
+  "name": "@uiframe/dropdown",
+  "version": "0.1.0",
+  "description": "UIFrame Dropdown component",
+
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/dropdown.min.js",
+
+  "files": ["dist"],
+  "sideEffects": false,
+
+  "peerDependencies": {
+    "@uiframe/core": "~0.1.0",
+    "bootstrap": "~5.0.0"
+  },
+
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "browser": "./dist/dropdown.min.js"
+    }
+  }
+}
