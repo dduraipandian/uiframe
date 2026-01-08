@@ -65,7 +65,7 @@ export default packages.map((pkg) => {
                 format: "iife",
                 name: "uiframe",
                 extend: true,
-                plugins: [terser(), iifeGuardPlugin(pkg)],
+                plugins: [iifeGuardPlugin(pkg), terser()],
                 globals: { "@uiframe/core": "uiframe" },
             },
         ],
