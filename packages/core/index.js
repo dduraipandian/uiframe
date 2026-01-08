@@ -1,2 +1,5 @@
-export * from "../../components/base.js";
-export * from "../../components/utils.js";
+if (typeof window !== "undefined") {
+    window.uiframe = window.uiframe || {};
+}
+
+export { Component, EmitterComponent, Utility } from "../../components/core";
