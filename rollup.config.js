@@ -4,8 +4,10 @@ import { terser } from "rollup-plugin-terser";
 import path from "path";
 import fs from "fs";
 
+const inputPKG = process.env.PKG;
 const packagesDir = path.resolve(__dirname, "packages");
 const packages = fs.readdirSync(packagesDir).filter((pkg) => {
+    if (inputPKG && pkg !== inputPKG) return false;
     return fs.statSync(path.join(packagesDir, pkg)).isDirectory();
 });
 
