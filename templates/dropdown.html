@@ -138,10 +138,12 @@ dd.on('item:click', (item) => console.log('Selected:', item));
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/dropdown/dist/dropdown.min.js"></script>
 
     <script type="module">
-      import { Dropdown } from "../components/dropdown.js";
-
+      const { Dropdown } = window.UIFrameDropdown;
+      
       // Demo 1: Basic dropdown
       const dd1 = new Dropdown({
         name: "Select Item",
