@@ -1,4 +1,4 @@
-import { EmitterComponent } from "./base.js";
+import { EmitterComponent } from "@uiframe/core";
 
 /**
  * Component for monitoring and displaying network status (Online/Offline).

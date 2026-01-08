@@ -1,4 +1,4 @@
-import { EmitterComponent } from "./base.js";
+import { EmitterComponent } from "@uiframe/core";
 
 class Notification extends EmitterComponent {
   constructor({ name, options = {} }) {

@@ -1,5 +1,4 @@
-import { EmitterComponent } from "./base.js";
-import { Utility } from "./utils.js";
+import { EmitterComponent, Utility } from "@uiframe/core";
 import { ContextMenu } from "./contextmenu.js";
 
 function animateExpandedCollapse(container, mutateFn) {
