@@ -7,18 +7,18 @@ import fs from "fs";
 const inputPKG = process.env.PKG;
 const packagesDir = path.resolve(__dirname, "packages");
 const packages = fs.readdirSync(packagesDir).filter((pkg) => {
-    if (inputPKG && pkg !== inputPKG) return false;
-    return fs.statSync(path.join(packagesDir, pkg)).isDirectory();
+  if (inputPKG && pkg !== inputPKG) return false;
+  return fs.statSync(path.join(packagesDir, pkg)).isDirectory();
 });
 
 function iifeGuardPlugin(pkgName) {
-    return {
-        name: "iife-guard",
-        renderChunk(code, chunk, options) {
-            if (options.format !== "iife") return null;
+  return {
+    name: "iife-guard",
+    renderChunk(code, chunk, options) {
+      if (options.format !== "iife") return null;
 
-            if (pkgName === "core")
-                return `
+      if (pkgName === "core")
+        return `
                     (function () {
                         if (typeof window !== "undefined") {
                             window.uiframe = window.uiframe || {};
@@ -26,8 +26,8 @@ function iifeGuardPlugin(pkgName) {
                     })();
                     ${code}
                 `;
-            else
-                return `
+      else
+        return `
                     (function () {
                         if (typeof window !== "undefined" && !window.uiframe) {
                             throw new Error(
@@ -37,45 +37,40 @@ function iifeGuardPlugin(pkgName) {
                     })();
                     ${code}
                 `;
-        },
-    };
+    },
+  };
 }
 
 export default packages.map((pkg) => {
-    const pkgPath = path.join(packagesDir, pkg);
-    const pkgJson = JSON.parse(
-        fs.readFileSync(path.join(pkgPath, "package.json"), "utf-8")
-    );
+  const pkgPath = path.join(packagesDir, pkg);
+  const pkgJson = JSON.parse(fs.readFileSync(path.join(pkgPath, "package.json"), "utf-8"));
 
-    return {
-        input: path.join(pkgPath, "index.js"),
-        output: [
-            {
-                file: path.join(pkgPath, "dist/index.js"),
-                format: "cjs",
-                sourcemap: true,
-            },
-            {
-                file: path.join(pkgPath, "dist/index.esm.js"),
-                format: "esm",
-                sourcemap: true,
-            },
-            {
-                file: path.join(pkgPath, `dist/${pkg}.min.js`),
-                format: "iife",
-                name: "uiframe",
-                extend: true,
-                plugins: [iifeGuardPlugin(pkg), terser()],
-                globals: { "@uiframe/core": "uiframe" },
-            },
-        ],
-        external: [
-            ...Object.keys(pkgJson.peerDependencies || {}),
-            (id) => id.startsWith("@uiframe/") && id !== pkgJson.name,
-        ],
-        plugins: [
-            resolve(),
-            commonjs(),
-        ],
-    };
+  return {
+    input: path.join(pkgPath, "index.js"),
+    output: [
+      {
+        file: path.join(pkgPath, "dist/index.js"),
+        format: "cjs",
+        sourcemap: true,
+      },
+      {
+        file: path.join(pkgPath, "dist/index.esm.js"),
+        format: "esm",
+        sourcemap: true,
+      },
+      {
+        file: path.join(pkgPath, `dist/${pkg}.min.js`),
+        format: "iife",
+        name: "uiframe",
+        extend: true,
+        plugins: [iifeGuardPlugin(pkg), terser()],
+        globals: { "@uiframe/core": "uiframe" },
+      },
+    ],
+    external: [
+      ...Object.keys(pkgJson.peerDependencies || {}),
+      (id) => id.startsWith("@uiframe/") && id !== pkgJson.name,
+    ],
+    plugins: [resolve(), commonjs()],
+  };
 });

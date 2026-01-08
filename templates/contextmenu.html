@@ -116,7 +116,10 @@ menu.on('item:click', (item) => console.log('Clicked', item));
     <script src="../packages/contextmenu/dist/contextmenu.min.js"></script>
 
     <script type="module">
-      const menu = new uiframe.ContextMenu({ name: "Demo Context Menu", options: { maxHeight: "12em" } });
+      const menu = new uiframe.ContextMenu({
+        name: "Demo Context Menu",
+        options: { maxHeight: "12em" },
+      });
       menu.renderInto("context-menu-container");
 
       menu.setDropdownItems([

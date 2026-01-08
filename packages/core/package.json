@@ -2,14 +2,13 @@
   "name": "@uiframe/core",
   "version": "0.1.0",
   "description": "Core logic for UIFrame components",
-  
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "browser": "dist/core.min.js",
-
-  "files": ["dist"],  
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
-  
   "exports": {
     ".": {
       "import": "./dist/index.esm.js",
