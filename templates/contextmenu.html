@@ -111,11 +111,12 @@ menu.on('item:click', (item) => console.log('Clicked', item));
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/dropdown/dist/dropdown.min.js"></script>
+    <script src="../packages/contextmenu/dist/contextmenu.min.js"></script>
 
     <script type="module">
-      import { ContextMenu } from "../components/contextmenu.js";
-
-      const menu = new ContextMenu({ name: "Demo Context Menu", options: { maxHeight: "12em" } });
+      const menu = new uiframe.ContextMenu({ name: "Demo Context Menu", options: { maxHeight: "12em" } });
       menu.renderInto("context-menu-container");
 
       menu.setDropdownItems([

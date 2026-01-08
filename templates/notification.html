@@ -65,9 +65,12 @@ notification.error('An error occurred', 'Error Title', { code: 500, message: 'Se
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <!-- Local dist path is added to publish as static content in github pages -->
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/notification/dist/notification.min.js"></script>
 
-    <script type="module">
-      import { notification } from "../components/notification.js";
+    <script type="module">      
+      const notification = uiframe.notification({name: "demo"});
 
       document.getElementById("btn-info").addEventListener("click", () => {
         notification.info("This is an informational toast.");
