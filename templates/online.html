@@ -105,11 +105,11 @@ status.renderInto('status-container');
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/online/dist/online.min.js"></script>
 
     <script type="module">
-      import { Online } from "../components/online.js";
-
-      const online = new Online({ name: "demo-online", options: { notify: true } });
+      const online = new uiframe.Online({ name: "demo-online", options: { notify: true } });
       online.renderInto("online-container");
 
       // Simulation buttons (cannot truly toggle navigator.onLine, so simulate update)

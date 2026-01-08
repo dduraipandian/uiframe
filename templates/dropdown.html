@@ -142,13 +142,9 @@ dd.on('item:click', (item) => console.log('Selected:', item));
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/dropdown/dist/dropdown.min.js"></script>
 
-    <script type="module">
-      const { Dropdown } = window.uiframe;
-
-      console.log(window.uiframe);
-      
+    <script type="module">      
       // Demo 1: Basic dropdown
-      const dd1 = new Dropdown({
+      const dd1 = new uiframe.Dropdown({
         name: "Select Item",
         options: { search: true, maxHeight: "15em" },
       });
@@ -171,7 +167,7 @@ dd.on('item:click', (item) => console.log('Selected:', item));
       });
 
       // Demo 2: Search + long list
-      const dd2 = new Dropdown({ name: "Choose", options: { search: true, maxHeight: "12em" } });
+      const dd2 = new uiframe.Dropdown({ name: "Choose", options: { search: true, maxHeight: "12em" } });
       dd2.renderInto("dropdown-demo-2");
       const items = Array.from({ length: 30 }, (_, i) => ({ name: `Item ${i + 1}`, value: i + 1 }));
       dd2.setDropdownItems(items);

@@ -1,0 +1,24 @@
+{
+  "name": "@uiframe/split",
+  "description": "UIFrame Split component",
+  "version": "0.1.0",  
+  
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/split.min.js",
+
+  "files": ["dist"],
+  "sideEffects": false,
+
+  "peerDependencies": {
+    "@uiframe/core": "~0.1.0"
+  },
+
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "browser": "./dist/split.min.js"
+    }
+  }
+}
