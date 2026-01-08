@@ -11,7 +11,8 @@
     "test": "jest",
     "dev": "npx serve . -l 8000",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
