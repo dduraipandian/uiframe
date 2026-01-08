@@ -8,10 +8,6 @@
     "dist"
   ],
   "sideEffects": false,
-  "scripts": {
-    "build": "rollup -c",
-    "test": "jest"
-  },
   "publishConfig": {
     "access": "public"
   },
