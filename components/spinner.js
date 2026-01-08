@@ -1,4 +1,4 @@
-import { EmitterComponent } from "./base.js";
+import { EmitterComponent } from "@uiframe/core";
 
 /**
  * Component for displaying a loading spinner/overlay.

@@ -1,5 +1,4 @@
-import { EmitterComponent } from "./base.js";
-import { Utility } from "./utils.js";
+import { EmitterComponent, Utility } from "@uiframe/core";
 
 /**
  * Feature-rich data grid component with search, pagination, and export capabilities.
