@@ -46,7 +46,7 @@
 &lt;script src="./components/js/vendor/bootstrap-table-export.min.js"&gt;&lt;/script&gt;
 
 &lt;script type="module"&gt;
-import Table from './components/table.js';
+import { Table } from './components/table.js';
 &lt;/script&gt;
       </code></pre>
       </div>
@@ -154,7 +154,7 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
         <div class="section-title">Minimal Example</div>
         <pre><code>&lt;div id="my-table" style="height: 400px;"&gt;&lt;/div&gt;
 &lt;script type="module"&gt;
-  import Table from './components/table.js';
+  import { Table } from './components/table.js';
   const t = new Table({ name: 'Data', options: { pageSize: 10 } });
   t.renderInto('my-table');
   t.updateData([
@@ -184,7 +184,7 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
     <!-- <script src="./components/js/vendor/fileSaver.min.js"></script> -->
 
     <script type="module">
-      import Table from "../components/table.js";
+      import { Table } from "../components/table.js";
       let tableData = [
         { id: 1, name: "Alice", age: 30, details: { city: "New York", job: "Engineer" } },
         { id: 2, name: "Bob", age: 25, details: { city: "San Francisco", job: "Designer" } },
