@@ -1,4 +1,4 @@
-import ContextMenu from "../components/contextmenu.js";
+import { ContextMenu } from "../components/contextmenu.js";
 
 describe("ContextMenu Component", () => {
   let container;

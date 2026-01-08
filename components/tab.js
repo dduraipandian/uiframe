@@ -90,7 +90,7 @@ class Tab extends EmitterComponent {
 
     if (typeof tab.content === "string") {
       container.innerHTML = tab.content;
-    } else if (tab.content instanceof EmitterComponent) {
+    } else if (tab.content && typeof tab.content.getContainer === "function") {
       const element = tab.content.getContainer();
       container.appendChild(element);
     } else if (tab.content) {

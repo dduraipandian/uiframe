@@ -1,4 +1,4 @@
-import Dropdown from "../components/dropdown.js";
+import { Dropdown } from "../components/dropdown.js";
 
 describe("Dropdown Component", () => {
   let container;

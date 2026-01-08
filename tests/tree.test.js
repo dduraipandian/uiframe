@@ -1,4 +1,4 @@
-import Tree from "../components/tree.js";
+import { Tree } from "../components/tree.js";
 
 describe("Tree Component", () => {
   let container;

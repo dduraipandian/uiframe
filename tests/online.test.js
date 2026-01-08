@@ -1,4 +1,4 @@
-import Online from "../components/online.js";
+import { Online } from "../components/online.js";
 
 describe("Online Component", () => {
   let container;
