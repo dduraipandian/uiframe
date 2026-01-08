@@ -82,9 +82,10 @@ tab.addTab({ id: 'profile', title: 'Profile', content: 'Profile Content' });
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/tab/dist/tab.min.js"></script>
     <script type="module">
-      import { Tab } from "../components/tab.js";
-      const tab = new Tab({ name: "Demo Tabs" });
+      const tab = new uiframe.Tab({ name: "Demo Tabs" });
       tab.renderInto("tab-demo");
       tab.addTab({ id: "home", title: "Home", content: "Welcome to the Home tab!" });
       tab.addTab({ id: "profile", title: "Profile", content: "This is your profile tab." });

@@ -123,9 +123,10 @@ tree.renderInto('my-tree-container');
       crossorigin="anonymous"
     ></script>
 
-    <script type="module">
-      import { Tree } from "../components/tree.js";
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/tree/dist/tree.min.js"></script>
 
+    <script type="module">
       const sampleStatic = [
         {
           name: "Root A",
@@ -189,7 +190,7 @@ tree.renderInto('my-tree-container');
         }
 
         // We use the same object structure so IDs match
-        t1 = new Tree({
+        t1 = new uiframe.Tree({
           name: "demo-tree-1",
           objects: JSON.parse(JSON.stringify(sampleStatic)),
           options: { contextData: contextData },

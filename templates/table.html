@@ -182,9 +182,9 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
     <!-- <script src="./components/js/vendor/fileSaver.min.js"></script> -->
-
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/table/dist/table.min.js"></script>
     <script type="module">
-      import { Table } from "../components/table.js";
       let tableData = [
         { id: 1, name: "Alice", age: 30, details: { city: "New York", job: "Engineer" } },
         { id: 2, name: "Bob", age: 25, details: { city: "San Francisco", job: "Designer" } },
@@ -238,7 +238,7 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
         { id: 50, name: "Zoe", age: 31, details: { city: "Lincoln", job: "Representative" } },
       ];
       const options = { pageSize: 10 };
-      const tbl = new Table({ name: "Users", options: options });
+      const tbl = new uiframe.Table({ name: "Users", options: options });
       tbl.renderInto("table-demo");
       tbl.updateData(tableData);
     </script>

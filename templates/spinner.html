@@ -163,12 +163,12 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/spinner/dist/spinner.min.js"></script>
 
     <script type="module">
-      import { Spinner } from "../components/spinner.js";
-
       // Demo 1: Border spinner primary
-      const s1 = new Spinner({
+      const s1 = new uiframe.Spinner({
         name: "demo1",
         options: { spinnerColor: "text-primary", spinnerType: "border", loadingText: "Loading" },
       });
@@ -179,7 +179,7 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
       document.getElementById("demo1-hide").addEventListener("click", () => s1.hide());
 
       // Demo 2: Grow spinner secondary + dot animation
-      const s2 = new Spinner({
+      const s2 = new uiframe.Spinner({
         name: "demo2",
         options: { spinnerColor: "text-secondary", spinnerType: "grow", loadingText: "Fetching" },
       });
@@ -190,7 +190,7 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
       document.getElementById("demo2-hide").addEventListener("click", () => s2.hide());
 
       // Demo 3: Cancellable spinner
-      const s3 = new Spinner({
+      const s3 = new uiframe.Spinner({
         name: "demo3",
         options: {
           enabledCancel: true,

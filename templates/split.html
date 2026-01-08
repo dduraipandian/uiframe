@@ -86,9 +86,11 @@ split.render();
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
-    <script type="module">
-      import { SplitPane } from "../components/split.js";
 
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/split/dist/split.min.js"></script>
+
+    <script type="module">
       const topContent = document.createElement("div");
       topContent.className = "p-3 bg-light h-100";
       topContent.textContent = "Top Pane Content";
@@ -101,7 +103,7 @@ split.render();
       const container = document.getElementById("split-demo");
       container.style.height = "700px"; // Needs explicit height
 
-      const split = new SplitPane({
+      const split = new uiframe.SplitPane({
         containerID: "split-demo",
         top: topContent,
         bottom: bottomContent,
