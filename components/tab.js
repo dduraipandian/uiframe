@@ -125,4 +125,4 @@ class Tab extends EmitterComponent {
   }
 }
 
-export default Tab;
+export { Tab };

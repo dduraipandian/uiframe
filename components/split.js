@@ -162,4 +162,4 @@ class SplitPane {
   }
 }
 
-export default SplitPane;
+export { SplitPane };

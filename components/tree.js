@@ -1,6 +1,6 @@
 import { EmitterComponent } from "./base.js";
-import Utility from "./utils.js";
-import ContextMenu from "./contextmenu.js";
+import { Utility } from "./utils.js";
+import { ContextMenu } from "./contextmenu.js";
 
 function animateExpandedCollapse(container, mutateFn) {
   // Only animate if this is an expanded collapse
@@ -360,4 +360,4 @@ class Tree extends EmitterComponent {
   }
 }
 
-export default Tree;
+export { Tree };

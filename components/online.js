@@ -110,4 +110,4 @@ class Online extends EmitterComponent {
   }
 }
 
-export default Online;
+export { Online };

@@ -1,5 +1,5 @@
 import { EmitterComponent } from "./base.js";
-import Utility from "./utils.js";
+import { Utility } from "./utils.js";
 
 /**
  * Feature-rich data grid component with search, pagination, and export capabilities.
@@ -543,4 +543,4 @@ class Table extends EmitterComponent {
   }
 }
 
-export default Table;
+export { Table };
