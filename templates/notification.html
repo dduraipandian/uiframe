@@ -69,8 +69,8 @@ notification.error('An error occurred', 'Error Title', { code: 500, message: 'Se
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/notification/dist/notification.min.js"></script>
 
-    <script type="module">      
-      const notification = uiframe.notification({name: "demo"});
+    <script type="module">
+      const notification = uiframe.notification({ name: "demo" });
 
       document.getElementById("btn-info").addEventListener("click", () => {
         notification.info("This is an informational toast.");

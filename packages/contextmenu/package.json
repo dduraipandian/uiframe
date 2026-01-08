@@ -1,20 +1,18 @@
 {
   "name": "@uiframe/contextmenu",
   "description": "UIFrame ContextMenu component",
-  "version": "0.1.0",  
-  
+  "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "browser": "dist/contextmenu.min.js",
-
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
-
   "peerDependencies": {
     "@uiframe/core": "~0.1.0",
     "@uiframe/dropdown": "~0.1.0"
   },
-
   "exports": {
     ".": {
       "import": "./dist/index.esm.js",
