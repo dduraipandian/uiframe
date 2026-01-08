@@ -11,6 +11,36 @@ const packages = fs.readdirSync(packagesDir).filter((pkg) => {
     return fs.statSync(path.join(packagesDir, pkg)).isDirectory();
 });
 
+function iifeGuardPlugin(pkgName) {
+    return {
+        name: "iife-guard",
+        renderChunk(code, chunk, options) {
+            if (options.format !== "iife") return null;
+
+            if (pkgName === "core")
+                return `
+                    (function () {
+                        if (typeof window !== "undefined") {
+                            window.uiframe = window.uiframe || {};
+                        }
+                    })();
+                    ${code}
+                `;
+            else
+                return `
+                    (function () {
+                        if (typeof window !== "undefined" && !window.uiframe) {
+                            throw new Error(
+                                "[uiframe] core must be loaded before ${pkgName}"
+                            );
+                        }
+                    })();
+                    ${code}
+                `;
+        },
+    };
+}
+
 export default packages.map((pkg) => {
     const pkgPath = path.join(packagesDir, pkg);
     const pkgJson = JSON.parse(
@@ -35,7 +65,7 @@ export default packages.map((pkg) => {
                 format: "iife",
                 name: "uiframe",
                 extend: true,
-                plugins: [terser()],
+                plugins: [terser(), iifeGuardPlugin(pkg)],
                 globals: { "@uiframe/core": "uiframe" },
             },
         ],
