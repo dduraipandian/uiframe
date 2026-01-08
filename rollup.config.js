@@ -34,8 +34,9 @@ export default packages.map((pkg) => {
                 file: path.join(pkgPath, `dist/${pkg}.min.js`),
                 format: "iife",
                 name: "uiframe",
+                extend: true,
                 plugins: [terser()],
-                globals: pkg === "core" ? {} : { "@uiframe/core": "uiframe" },
+                globals: { "@uiframe/core": "uiframe" },
             },
         ],
         external: [
