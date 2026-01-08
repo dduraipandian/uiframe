@@ -26,7 +26,7 @@
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Extends <strong>Dropdown</strong>.</p>
         <pre><code>&lt;script type="module"&gt;
-import ContextMenu from './components/contextmenu.js';
+import { ContextMenu } from './components/contextmenu.js';
 &lt;/script&gt;
       </code></pre>
       </div>
@@ -113,7 +113,7 @@ menu.on('item:click', (item) => console.log('Clicked', item));
     ></script>
 
     <script type="module">
-      import ContextMenu from "../components/contextmenu.js";
+      import { ContextMenu } from "../components/contextmenu.js";
 
       const menu = new ContextMenu({ name: "Demo Context Menu", options: { maxHeight: "12em" } });
       menu.renderInto("context-menu-container");

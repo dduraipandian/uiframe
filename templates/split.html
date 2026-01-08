@@ -26,7 +26,7 @@
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
         <pre><code>&lt;script type="module"&gt;
-import SplitPane from './components/split.js';
+import { SplitPane } from './components/split.js';
 &lt;/script&gt;
       </code></pre>
       </div>
@@ -87,7 +87,7 @@ split.render();
       crossorigin="anonymous"
     ></script>
     <script type="module">
-      import SplitPane from "../components/split.js";
+      import { SplitPane } from "../components/split.js";
 
       const topContent = document.createElement("div");
       topContent.className = "p-3 bg-light h-100";

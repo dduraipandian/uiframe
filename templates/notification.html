@@ -28,14 +28,14 @@
           Use as an ES module. The library exports a default `notification` instance.
         </p>
         <pre><code>&lt;script type="module"&gt;
-import notification from './components/notification.js';
+import { notification } from './components/notification.js';
 &lt;/script&gt;
       </code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>import notification from './components/notification.js';
+        <pre><code>import { notification } from './components/notification.js';
 // Basic notifications
 notification.info('Informational message');
 notification.success('Saved successfully');
@@ -67,7 +67,7 @@ notification.error('An error occurred', 'Error Title', { code: 500, message: 'Se
     ></script>
 
     <script type="module">
-      import notification from "../components/notification.js";
+      import { notification } from "../components/notification.js";
 
       document.getElementById("btn-info").addEventListener("click", () => {
         notification.info("This is an informational toast.");
