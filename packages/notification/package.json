@@ -1,11 +1,11 @@
 {
-  "name": "@uiframe/dropdown",
-  "version": "0.1.0",
-  "description": "UIFrame Dropdown component",
-
+  "name": "@uiframe/notification",
+  "description": "UIFrame Notification component",
+  "version": "0.1.0",  
+  
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
-  "browser": "dist/dropdown.min.js",
+  "browser": "dist/notification.min.js",
 
   "files": ["dist"],
   "sideEffects": false,
@@ -18,7 +18,7 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/dropdown.min.js"
+      "browser": "./dist/notification.min.js"
     }
   }
 }
