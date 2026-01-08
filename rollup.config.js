@@ -11,10 +11,6 @@ const packages = fs.readdirSync(packagesDir).filter((pkg) => {
     return fs.statSync(path.join(packagesDir, pkg)).isDirectory();
 });
 
-function capitalize(name) {
-    return name.charAt(0).toUpperCase() + name.slice(1);
-}
-
 export default packages.map((pkg) => {
     const pkgPath = path.join(packagesDir, pkg);
     const pkgJson = JSON.parse(
@@ -37,14 +33,9 @@ export default packages.map((pkg) => {
             {
                 file: path.join(pkgPath, `dist/${pkg}.min.js`),
                 format: "iife",
-                name: pkg === "core" ? "UIFrameCore" : `UIFrame${capitalize(pkg)}`,
+                name: "uiframe",
                 plugins: [terser()],
-                globals: (id) => {
-                    if (id.startsWith("@uiframe/")) {
-                        const name = id.split("/")[1];
-                        return name === "core" ? "UIFrameCore" : `UIFrame${capitalize(name)}`;
-                    }
-                }
+                globals: pkg === "core" ? {} : { "@uiframe/core": "uiframe" },
             },
         ],
         external: [
