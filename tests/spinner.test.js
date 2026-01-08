@@ -1,4 +1,4 @@
-import Spinner from "../components/spinner.js";
+import { Spinner } from "../components/spinner.js";
 
 describe("Spinner Component", () => {
   let container;

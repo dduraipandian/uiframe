@@ -1,4 +1,5 @@
-import Utility from "../components/utils.js";
+// eslint-disable-next-line import/extensions
+import { Utility } from "../components/core";
 
 describe("Utility Class", () => {
   beforeEach(() => {

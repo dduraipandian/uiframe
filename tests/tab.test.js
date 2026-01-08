@@ -1,5 +1,6 @@
-import Tab from "../components/tab.js";
-import { EmitterComponent } from "../components/base.js";
+// eslint-disable-next-line import/extensions
+import { EmitterComponent } from "../components/core";
+import { Tab } from "../components/tab.js";
 
 class MockContent extends EmitterComponent {
   html() {
@@ -32,12 +33,14 @@ describe("Tab Component", () => {
     expect(container.querySelector("#tab1-tab").classList.contains("active")).toBe(true);
     expect(container.querySelector("#tab2-tab").classList.contains("active")).toBe(false);
     expect(container.querySelector("#tab1-content").textContent).toContain("Content 1");
+    expect(tab.tabs.length).toBe(2);
   });
 
   test("should add a new tab dynamically", () => {
     const tab = new Tab({ name: "MyTabs", options: { tabs: [] } });
     tab.renderInto(container);
 
+    expect(tab.tabs.length).toBe(0);
     const newTab = { id: "new", title: "New Tab", content: new MockContent({ name: "Mock" }) };
     tab.addTab(newTab);
 

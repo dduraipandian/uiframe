@@ -1,4 +1,5 @@
-import { Component, EmitterComponent } from "../components/base.js";
+// eslint-disable-next-line import/extensions
+import { Component, EmitterComponent } from "../components/core";
 
 // Define concrete classes for testing base classes
 class TestComponent extends Component {

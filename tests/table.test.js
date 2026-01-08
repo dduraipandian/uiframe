@@ -1,4 +1,4 @@
-import Table from "../components/table.js";
+import { Table } from "../components/table.js";
 
 describe("Table Component", () => {
   let container;
