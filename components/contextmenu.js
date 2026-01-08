@@ -1,4 +1,4 @@
-import Dropdown from "./dropdown.js";
+import { Dropdown } from "./dropdown.js";
 
 /**
  * Specialized Dropdown used as a right-click context menu.
@@ -103,4 +103,4 @@ class ContextMenu extends Dropdown {
   }
 }
 
-export default ContextMenu;
+export { ContextMenu };

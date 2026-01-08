@@ -65,4 +65,4 @@ class Utility {
   }
 }
 
-export default Utility;
+export { Utility };

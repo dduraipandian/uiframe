@@ -1,5 +1,5 @@
 import { EmitterComponent } from "./base.js";
-import Utility from "./utils.js";
+import { Utility } from "./utils.js";
 
 /**
  * Searchable, animated dropdown component built on Bootstrap.
@@ -255,4 +255,4 @@ class Dropdown extends EmitterComponent {
   }
 }
 
-export default Dropdown;
+export { Dropdown };

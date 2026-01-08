@@ -139,4 +139,4 @@ class Notification extends EmitterComponent {
 }
 
 const notification = new Notification("app");
-export default notification;
+export { notification };

@@ -169,4 +169,4 @@ class Spinner extends EmitterComponent {
   }
 }
 
-export default Spinner;
+export { Spinner };
