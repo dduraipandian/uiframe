@@ -130,6 +130,26 @@ code {
   font-size: 0.9em;
 }
 
+/* Prism Copy Button Styles */
+.copy-to-clipboard-button {
+  background: var(--bg-sidebar) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-xs) !important;
+  padding: 4px 8px !important;
+  font-size: 0.75rem !important;
+  font-family: var(--font-family-sans) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.copy-to-clipboard-button:hover {
+  background: var(--primary-color) !important;
+  color: #fff !important;
+  border-color: var(--primary-color) !important;
+}
+
 .list-compact li {
   margin-bottom: var(--spacing-sm);
 }
