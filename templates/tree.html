@@ -29,9 +29,9 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;script type="module"&gt;
-import { Tree } from './components/tree.js';
-&lt;/script&gt;
+        <pre><code>&lt;!-- Load core and tree packages --&gt;
+&lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
+&lt;script src="../packages/tree/dist/tree.min.js"&gt;&lt;/script&gt;
       </code></pre>
       </div>
 
@@ -41,7 +41,7 @@ import { Tree } from './components/tree.js';
   { name: 'Root', children: [ { name: 'Child A', children: [] } ] }
 ];
 // IDs are automatically generated based on path (e.g. root-Child A)
-const tree = new Tree({ name: 'my-tree', objects: sample });
+const tree = new uiframe.Tree({ name: 'my-tree', objects: sample });
 tree.renderInto('my-tree-container');
       </code></pre>
       </div>
@@ -89,9 +89,6 @@ tree.renderInto('my-tree-container');
           <div class="section-title mb-0">Persistent State & Context Menu</div>
           <div class="btn-group d-flex">
             <button class="btn btn-sm btn-primary" id="demo1-show">Render</button>
-            <button class="btn btn-sm btn-outline-warning" id="demo1-refresh">
-              Full Refresh (Test Persistence)
-            </button>
             <button class="btn btn-sm btn-outline-secondary" id="demo1-clear">Clear</button>
           </div>
         </div>
@@ -227,7 +224,7 @@ tree.renderInto('my-tree-container');
       let t2 = null;
       document.getElementById("demo2-show").addEventListener("click", () => {
         if (t2 && t2.isRendered && t2.isRendered()) return;
-        t2 = new Tree({
+        t2 = new uiframe.Tree({
           name: "demo-tree-2",
           objects: lazyObjects,
           options: { data_callback: fakeLoader },

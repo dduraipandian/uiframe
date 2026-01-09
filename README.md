@@ -49,7 +49,10 @@ All components are built as browser-ready bundles and ESM/CJS packages.
 Load `core.min.js` first, followed by the components you need. All components are available under the global `uiframe` object.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+/>
 <script src="./packages/core/dist/core.min.js"></script>
 <script src="./packages/spinner/dist/spinner.min.js"></script>
 
@@ -115,18 +118,18 @@ npm run format  # Auto-format code with Prettier
 
 `uiframe` follows a modular structure where each component is a separate package in the `packages/` directory.
 
-| Package | Purpose |
-|---------|---------|
-| `core` | Base classes (`Component`, `EmitterComponent`) and `Utility` |
-| `spinner` | Loading indicator with custom styling |
-| `table` | Data grid with search, pagination, export |
-| `tree` | Recursive tree view with lazy-loading |
-| `tab` | Dynamic tab management |
-| `dropdown` | Searchable dropdown component |
-| `contextmenu` | Right-click context menus |
-| `online` | Network status monitoring |
-| `split` | Resizable split pane layouts |
-| `notification` | Toast and modal-based notifications |
+| Package        | Purpose                                                      |
+| -------------- | ------------------------------------------------------------ |
+| `core`         | Base classes (`Component`, `EmitterComponent`) and `Utility` |
+| `spinner`      | Loading indicator with custom styling                        |
+| `table`        | Data grid with search, pagination, export                    |
+| `tree`         | Recursive tree view with lazy-loading                        |
+| `tab`          | Dynamic tab management                                       |
+| `dropdown`     | Searchable dropdown component                                |
+| `contextmenu`  | Right-click context menus                                    |
+| `online`       | Network status monitoring                                    |
+| `split`        | Resizable split pane layouts                                 |
+| `notification` | Toast and modal-based notifications                          |
 
 Core source code is located in `components/`. Packages in `packages/` build these into their respective `dist/` folders using Rollup.
 
