@@ -20,13 +20,17 @@ jobs:
           npm ci
           npm run pre-publish
 
+      - name: Prepare Pages folder
+        run: |
+          rm -rf pages
+          mkdir pages
+          cp index.html pages/
+          cp -r components pages/
+          cp -r packages pages/
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: .
+          folder: pages
           clean: true
-          clean-exclude: |
-            packages/**
-            components/**
-            index.html
