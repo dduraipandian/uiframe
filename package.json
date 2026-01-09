@@ -4,6 +4,7 @@
   "description": "A lightweight, opinionated composable UI framework built on Bootstrap 5.",
   "main": "index.js",
   "type": "module",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
@@ -13,7 +14,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "build": "rollup -c",
-    "clean": "rimraf packages/*/dist --glob"
+    "clean": "rimraf packages/*/dist --glob",
+    "pre-publish": "npm run lint && npm test && npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
