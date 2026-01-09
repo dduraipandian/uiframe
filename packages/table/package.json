@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/table.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0"
   },
@@ -17,6 +18,12 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
       "browser": "./dist/table.min.js"
-    }
+    },
+    "./style": "./dist/table.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/table"
   }
 }

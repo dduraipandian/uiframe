@@ -10,7 +10,8 @@
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/split/dist/split.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
     <link
       rel="stylesheet"
@@ -34,6 +35,8 @@
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
         <pre><code class="language-html">&lt;!-- Load core and split packages --&gt;
+&lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
+&lt;link rel="stylesheet" href="../packages/split/dist/split.css"&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/split/dist/split.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
@@ -78,15 +81,27 @@ split.render();</code></pre>
 
       <div class="card">
         <div class="section-title">Events</div>
-        <p class="mb-2">This component does not currently emit custom events. Use CSS resize observers or manual drag tracking for advanced use cases.</p>
+        <p class="mb-2">
+          This component does not currently emit custom events. Use CSS resize observers or manual
+          drag tracking for advanced use cases.
+        </p>
       </div>
 
       <div class="card">
         <div class="section-title">Features</div>
         <ul class="list-compact">
-          <li><strong>Fixed container height</strong>: The split container needs explicit height (in px or %).</li>
-          <li><strong>Min size constraints</strong>: Set <code>min_size</code> to prevent panes from collapsing too small.</li>
-          <li><strong>Dynamic content</strong>: Update pane content by modifying the DOM elements directly.</li>
+          <li>
+            <strong>Fixed container height</strong>: The split container needs explicit height (in
+            px or %).
+          </li>
+          <li>
+            <strong>Min size constraints</strong>: Set <code>min_size</code> to prevent panes from
+            collapsing too small.
+          </li>
+          <li>
+            <strong>Dynamic content</strong>: Update pane content by modifying the DOM elements
+            directly.
+          </li>
           <li><strong>Two-pane only</strong>: Currently designed for top/bottom split layout.</li>
         </ul>
       </div>

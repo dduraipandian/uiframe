@@ -58,4 +58,9 @@ describe("Base Component Classes", () => {
     emitter.emit("test-event", { data: 2 });
     expect(spy).toHaveBeenCalledTimes(1);
   });
+
+  test("core alias resolves", () => {
+    const core = require("@uiframe/core");
+    expect(core).toBeDefined();
+  });
 });

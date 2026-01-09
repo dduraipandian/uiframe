@@ -18,5 +18,10 @@
       "require": "./dist/index.js",
       "browser": "./dist/spinner.min.js"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/spinner"
   }
 }

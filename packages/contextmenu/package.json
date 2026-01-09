@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/contextmenu.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0",
     "@uiframe/dropdown": "~0.1.0"
@@ -19,5 +20,10 @@
       "require": "./dist/index.js",
       "browser": "./dist/contextmenu.min.js"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/contextmenu"
   }
 }

@@ -1,21 +1,12 @@
+/* START: TREE COMPONENT */
 .uiframe-tree {
   .btn-toggle {
-    padding: 0.25rem 0.5rem;
-    font-weight: 600;
-    --bs-btn-font-size: 14px;
-    color: var(--bs-emphasis-color);
-    background-color: transparent;
-    width: 100% !important;
     display: inline-flex;
-    /* flex container */
     align-items: center;
-    /* vertical center */
     gap: 0.35em;
-  }
-
-  .btn-toggle:hover,
-  .btn-toggle:focus {
-    color: rgba(var(--bs-emphasis-color-rgb), 0.65);
+    width: 100%;
+    background-color: transparent;
+    border: none;
   }
 
   .btn-toggle::before {
@@ -23,63 +14,30 @@
     display: inline-block;
     width: 1.25em;
     height: 1.25em;
-    vertical-align: middle;
     background: currentColor;
     font-size: 0.65em;
     -webkit-mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e")
       no-repeat center / contain;
     mask: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e")
       no-repeat center / contain;
-
     transition: transform 0.35s ease;
     transform-origin: center;
-  }
-
-  .btn-toggle[aria-expanded="true"] {
-    color: rgba(var(--bs-emphasis-color-rgb), 0.85);
   }
 
   .btn-toggle[aria-expanded="true"]::before {
     transform: rotate(90deg);
   }
 
-  .btn-toggle-nav a {
-    padding: 0.1875rem 0.5rem;
-    margin-top: 0.125rem;
-    margin-left: 1.25rem;
-  }
-
-  .btn-toggle-nav a:hover,
-  .btn-toggle-nav a:focus {
-    color: var(--bs-tertiary-bg);
-    width: 91% !important;
-  }
-
-  .scrollarea {
-    overflow-y: auto;
-  }
-
-  .btn-toggle-nav {
-    a,
-    button {
-      font-size: 14px !important;
-    }
-  }
-
   .span-icon {
     display: inline-flex;
     align-items: center;
-    /* vertically center icon & text */
     gap: 0.25em;
-
-    svg {
-      fill: var(--tree-icon-color, rgb(96 209 255));
-    }
   }
 
   .span-icon svg {
     width: 1em;
-    /* scales with font-size */
     height: 1em;
   }
 }
+
+/* END: TREE COMPONENT */

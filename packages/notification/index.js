@@ -1,3 +1,5 @@
+import "../../components/css/notification.css";
+
 import { Notification } from "../../components/notification.js";
 
 let instance = null;

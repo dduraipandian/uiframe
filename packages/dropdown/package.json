@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/dropdown.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0"
   },
@@ -17,6 +18,12 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
       "browser": "./dist/dropdown.min.js"
-    }
+    },
+    "./style": "./dist/dropdown.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/dropdown"
   }
 }

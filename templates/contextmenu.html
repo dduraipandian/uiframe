@@ -11,7 +11,9 @@
       crossorigin="anonymous"
     />
 
-    <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/dropdown/dist/dropdown.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/notification/dist/notification.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
     <link
       rel="stylesheet"
@@ -33,7 +35,9 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Extends <strong>Dropdown</strong>.</p>
-        <pre><code class="language-html">&lt;!-- Load core and contextmenu packages (depends on dropdown) --&gt;
+        <pre><code class="language-html">&lt;!-- Load core, dropdown and contextmenu packages --&gt;
+&lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
+&lt;link rel="stylesheet" href="../packages/dropdown/dist/dropdown.css"&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/dropdown/dist/dropdown.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/contextmenu/dist/contextmenu.min.js"&gt;&lt;/script&gt;</code></pre>
@@ -96,10 +100,21 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
       <div class="card">
         <div class="section-title">Features</div>
         <ul class="list-compact">
-          <li><strong>Container requirement</strong>: Target or parent element must have class <code>context-menu-container</code>.</li>
-          <li><strong>Separator items</strong>: Use <code>null</code> to create visual separators between groups.</li>
-          <li><strong>Reusable menus</strong>: One menu instance can be attached to multiple targets.</li>
-          <li><strong>Manual positioning</strong>: The <code>show(context, event)</code> method positions the menu at cursor.</li>
+          <li>
+            <strong>Container requirement</strong>: Target or parent element must have class
+            <code>context-menu-container</code>.
+          </li>
+          <li>
+            <strong>Separator items</strong>: Use <code>null</code> to create visual separators
+            between groups.
+          </li>
+          <li>
+            <strong>Reusable menus</strong>: One menu instance can be attached to multiple targets.
+          </li>
+          <li>
+            <strong>Manual positioning</strong>: The <code>show(context, event)</code> method
+            positions the menu at cursor.
+          </li>
         </ul>
       </div>
 
@@ -124,7 +139,10 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
 
       <div class="card">
         <div class="section-title">Demo: Right-click Area</div>
-        <p class="text-muted">Right-click inside the dotted box to open the context menu.</p>
+        <p class="text-muted">
+          Right-click inside the dotted box to open the context menu. When clicking on any menu
+          item, a notification will be shown.
+        </p>
         <div id="context-demo-area" class="mt-2 p-3 context-menu-container demo-area">
           Right-click here
         </div>
@@ -153,12 +171,14 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/dropdown/dist/dropdown.min.js"></script>
     <script src="../packages/contextmenu/dist/contextmenu.min.js"></script>
+    <script src="../packages/notification/dist/notification.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
     <script type="module">
+      const notification = new uiframe.notification({ app: "contextmenu-demo" });
       const menu = new uiframe.ContextMenu({
         name: "Demo Context Menu",
         options: { maxHeight: "12em" },
@@ -191,7 +211,7 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
       // Listen to menu item clicks
       menu.on("item:click", (item) => {
         console.log("Context menu clicked:", item);
-        alert(`Clicked: ${item.name} (value=${item.value})`);
+        notification.info(`Clicked: ${item.name} (value=${item.value})`);
       });
     </script>
   </body>

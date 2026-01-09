@@ -4,16 +4,18 @@
   "description": "A lightweight, opinionated composable UI framework built on Bootstrap 5.",
   "main": "index.js",
   "type": "module",
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "test": "jest",
-    "dev": "npx serve . -l 8000",
+    "dev": "npm run clean && npm run build &&npx serve . -l 8000",
     "lint": "eslint .",
     "format": "prettier --write .",
     "build": "rollup -c",
-    "clean": "rimraf packages/*/dist --glob"
+    "clean": "rimraf packages/*/dist --glob",
+    "pre-publish": "npm run lint && npm test && npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -54,6 +56,7 @@
     "prettier": "^3.7.4",
     "rimraf": "^6.1.2",
     "rollup": "^2.79.2",
+    "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "^7.0.2"
   }
 }

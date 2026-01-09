@@ -1,115 +1,27 @@
+/* START: TABLE COMPONENT */
 .uiframe-table {
-  .search {
-    margin: 0 !important;
-
-    input {
-      font-size: 0.875em;
-      width: 250px;
-
-      outline: 0;
-      box-shadow: none;
-      border: 1px solid var(--input-border-color);
-      opacity: 0.9;
-    }
+  .table-col-wrapper {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .pagination {
-    .page-link {
-      color: var(--dropdown-background-color);
-    }
-
-    .active > .page-link,
-    .page-link.active {
-      z-index: 3;
-      outline: 0;
-      box-shadow: none;
-      color: var(--input-border-color);
-      background-color: var(--dropdown-background-color);
-      border-color: var(--dropdown-background-color);
-    }
+  .json-nested-object {
+    max-width: 300px;
+    overflow: hidden;
   }
 
-  .table-sm > :not(caption) > * > * {
-    padding: 0.125rem 0.125rem !important;
+  tbody tr:hover {
+    cursor: pointer;
   }
 
-  .table.bt-table {
-    tbody tr {
-      background-color: transparent;
-    }
+  .table-identifier-link {
+    text-decoration: none;
 
-    thead {
-      background-color: var(--table-header-bg-color) !important;
-
-      tr {
-        background-color: var(--table-header-bg-color) !important;
-      }
-    }
-
-    tbody tr:hover {
+    &:hover {
       filter: brightness(120%);
-      cursor: pointer;
-    }
-
-    tbody tr:nth-child(odd of [data-filtered="true"]) * {
-      background-color: var(--table-odd-row-bg-color);
-    }
-
-    tbody tr:nth-child(even of [data-filtered="true"]) * {
-      background-color: var(--table-even-row-bg-color);
-    }
-
-    tr td {
-      color: var(--table-color) !important;
-
-      &:first-child {
-        width: fit-content;
-        padding-left: 6px;
-      }
-    }
-
-    td:hover {
-      .table-col-wrapper i {
-        display: inline-block !important;
-      }
-    }
-
-    th {
-      background-color: var(--table-header-bg-color);
-      color: var(--table-color) !important;
-    }
-
-    th,
-    td {
-      .table-col-wrapper {
-        padding-left: 10px;
-        padding-top: 2px;
-        padding-bottom: 2px;
-        max-width: 250px !important;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      &:first-child .table-col-wrapper {
-        width: fit-content;
-        min-width: 30px;
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-    }
-
-    .json-nested-object {
-      max-width: 300px;
-      overflow: hidden;
-    }
-
-    .table-identifier-link {
-      text-decoration: none;
-      color: var(--table-identifier-link-color) !important;
-
-      &:hover {
-        filter: brightness(120%);
-      }
     }
   }
 }
+
+/* END: TABLE COMPONENT */
