@@ -25,7 +25,3 @@ jobs:
         with:
           branch: gh-pages
           folder: .
-          clean: true
-          clean-exclude: |
-            packages/**
-            index.html
