@@ -14,7 +14,7 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          npm install
+          npm ci
           npm run pre-publish
 
       - name: Deploy to GitHub Pages
@@ -22,3 +22,7 @@ jobs:
         with:
           branch: gh-pages
           folder: .
+          clean: true
+          clean-exclude: |
+            packages/**
+            index.html
