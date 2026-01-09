@@ -20,5 +20,10 @@
       "require": "./dist/index.js",
       "browser": "./dist/contextmenu.min.js"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/contextmenu"
   }
 }

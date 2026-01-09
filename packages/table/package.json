@@ -20,5 +20,10 @@
       "browser": "./dist/table.min.js"
     },
     "./style": "./dist/table.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/table"
   }
 }

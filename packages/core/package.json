@@ -16,5 +16,10 @@
       "require": "./dist/index.js"
     },
     "./style": "./dist/base.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/core"
   }
 }

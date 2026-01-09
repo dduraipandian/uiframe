@@ -20,5 +20,10 @@
       "browser": "./dist/dropdown.min.js"
     },
     "./style": "./dist/dropdown.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/dropdown"
   }
 }

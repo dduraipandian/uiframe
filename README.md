@@ -54,8 +54,8 @@ Load `core.min.js` first, followed by the components you need. All components ar
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 />
 <!-- Load UI Frame CSS (base utilities + component styles) -->
-<link rel="stylesheet" href="./packages/core/dist/base.css">
-<link rel="stylesheet" href="./packages/table/dist/table.css">
+<link rel="stylesheet" href="./packages/core/dist/base.css" />
+<link rel="stylesheet" href="./packages/table/dist/table.css" />
 
 <script src="./packages/core/dist/core.min.js"></script>
 <script src="./packages/table/dist/table.min.js"></script>
@@ -68,14 +68,12 @@ Load `core.min.js` first, followed by the components you need. All components ar
     name: "MainTable",
     options: {
       search: true,
-      pagination: true
+      pagination: true,
     },
   });
 
   myTable.renderInto("app-container");
-  myTable.updateData([
-    { id: 1, name: "Sample Item" }
-  ]);
+  myTable.updateData([{ id: 1, name: "Sample Item" }]);
 </script>
 ```
 
@@ -83,7 +81,7 @@ Load `core.min.js` first, followed by the components you need. All components ar
 
 ```javascript
 import { Table } from "@uiframe/table";
-import "@uiframe/core/style";  // Base utilities
+import "@uiframe/core/style"; // Base utilities
 import "@uiframe/table/style"; // Component styles
 
 const myTable = new Table({ name: "Users" });

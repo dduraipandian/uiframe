@@ -20,5 +20,10 @@
       "browser": "./dist/tab.min.js"
     },
     "./style": "./dist/tab.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/tab"
   }
 }

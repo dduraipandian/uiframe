@@ -21,5 +21,10 @@
       "browser": "./dist/tree.min.js"
     },
     "./style": "./dist/tree.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/tree"
   }
 }
