@@ -5,6 +5,7 @@ import postcss from "rollup-plugin-postcss";
 import path from "path";
 import fs from "fs";
 
+const publishSourceMap = process.env.PUBLISH_SOURCEMAP === "true";
 const inputPKG = process.env.PKG;
 const packagesDir = path.resolve(__dirname, "packages");
 const packages = fs.readdirSync(packagesDir).filter((pkg) => {
@@ -49,7 +50,7 @@ export default packages.map((pkg) => {
   const cssPlugin = postcss({
     extract: pkg === "core" ? "base.css" : `${pkg}.css`,
     minimize: true,
-    sourceMap: false,
+    sourceMap: publishSourceMap,
   });
 
   return {
@@ -58,18 +59,18 @@ export default packages.map((pkg) => {
       {
         file: path.join(pkgPath, "dist/index.js"),
         format: "cjs",
-        sourcemap: true,
+        sourcemap: publishSourceMap,
       },
       {
         file: path.join(pkgPath, "dist/index.esm.js"),
         format: "esm",
-        sourcemap: true,
+        sourcemap: publishSourceMap,
       },
       {
         file: path.join(pkgPath, `dist/${pkg}.min.js`),
         format: "iife",
         name: "uiframe",
-        extend: true,
+        extend: publishSourceMap,
         plugins: [iifeGuardPlugin(pkg), terser()],
         globals: { "@uiframe/core": "uiframe" },
       },
