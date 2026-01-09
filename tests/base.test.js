@@ -6,14 +6,14 @@ class TestComponent extends Component {
   html() {
     return '<div id="test-el">Test</div>';
   }
-  init() {}
+  init() { }
 }
 
 class TestEmitter extends EmitterComponent {
   html() {
     return "<div>Emitter</div>";
   }
-  init() {}
+  init() { }
 }
 
 describe("Base Component Classes", () => {
@@ -57,5 +57,10 @@ describe("Base Component Classes", () => {
     emitter.off("test-event", spy);
     emitter.emit("test-event", { data: 2 });
     expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  test("core alias resolves", () => {
+    const core = require("@uiframe/core");
+    expect(core).toBeDefined();
   });
 });
