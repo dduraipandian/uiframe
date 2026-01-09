@@ -29,15 +29,15 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;script type="module"&gt;
-import { Spinner } from './components/spinner.js';
-&lt;/script&gt;
+        <pre><code>&lt;!-- Load core and spinner packages --&gt;
+&lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
+&lt;script src="../packages/spinner/dist/spinner.min.js"&gt;&lt;/script&gt;
       </code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const spinner = new Spinner({
+        <pre><code>const spinner = new uiframe.Spinner({
   name: 'my-spinner',
   options: {
     spinnerColor: 'text-primary',
@@ -45,7 +45,7 @@ import { Spinner } from './components/spinner.js';
   }
 });
 spinner.renderInto('container-id');
-spinner.show('Loading...', true); // Shows spinner with dot animation
+spinner.show('Loading...', true);
       </code></pre>
       </div>
 
@@ -147,9 +147,8 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
       <div class="card">
         <div class="section-title">Minimal Example</div>
         <pre><code>&lt;div id="spinner-container" style="position:relative; height: 240px;"&gt;&lt;/div&gt;
-&lt;script type="module"&gt;
-  import { Spinner } from './components/spinner.js';
-  const s = new Spinner({ options: { spinnerColor: 'text-primary', spinnerType: 'border' } });
+&lt;script&gt;
+  const s = new uiframe.Spinner({ options: { spinnerColor: 'text-primary', spinnerType: 'border' } });
   s.renderInto('spinner-container');
   s.show('Loading...', true);
   setTimeout(() =&gt; s.hide(), 2000);

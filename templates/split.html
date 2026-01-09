@@ -25,9 +25,9 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;script type="module"&gt;
-import { SplitPane } from './components/split.js';
-&lt;/script&gt;
+        <pre><code>&lt;!-- Load core and split packages --&gt;
+&lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
+&lt;script src="../packages/split/dist/split.min.js"&gt;&lt;/script&gt;
       </code></pre>
       </div>
 
@@ -39,7 +39,7 @@ topDiv.innerHTML = "Top Content";
 const bottomDiv = document.createElement('div');
 bottomDiv.innerHTML = "Bottom Content";
 
-const split = new SplitPane({
+const split = new uiframe.SplitPane({
   containerID: 'split-container',
   top: topDiv,
   bottom: bottomDiv,

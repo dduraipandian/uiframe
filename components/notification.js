@@ -30,7 +30,7 @@ class Notification extends EmitterComponent {
                 data-bs-backdrop="static" 
                 data-bs-keyboard="false" 
                 tabindex="-1" 
-                aria-labelledby="staticBackdropLabel" 
+                aria-labelledby="errorNotificationModalTitle" 
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="max-width: 650px; width: 650px">

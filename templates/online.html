@@ -25,15 +25,15 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;script type="module"&gt;
-import { Online } from './components/online.js';
-&lt;/script&gt;
+        <pre><code>&lt;!-- Load core and online packages --&gt;
+&lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
+&lt;script src="../packages/online/dist/online.min.js"&gt;&lt;/script&gt;
       </code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const status = new Online({ 
+        <pre><code>const status = new uiframe.Online({ 
   name: 'net-status',
   options: {
     notify: true
