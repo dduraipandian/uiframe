@@ -170,4 +170,3 @@ class Spinner extends EmitterComponent {
 }
 
 export { Spinner };
-//# sourceMappingURL=index.esm.js.map

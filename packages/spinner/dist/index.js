@@ -174,4 +174,3 @@ class Spinner extends core.EmitterComponent {
 }
 
 exports.Spinner = Spinner;
-//# sourceMappingURL=index.js.map

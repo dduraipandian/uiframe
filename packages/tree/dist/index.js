@@ -718,4 +718,3 @@ class Tree extends core.EmitterComponent {
 }
 
 exports.Tree = Tree;
-//# sourceMappingURL=index.js.map

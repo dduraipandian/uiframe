@@ -163,4 +163,3 @@ class SplitPane {
 }
 
 export { SplitPane };
-//# sourceMappingURL=index.esm.js.map

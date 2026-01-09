@@ -289,4 +289,3 @@ class Utility {
 exports.Component = Component;
 exports.EmitterComponent = EmitterComponent;
 exports.Utility = Utility;
-//# sourceMappingURL=index.js.map

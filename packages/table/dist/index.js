@@ -547,4 +547,3 @@ class Table extends core.EmitterComponent {
 }
 
 exports.Table = Table;
-//# sourceMappingURL=index.js.map

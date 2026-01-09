@@ -543,4 +543,3 @@ class Table extends EmitterComponent {
 }
 
 export { Table };
-//# sourceMappingURL=index.esm.js.map

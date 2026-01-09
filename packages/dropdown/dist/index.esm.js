@@ -255,4 +255,3 @@ class Dropdown extends EmitterComponent {
 }
 
 export { Dropdown };
-//# sourceMappingURL=index.esm.js.map

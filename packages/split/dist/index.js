@@ -167,4 +167,3 @@ class SplitPane {
 }
 
 exports.SplitPane = SplitPane;
-//# sourceMappingURL=index.js.map

@@ -163,4 +163,3 @@ function getInstance({ app, options = {} }) {
 
 exports.Notification = Notification;
 exports.notification = getInstance;
-//# sourceMappingURL=index.js.map

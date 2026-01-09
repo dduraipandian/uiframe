@@ -158,4 +158,3 @@ function getInstance({ app, options = {} }) {
 }
 
 export { Notification, getInstance as notification };
-//# sourceMappingURL=index.esm.js.map

@@ -111,4 +111,3 @@ class Online extends EmitterComponent {
 }
 
 export { Online };
-//# sourceMappingURL=index.esm.js.map

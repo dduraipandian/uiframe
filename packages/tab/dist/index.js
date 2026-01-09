@@ -130,4 +130,3 @@ class Tab extends core.EmitterComponent {
 }
 
 exports.Tab = Tab;
-//# sourceMappingURL=index.js.map

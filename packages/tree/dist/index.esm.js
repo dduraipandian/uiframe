@@ -714,4 +714,3 @@ class Tree extends EmitterComponent {
 }
 
 export { Tree };
-//# sourceMappingURL=index.esm.js.map

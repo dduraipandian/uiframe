@@ -126,4 +126,3 @@ class Tab extends EmitterComponent {
 }
 
 export { Tab };
-//# sourceMappingURL=index.esm.js.map

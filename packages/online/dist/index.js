@@ -115,4 +115,3 @@ class Online extends core.EmitterComponent {
 }
 
 exports.Online = Online;
-//# sourceMappingURL=index.js.map

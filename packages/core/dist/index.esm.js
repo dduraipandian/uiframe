@@ -283,4 +283,3 @@ class Utility {
 }
 
 export { Component, EmitterComponent, Utility };
-//# sourceMappingURL=index.esm.js.map

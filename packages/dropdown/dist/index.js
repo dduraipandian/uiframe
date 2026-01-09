@@ -259,4 +259,3 @@ class Dropdown extends core.EmitterComponent {
 }
 
 exports.Dropdown = Dropdown;
-//# sourceMappingURL=index.js.map
