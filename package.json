@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "jest",
-    "dev": "npx serve . -l 8000",
+    "dev": "npm run clean && npm run build &&npx serve . -l 8000",
     "lint": "eslint .",
     "format": "prettier --write .",
     "build": "rollup -c",
