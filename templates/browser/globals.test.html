@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>uiframe global tests</title>
+  </head>
+  <body>
+    <script src="../../packages/core/dist/core.min.js"></script>
+    <script src="../../packages/dropdown/dist/dropdown.min.js"></script>
+    <script src="../../packages/notification/dist/notification.min.js"></script>
+    <script src="../../packages/contextmenu/dist/contextmenu.min.js"></script>
+    <script>
+      function assert(condition, message) {
+        if (!condition) {
+          throw new Error("❌ " + message);
+        }
+        console.log("✅ " + message);
+      }
+
+      console.log("uiframe", uiframe);
+      // ---- GLOBAL CONTRACT ----
+      assert(window.uiframe, "window.uiframe exists");
+      assert(typeof uiframe === "object", "uiframe is an object");
+      assert(typeof uiframe.EmitterComponent === "function", "EmitterComponent exposed");
+
+      // ---- COMPONENTS ----
+      assert(typeof uiframe.Dropdown === "function", "Dropdown exposed");
+      assert(typeof uiframe.Notification === "function", "Notification exposed");
+      assert(typeof uiframe.ContextMenu === "function", "ContextMenu exposed");
+
+      // ---- NO LEAKS ----
+      assert(!window.Dropdown, "Dropdown is NOT global");
+      assert(!window.ContextMenu, "ContextMenu is NOT global");
+
+      console.log("🎉 All uiframe global tests passed");
+    </script>
+  </body>
+</html>

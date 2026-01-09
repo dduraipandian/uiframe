@@ -1,0 +1,192 @@
+:root {
+  /* Font System */
+  --font-family-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+  --font-size-base: 0.95rem;
+  --font-size-sm: 0.875rem;
+
+  /* Color Palette - Professional Blues & Grays */
+  --primary-color: #0d6efd;
+  --primary-color-hover: #0b5ed7;
+  --bg-sidebar: #f8f9fa;
+  --bg-main: #ffffff;
+  --border-color: #dee2e6;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --code-bg: #f8f9fa;
+  --code-color: #d63384;
+
+  /* Spacing & Layout */
+  --navbar-height: 60px;
+  --sidebar-width: 280px;
+  --container-max-width: 1000px;
+  --padding-content: 2rem;
+
+  /* Component Defaults */
+  --dropdown-font-size: var(--font-size-sm);
+  --input-border-color: var(--border-color);
+  --table-header-bg-color: var(--bg-sidebar);
+  --dropdown-active-color: var(--text-muted);
+  /* Additional visual tokens */
+  --radius: 8px;
+  --radius-sm: 6px;
+  --radius-xs: 4px;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --card-padding: 1.5rem;
+  --demo-bg: #fafbfc;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --demo-min-height: 150px;
+  --table-demo-height: 400px;
+  --demo-tall-height: 700px;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  color: var(--text-main);
+  background-color: var(--bg-main);
+}
+
+.page {
+  padding: var(--padding-content);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: var(--card-padding);
+  margin-bottom: 1.5rem;
+  background: var(--bg-main);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.demo-box {
+  position: relative;
+  width: 100%;
+  min-height: var(--demo-min-height);
+  border: 1px solid var(--border-color);
+  background-color: var(--demo-bg);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-main);
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+pre code {
+  font-size: 0.85rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  background: transparent;
+  padding: 0;
+}
+
+code {
+  /* color: #444;
+  background-color: rgba(0, 0, 0, 0.05); */
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.9em;
+}
+
+/* Prism Copy Button Styles */
+.copy-to-clipboard-button {
+  background: var(--bg-sidebar) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-xs) !important;
+  padding: 4px 8px !important;
+  font-size: 0.75rem !important;
+  font-family: var(--font-family-sans) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.copy-to-clipboard-button:hover {
+  background: var(--primary-color) !important;
+  color: #fff !important;
+  border-color: var(--primary-color) !important;
+}
+
+.list-compact li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.list-compact li strong {
+  color: var(--text-main);
+}
+
+/* Sidebar Styles */
+.sidebar-sticky {
+  position: sticky;
+  top: var(--navbar-height);
+  height: calc(100vh - var(--navbar-height));
+  padding-top: var(--spacing-lg);
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+}
+
+/* Shared template helpers (moved from individual templates) */
+.template-body {
+  overflow: auto;
+}
+.demo-area {
+  border: 2px dashed var(--border-color);
+  min-height: 120px;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+}
+#table-demo {
+  height: var(--table-demo-height);
+}
+.tree-demo {
+  position: relative;
+  min-height: 120px;
+}
+.demo-tall {
+  height: var(--demo-tall-height);
+}
