@@ -13,6 +13,10 @@
 
     <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
   </head>
 
   <body class="p-3 template-body">
@@ -29,15 +33,14 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;!-- Load core and spinner packages --&gt;
+        <pre><code class="language-html">&lt;!-- Load core and spinner packages --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
-&lt;script src="../packages/spinner/dist/spinner.min.js"&gt;&lt;/script&gt;
-      </code></pre>
+&lt;script src="../packages/spinner/dist/spinner.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const spinner = new uiframe.Spinner({
+        <pre><code class="language-javascript">const spinner = new uiframe.Spinner({
   name: 'my-spinner',
   options: {
     spinnerColor: 'text-primary',
@@ -45,8 +48,7 @@
   }
 });
 spinner.renderInto('container-id');
-spinner.show('Loading...', true);
-      </code></pre>
+spinner.show('Loading...', true);</code></pre>
       </div>
 
       <div class="card">
@@ -84,11 +86,10 @@ spinner.show('Loading...', true);
           Listen to events on the container based on the pattern
           `spinner:{containerId}:{name}:cancel`.
         </p>
-        <pre><code>// Example: Handle cancellation
+        <pre><code class="language-javascript">// Example: Handle cancellation
 spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}:cancel`, (e) => {
     console.log('User clicked cancel', e.detail);
-});
-      </code></pre>
+});</code></pre>
       </div>
 
       <h2 class="mt-4">Live Demos</h2>
@@ -146,14 +147,13 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code>&lt;div id="spinner-container" style="position:relative; height: 240px;"&gt;&lt;/div&gt;
+        <pre><code class="language-html">&lt;div id="spinner-container" style="position:relative; height: 240px;"&gt;&lt;/div&gt;
 &lt;script&gt;
   const s = new uiframe.Spinner({ options: { spinnerColor: 'text-primary', spinnerType: 'border' } });
   s.renderInto('spinner-container');
   s.show('Loading...', true);
   setTimeout(() =&gt; s.hide(), 2000);
-&lt;/script&gt;
-      </code></pre>
+&lt;/script&gt;</code></pre>
       </div>
     </div>
 
@@ -164,6 +164,8 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
     ></script>
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/spinner/dist/spinner.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 
     <script type="module">
       // Demo 1: Border spinner primary

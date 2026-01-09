@@ -13,6 +13,10 @@
 
     <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
   </head>
 
   <body class="p-3 template-body">
@@ -25,16 +29,15 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Extends <strong>Dropdown</strong>.</p>
-        <pre><code>&lt;!-- Load core and contextmenu packages (depends on dropdown) --&gt;
+        <pre><code class="language-html">&lt;!-- Load core and contextmenu packages (depends on dropdown) --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/dropdown/dist/dropdown.min.js"&gt;&lt;/script&gt;
-&lt;script src="../packages/contextmenu/dist/contextmenu.min.js"&gt;&lt;/script&gt;
-      </code></pre>
+&lt;script src="../packages/contextmenu/dist/contextmenu.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const menu = new uiframe.ContextMenu({ name: 'My Context Menu' });
+        <pre><code class="language-javascript">const menu = new uiframe.ContextMenu({ name: 'My Context Menu' });
 menu.renderInto('container-id');
 menu.setDropdownItems([
   { name: 'Edit', value: 'edit' },
@@ -46,8 +49,7 @@ document.getElementById('target').addEventListener('contextmenu', (e) => {
   menu.show(null, e);
 });
 
-menu.on('item:click', (item) => console.log('Clicked', item));
-      </code></pre>
+menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
       </div>
 
       <div class="card">
@@ -115,6 +117,8 @@ menu.on('item:click', (item) => console.log('Clicked', item));
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/dropdown/dist/dropdown.min.js"></script>
     <script src="../packages/contextmenu/dist/contextmenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 
     <script type="module">
       const menu = new uiframe.ContextMenu({

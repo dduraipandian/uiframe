@@ -13,6 +13,10 @@
 
     <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
   </head>
 
   <body class="p-3 template-body">
@@ -29,21 +33,19 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;!-- Load core and tree packages --&gt;
+        <pre><code class="language-html">&lt;!-- Load core and tree packages --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
-&lt;script src="../packages/tree/dist/tree.min.js"&gt;&lt;/script&gt;
-      </code></pre>
+&lt;script src="../packages/tree/dist/tree.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const sample = [
+        <pre><code class="language-javascript">const sample = [
   { name: 'Root', children: [ { name: 'Child A', children: [] } ] }
 ];
 // IDs are automatically generated based on path (e.g. root-Child A)
 const tree = new uiframe.Tree({ name: 'my-tree', objects: sample });
-tree.renderInto('my-tree-container');
-      </code></pre>
+tree.renderInto('my-tree-container');</code></pre>
       </div>
 
       <div class="card">
@@ -122,6 +124,8 @@ tree.renderInto('my-tree-container');
 
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/tree/dist/tree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 
     <script type="module">
       const sampleStatic = [
