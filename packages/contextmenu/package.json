@@ -17,7 +17,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/contextmenu.min.js"
+      "browser": "./dist/contextmenu.min.js",
+      "style": "./dist/contextmenu.css"
     }
   }
 }

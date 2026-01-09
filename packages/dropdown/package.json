@@ -16,7 +16,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/dropdown.min.js"
+      "browser": "./dist/dropdown.min.js",
+      "style": "./dist/dropdown.css"
     }
   }
 }

@@ -16,7 +16,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/notification.min.js"
+      "browser": "./dist/notification.min.js",
+      "style": "./dist/notification.css"
     }
   }
 }

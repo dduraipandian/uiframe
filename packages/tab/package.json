@@ -16,7 +16,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/tab.min.js"
+      "browser": "./dist/tab.min.js",
+      "style": "./dist/tab.css"
     }
   }
 }

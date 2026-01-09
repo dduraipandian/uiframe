@@ -17,7 +17,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/tree.min.js"
+      "browser": "./dist/tree.min.js",
+      "style": "./dist/tree.css"
     }
   }
 }

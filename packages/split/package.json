@@ -16,7 +16,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/split.min.js"
+      "browser": "./dist/split.min.js",
+      "style": "./dist/split.css"
     }
   }
 }

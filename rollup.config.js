@@ -1,6 +1,7 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
+import postcss from "rollup-plugin-postcss";
 import path from "path";
 import fs from "fs";
 
@@ -45,6 +46,12 @@ export default packages.map((pkg) => {
   const pkgPath = path.join(packagesDir, pkg);
   const pkgJson = JSON.parse(fs.readFileSync(path.join(pkgPath, "package.json"), "utf-8"));
 
+  const cssPlugin = postcss({
+    extract: pkg === "core" ? "base.css" : `${pkg}.css`,
+    minimize: true,
+    sourceMap: false,
+  });
+
   return {
     input: path.join(pkgPath, "index.js"),
     output: [
@@ -71,6 +78,6 @@ export default packages.map((pkg) => {
       ...Object.keys(pkgJson.peerDependencies || {}),
       (id) => id.startsWith("@uiframe/") && id !== pkgJson.name,
     ],
-    plugins: [resolve(), commonjs()],
+    plugins: [resolve(), commonjs(), cssPlugin],
   };
 });
