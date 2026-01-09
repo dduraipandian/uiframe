@@ -1,1 +1,0 @@
-.uiframe-split-container{display:flex;flex-direction:column;height:100vh;overflow:hidden;.split-pane{min-height:130px}.split-divider{background-color:var(--bs-secondary-color)!important;height:1px;z-index:10000;.split-divider-icon{cursor:row-resize;filter:brightness(.5);margin-top:-22px}}}
