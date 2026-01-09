@@ -58,6 +58,40 @@ notification.error('An error occurred', 'Error Title', {
       </div>
 
       <div class="card">
+        <div class="section-title">API</div>
+        <ul class="list-compact">
+          <li><code>info(message)</code>: Show informational toast.</li>
+          <li><code>success(message)</code>: Show success toast.</li>
+          <li><code>warning(message)</code>: Show warning toast.</li>
+          <li><code>error(message, title?, details?)</code>: Show error toast with optional modal details.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Events</div>
+        <p class="mb-2">Notifications use Bootstrap toasts which emit standard Bootstrap toast events.</p>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li><strong>Multiple types</strong>: Info, success, warning, and error with distinct styling.</li>
+          <li><strong>Error details modal</strong>: Errors can include detailed information in a modal dialog.</li>
+          <li><strong>Toast stacking</strong>: Multiple notifications stack automatically.</li>
+          <li><strong>Auto-dismiss</strong>: Toasts disappear after configurable duration.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code class="language-html">&lt;script&gt;
+  const notify = uiframe.notification();
+  notify.success('All set!');
+  notify.error('Something went wrong');
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="card">
         <div class="section-title">Demo</div>
         <p class="text-muted">
           Trigger different notification types below. Errors include a link to view details in a

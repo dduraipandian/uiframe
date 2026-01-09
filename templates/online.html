@@ -85,8 +85,33 @@ status.renderInto('status-container');</code></pre>
         <div class="section-title">Events</div>
         <p class="mb-2">
           This component automatically listens to <code>window.ononline</code> and
-          <code>window.onoffline</code>.
+          <code>window.onoffline</code> events.
         </p>
+        <pre><code class="language-javascript">// Status changes trigger internal updates and notifications
+window.addEventListener('online', () => {
+  console.log('Connection restored');
+});
+window.addEventListener('offline', () => {
+  console.log('Connection lost');
+});</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li><strong>Automatic updates</strong>: No manual polling needed; uses native browser events.</li>
+          <li><strong>Toast notifications</strong>: Enable with <code>notify: true</code> to alert users of status changes.</li>
+          <li><strong>Minimal footprint</strong>: Only renders a status badge, no heavy UI.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code class="language-html">&lt;div id="status"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const status = new uiframe.Online({ name: 'net' });
+  status.renderInto('status');
+&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card mt-3">

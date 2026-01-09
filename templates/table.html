@@ -145,31 +145,35 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
             view icon.
           </li>
           <li>
-            <strong>Row numbering</strong>: First column shows dynamic row numbers that update with
-            filtering.
+            <strong>Row numbering</strong>: First column shows dynamic row numbers that update with filtering.
           </li>
           <li>
-            <strong>Pagination</strong>: Navigate large datasets with page controls and info
-            display.
+            <strong>Clickable columns</strong>: Configure columns to emit events on click via <code>link</code> option.
+          </li>
+          <li>
+            <strong>Pagination</strong>: Built-in page navigation with customizable page size.
           </li>
         </ul>
       </div>
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="my-table" style="height: 400px;"&gt;&lt;/div&gt;
+        <pre><code class="language-html">&lt;div id="table-container"&gt;&lt;/div&gt;
 &lt;script&gt;
-  const t = new uiframe.Table({ name: 'Data', options: { pageSize: 10 } });
-  t.renderInto('my-table');
-  t.updateData([
-    { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' }
+  const tbl = new uiframe.Table({ name: 'Data' });
+  tbl.renderInto('table-container');
+  tbl.updateData([
+    { id: 1, name: 'Alice', email: 'alice@example.com' },
+    { id: 2, name: 'Bob', email: 'bob@example.com' }
   ]);
 &lt;/script&gt;</code></pre>
       </div>
 
-      <h2 class="mt-4">Live Demo</h2>
+      <h2 class="mt-4">Live Demos</h2>
+
       <div class="card">
+        <div class="section-title">Basic Table with Search and Pagination</div>
+        <p class="text-muted mb-3">Interactive table with search, sorting, and pagination features.</p>
         <div id="table-demo" class="demo-box"></div>
       </div>
     </div>

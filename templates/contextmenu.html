@@ -88,7 +88,39 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
             <strong>item:click</strong>: Emitted when an item is clicked (inherited from Dropdown).
           </li>
         </ul>
+        <pre><code class="language-javascript">menu.on('item:click', (item) => {
+  console.log('Menu item clicked:', item.name, item.value);
+});</code></pre>
       </div>
+
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li><strong>Container requirement</strong>: Target or parent element must have class <code>context-menu-container</code>.</li>
+          <li><strong>Separator items</strong>: Use <code>null</code> to create visual separators between groups.</li>
+          <li><strong>Reusable menus</strong>: One menu instance can be attached to multiple targets.</li>
+          <li><strong>Manual positioning</strong>: The <code>show(context, event)</code> method positions the menu at cursor.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code class="language-html">&lt;div id="target" class="context-menu-container"&gt;Right-click me&lt;/div&gt;
+&lt;div id="menu-holder"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const menu = new uiframe.ContextMenu({ name: 'ctx' });
+  menu.renderInto('menu-holder');
+  menu.setDropdownItems([
+    { name: 'Copy', value: 'copy' },
+    { name: 'Paste', value: 'paste' }
+  ]);
+  document.getElementById('target').addEventListener('contextmenu', (e) => {
+    menu.show(null, e);
+  });
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <h2 class="mt-4">Live Demos</h2>
 
       <div class="card">
         <div class="section-title">Demo: Right-click Area</div>
