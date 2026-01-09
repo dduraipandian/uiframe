@@ -1,0 +1,9 @@
+/* START: NOTIFICATION COMPONENT */
+
+.uiframe-notification-container {
+  .toast {
+    border: none;
+  }
+}
+
+/* END: NOTIFICATION COMPONENT */

@@ -1,34 +1,29 @@
+/* START: SPLIT COMPONENT */
+
 /* full-height container */
-.split-container {
+.uiframe-split-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-
-  border-radius: 0.5rem;
   overflow: hidden;
-}
 
-.split-pane {
-  min-height: 130px;
-  /* minimum height to avoid collapsing */
-}
+  .split-pane {
+    min-height: 130px;
+    /* minimum height to avoid collapsing */
+  }
 
-/* visual divider / drag handle */
-.split-divider {
-  height: 1px;
-  background-color: var(--split-divider-color) !important;
-  z-index: 10000;
+  /* visual divider / drag handle */
+  .split-divider {
+    height: 1px;
+    background-color: var(--bs-secondary-color) !important;
+    z-index: 10000;
 
-  .split-divider-icon {
-    margin-top: -22px;
-    cursor: row-resize;
-    filter: brightness(0.5);
+    .split-divider-icon {
+      margin-top: -22px;
+      cursor: row-resize;
+      filter: brightness(0.5);
+    }
   }
 }
 
-/* during drag reduce selection */
-.no-select {
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
+/* END: SPLIT COMPONENT */
