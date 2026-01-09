@@ -14,16 +14,16 @@ A lightweight, opinionated composable UI framework for building professional web
 
 - **🚀 Performance Oriented**: Efficient DOM manipulation and clean lifecycle management.
 - **🎨 Modern Aesthetics**: Professional styling out of the box with Bootstrap 5 integration.
-- **📂 Component Library**:
+- **📂 Component Library** (Package-based):
   - **Table**: Feature-rich data grid with search, pagination, and JSON/CSV export.
   - **Tree**: Dynamic, recursive tree view with lazy loading and state persistence.
-  - **ContextMenu**: Flexible right-click menus with async initialization.
-  - **DropDown**: Compact dropdown with optional search, item animations, and event-driven selection.
+  - **ContextMenu**: Flexible right-click menus with manual positioning.
+  - **DropDown**: Compact dropdown with search, animations, and event-driven selection.
   - **Tab**: Dynamic tab management for complex layouts.
-  - **Spinner**: Customizable loading indicators with event handling.
-  - **Split**: Two or multi-pane layout with a draggable divider
-  - **Online**: Real-time network status monitoring with automatic Toast notifications.
-- **🧪 Robust Testing**: Comprehensive unit test suite using Jest and JSDOM.
+  - **Spinner**: Customizable loading indicators.
+  - **Split**: Draggable multi-pane layouts.
+  - **Online**: Real-time network status monitoring.
+- **🧪 Robust Testing**: Comprehensive unit test suite (40+ tests) passing across all components.
 
 ## Getting Started
 
@@ -42,19 +42,22 @@ cd uiframe
 npm install
 ```
 
-### Quick Start
+All components are built as browser-ready bundles and ESM/CJS packages.
 
-All components are ES Modules. Here's a simple example using the `Spinner` component:
+#### In the Browser (IIFE)
+
+Load `core.min.js` first, followed by the components you need. All components are available under the global `uiframe` object.
 
 ```html
-<!-- In your HTML -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<script src="./packages/core/dist/core.min.js"></script>
+<script src="./packages/spinner/dist/spinner.min.js"></script>
+
 <div id="app-container"></div>
 
-<script type="module">
-  import { Spinner } from "./components/spinner.js";
-  // or import { Spinner } from "uiframe"; if installed via npm
-
-  const mySpinner = new Spinner({
+<script>
+  // Components are automatically attached to the window.uiframe object
+  const mySpinner = new uiframe.Spinner({
     name: "MainLoader",
     options: {
       loadingText: "Loading data...",
@@ -62,13 +65,18 @@ All components are ES Modules. Here's a simple example using the `Spinner` compo
     },
   });
 
-  // Render into a container
   mySpinner.renderInto("app-container");
-
-  // Control visibility
   mySpinner.show();
-  setTimeout(() => mySpinner.hide(), 2000);
 </script>
+```
+
+#### Using ESM (Modern Bundlers)
+
+```javascript
+import { Spinner } from "@uiframe/spinner";
+
+const mySpinner = new Spinner({ name: "Loader" });
+mySpinner.renderInto(document.body);
 ```
 
 ## Documentation
@@ -105,20 +113,22 @@ npm run format  # Auto-format code with Prettier
 
 ### Components Structure
 
-All core components are located in [components/](components/):
+`uiframe` follows a modular structure where each component is a separate package in the `packages/` directory.
 
-| File             | Purpose                                                   |
-| ---------------- | --------------------------------------------------------- |
-| `base.js`        | Core component classes (`Component`, `EmitterComponent`)  |
-| `utils.js`       | Shared utility functions (deep value access, etc.)        |
-| `spinner.js`     | Loading indicator with custom styling                     |
-| `table.js`       | Data grid with search, pagination, export                 |
-| `tree.js`        | Recursive tree view with lazy-loading & state persistence |
-| `tab.js`         | Dynamic tab management                                    |
-| `dropdown.js`    | Searchable dropdown component                             |
-| `contextmenu.js` | Right-click context menus                                 |
-| `online.js`      | Network status monitoring                                 |
-| `split.js`       | Resizable split pane layouts                              |
+| Package | Purpose |
+|---------|---------|
+| `core` | Base classes (`Component`, `EmitterComponent`) and `Utility` |
+| `spinner` | Loading indicator with custom styling |
+| `table` | Data grid with search, pagination, export |
+| `tree` | Recursive tree view with lazy-loading |
+| `tab` | Dynamic tab management |
+| `dropdown` | Searchable dropdown component |
+| `contextmenu` | Right-click context menus |
+| `online` | Network status monitoring |
+| `split` | Resizable split pane layouts |
+| `notification` | Toast and modal-based notifications |
+
+Core source code is located in `components/`. Packages in `packages/` build these into their respective `dist/` folders using Rollup.
 
 ## Contributing
 
