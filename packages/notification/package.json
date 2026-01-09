@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/notification.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0"
   },
@@ -16,8 +17,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/notification.min.js",
-      "style": "./dist/notification.css"
-    }
+      "browser": "./dist/notification.min.js"
+    },
+    "./style": "./dist/notification.css"
   }
 }

@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/tree.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0",
     "@uiframe/contextmenu": "~0.1.0"
@@ -17,8 +18,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/tree.min.js",
-      "style": "./dist/tree.css"
-    }
+      "browser": "./dist/tree.min.js"
+    },
+    "./style": "./dist/tree.css"
   }
 }

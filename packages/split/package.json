@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/split.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0"
   },
@@ -16,8 +17,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/split.min.js",
-      "style": "./dist/split.css"
-    }
+      "browser": "./dist/split.min.js"
+    },
+    "./style": "./dist/split.css"
   }
 }

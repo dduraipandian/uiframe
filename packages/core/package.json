@@ -9,11 +9,12 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/base.css",
   "exports": {
     ".": {
       "import": "./dist/index.esm.js",
-      "require": "./dist/index.js",
-      "style": "./dist/base.css"
-    }
+      "require": "./dist/index.js"
+    },
+    "./style": "./dist/base.css"
   }
 }

@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/tab.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0"
   },
@@ -16,8 +17,8 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/tab.min.js",
-      "style": "./dist/tab.css"
-    }
+      "browser": "./dist/tab.min.js"
+    },
+    "./style": "./dist/tab.css"
   }
 }

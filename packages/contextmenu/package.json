@@ -9,6 +9,7 @@
     "dist"
   ],
   "sideEffects": false,
+  "style": "dist/contextmenu.css",
   "peerDependencies": {
     "@uiframe/core": "~0.1.0",
     "@uiframe/dropdown": "~0.1.0"
@@ -17,8 +18,7 @@
     ".": {
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js",
-      "browser": "./dist/contextmenu.min.js",
-      "style": "./dist/contextmenu.css"
+      "browser": "./dist/contextmenu.min.js"
     }
   }
 }

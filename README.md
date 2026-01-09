@@ -53,33 +53,41 @@ Load `core.min.js` first, followed by the components you need. All components ar
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 />
+<!-- Load UI Frame CSS (base utilities + component styles) -->
+<link rel="stylesheet" href="./packages/core/dist/base.css">
+<link rel="stylesheet" href="./packages/table/dist/table.css">
+
 <script src="./packages/core/dist/core.min.js"></script>
-<script src="./packages/spinner/dist/spinner.min.js"></script>
+<script src="./packages/table/dist/table.min.js"></script>
 
 <div id="app-container"></div>
 
 <script>
   // Components are automatically attached to the window.uiframe object
-  const mySpinner = new uiframe.Spinner({
-    name: "MainLoader",
+  const myTable = new uiframe.Table({
+    name: "MainTable",
     options: {
-      loadingText: "Loading data...",
-      spinnerColor: "text-primary",
+      search: true,
+      pagination: true
     },
   });
 
-  mySpinner.renderInto("app-container");
-  mySpinner.show();
+  myTable.renderInto("app-container");
+  myTable.updateData([
+    { id: 1, name: "Sample Item" }
+  ]);
 </script>
 ```
 
 #### Using ESM (Modern Bundlers)
 
 ```javascript
-import { Spinner } from "@uiframe/spinner";
+import { Table } from "@uiframe/table";
+import "@uiframe/core/style";  // Base utilities
+import "@uiframe/table/style"; // Component styles
 
-const mySpinner = new Spinner({ name: "Loader" });
-mySpinner.renderInto(document.body);
+const myTable = new Table({ name: "Users" });
+myTable.renderInto(document.body);
 ```
 
 ## Documentation
