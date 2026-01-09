@@ -27,13 +27,13 @@
   filter: brightness(60%);
 }
 
-.hide {
+/* .hide {
   opacity: 0;
 }
 
 .show {
   opacity: 100 !important;
-}
+} */
 
 .hover-light:hover {
   filter: brightness(120%);

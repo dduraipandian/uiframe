@@ -53,8 +53,6 @@ body {
 }
 
 .page {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
   padding: var(--padding-content);
 }
 
