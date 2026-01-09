@@ -1,0 +1,25 @@
+{
+  "name": "@uiframe/core",
+  "version": "0.1.0",
+  "description": "Core logic for UIFrame components",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/core.min.js",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "style": "dist/base.css",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    },
+    "./style": "./dist/base.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/core"
+  }
+}

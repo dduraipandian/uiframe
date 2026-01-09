@@ -1,0 +1,30 @@
+{
+  "name": "@uiframe/tree",
+  "description": "UIFrame Tree component",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/tree.min.js",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "style": "dist/tree.css",
+  "peerDependencies": {
+    "@uiframe/core": "~0.1.0",
+    "@uiframe/contextmenu": "~0.1.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "browser": "./dist/tree.min.js"
+    },
+    "./style": "./dist/tree.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dduraipandian/uiframe.git",
+    "directory": "./packages/tree"
+  }
+}
