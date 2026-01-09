@@ -117,7 +117,6 @@ pre {
 
 pre code {
   font-size: 0.85rem;
-  color: var(--text-main);
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   background: transparent;
   padding: 0;
@@ -129,6 +128,26 @@ code {
   padding: 0.2rem 0.4rem;
   border-radius: var(--radius-xs);
   font-size: 0.9em;
+}
+
+/* Prism Copy Button Styles */
+.copy-to-clipboard-button {
+  background: var(--bg-sidebar) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-xs) !important;
+  padding: 4px 8px !important;
+  font-size: 0.75rem !important;
+  font-family: var(--font-family-sans) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.copy-to-clipboard-button:hover {
+  background: var(--primary-color) !important;
+  color: #fff !important;
+  border-color: var(--primary-color) !important;
 }
 
 .list-compact li {

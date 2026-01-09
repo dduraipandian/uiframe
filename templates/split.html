@@ -12,6 +12,14 @@
     />
     <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+    />
   </head>
 
   <body class="p-3 template-body">
@@ -25,15 +33,14 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;!-- Load core and split packages --&gt;
+        <pre><code class="language-html">&lt;!-- Load core and split packages --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
-&lt;script src="../packages/split/dist/split.min.js"&gt;&lt;/script&gt;
-      </code></pre>
+&lt;script src="../packages/split/dist/split.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>// Create container and pane elements first
+        <pre><code class="language-javascript">// Create container and pane elements first
 const topDiv = document.createElement('div');
 topDiv.innerHTML = "Top Content";
 const bottomDiv = document.createElement('div');
@@ -47,8 +54,7 @@ const split = new uiframe.SplitPane({
     min_size: 100
   }
 });
-split.render();
-      </code></pre>
+split.render();</code></pre>
       </div>
 
       <div class="card">
@@ -72,10 +78,38 @@ split.render();
 
       <div class="card">
         <div class="section-title">Events</div>
-        <p class="mb-2">This component does not currently emit events.</p>
+        <p class="mb-2">This component does not currently emit custom events. Use CSS resize observers or manual drag tracking for advanced use cases.</p>
       </div>
 
-      <h2 class="mt-4">Live Demo</h2>
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li><strong>Fixed container height</strong>: The split container needs explicit height (in px or %).</li>
+          <li><strong>Min size constraints</strong>: Set <code>min_size</code> to prevent panes from collapsing too small.</li>
+          <li><strong>Dynamic content</strong>: Update pane content by modifying the DOM elements directly.</li>
+          <li><strong>Two-pane only</strong>: Currently designed for top/bottom split layout.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code class="language-html">&lt;div id="split-container" style="height: 500px;"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const top = document.createElement('div');
+  top.textContent = 'Top area';
+  const bottom = document.createElement('div');
+  bottom.textContent = 'Bottom area';
+  
+  const split = new uiframe.SplitPane({
+    containerID: 'split-container',
+    top: top,
+    bottom: bottom
+  });
+  split.render();
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <h2 class="mt-4">Live Demos</h2>
       <div class="card demo-tall">
         <div id="split-demo" class="demo-box"></div>
       </div>
@@ -89,6 +123,10 @@ split.render();
 
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/split/dist/split.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
     <script type="module">
       const topContent = document.createElement("div");

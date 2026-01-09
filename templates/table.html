@@ -21,6 +21,14 @@
 
     <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+    />
   </head>
 
   <body class="p-3 template-body">
@@ -37,7 +45,7 @@
           <strong>Dependencies:</strong> Bootstrap Icons, Bootstrap Table (CSS/JS), TableExport,
           FileSaver.
         </p>
-        <pre><code>&lt;!-- Required Vendor Assets & UI Frame --&gt;
+        <pre><code class="language-html">&lt;!-- Required Vendor Assets & UI Frame --&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/bootstrap-table.min.css"&gt;
 &lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"&gt;&lt;/script&gt;
@@ -46,13 +54,12 @@
 
 &lt;!-- UI Frame Packages --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
-&lt;script src="../packages/table/dist/table.min.js"&gt;&lt;/script&gt;
-      </code></pre>
+&lt;script src="../packages/table/dist/table.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const tbl = new uiframe.Table({ 
+        <pre><code class="language-javascript">const tbl = new uiframe.Table({ 
   name: 'Users',
   options: {
     search: true,
@@ -64,8 +71,7 @@ tbl.renderInto('container-id');
 tbl.updateData([
   { id: 1, name: 'Alice', role: 'Admin' },
   { id: 2, name: 'Bob', role: 'User' }
-]);
-      </code></pre>
+]);</code></pre>
       </div>
 
       <div class="card">
@@ -105,7 +111,7 @@ tbl.updateData([
       <div class="card">
         <div class="section-title">Events</div>
         <p class="mb-2">Events are configured via the <code>link</code> option.</p>
-        <pre><code>// Example: Emit 'user:click' when 'id' column is clicked
+        <pre><code class="language-javascript">// Example: Emit 'user:click' when 'id' column is clicked
 const tbl = new Table({
   name: 'Users',
   options: {
@@ -139,32 +145,35 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
             view icon.
           </li>
           <li>
-            <strong>Row numbering</strong>: First column shows dynamic row numbers that update with
-            filtering.
+            <strong>Row numbering</strong>: First column shows dynamic row numbers that update with filtering.
           </li>
           <li>
-            <strong>Pagination</strong>: Navigate large datasets with page controls and info
-            display.
+            <strong>Clickable columns</strong>: Configure columns to emit events on click via <code>link</code> option.
+          </li>
+          <li>
+            <strong>Pagination</strong>: Built-in page navigation with customizable page size.
           </li>
         </ul>
       </div>
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code>&lt;div id="my-table" style="height: 400px;"&gt;&lt;/div&gt;
+        <pre><code class="language-html">&lt;div id="table-container"&gt;&lt;/div&gt;
 &lt;script&gt;
-  const t = new uiframe.Table({ name: 'Data', options: { pageSize: 10 } });
-  t.renderInto('my-table');
-  t.updateData([
-    { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' }
+  const tbl = new uiframe.Table({ name: 'Data' });
+  tbl.renderInto('table-container');
+  tbl.updateData([
+    { id: 1, name: 'Alice', email: 'alice@example.com' },
+    { id: 2, name: 'Bob', email: 'bob@example.com' }
   ]);
-&lt;/script&gt;
-      </code></pre>
+&lt;/script&gt;</code></pre>
       </div>
 
-      <h2 class="mt-4">Live Demo</h2>
+      <h2 class="mt-4">Live Demos</h2>
+
       <div class="card">
+        <div class="section-title">Basic Table with Search and Pagination</div>
+        <p class="text-muted mb-3">Interactive table with search, sorting, and pagination features.</p>
         <div id="table-demo" class="demo-box"></div>
       </div>
     </div>
@@ -182,6 +191,10 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
     <!-- <script src="./components/js/vendor/fileSaver.min.js"></script> -->
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/table/dist/table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
     <script type="module">
       let tableData = [
         { id: 1, name: "Alice", age: 30, details: { city: "New York", job: "Engineer" } },

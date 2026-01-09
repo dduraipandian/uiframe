@@ -13,6 +13,14 @@
 
     <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+    />
   </head>
 
   <body class="p-3 template-body">
@@ -25,22 +33,20 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;!-- Load core and online packages --&gt;
+        <pre><code class="language-html">&lt;!-- Load core and online packages --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
-&lt;script src="../packages/online/dist/online.min.js"&gt;&lt;/script&gt;
-      </code></pre>
+&lt;script src="../packages/online/dist/online.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const status = new uiframe.Online({ 
+        <pre><code class="language-javascript">const status = new uiframe.Online({ 
   name: 'net-status',
   options: {
     notify: true
   }
 });
-status.renderInto('status-container');
-      </code></pre>
+status.renderInto('status-container');</code></pre>
       </div>
 
       <div class="card">
@@ -79,8 +85,33 @@ status.renderInto('status-container');
         <div class="section-title">Events</div>
         <p class="mb-2">
           This component automatically listens to <code>window.ononline</code> and
-          <code>window.onoffline</code>.
+          <code>window.onoffline</code> events.
         </p>
+        <pre><code class="language-javascript">// Status changes trigger internal updates and notifications
+window.addEventListener('online', () => {
+  console.log('Connection restored');
+});
+window.addEventListener('offline', () => {
+  console.log('Connection lost');
+});</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li><strong>Automatic updates</strong>: No manual polling needed; uses native browser events.</li>
+          <li><strong>Toast notifications</strong>: Enable with <code>notify: true</code> to alert users of status changes.</li>
+          <li><strong>Minimal footprint</strong>: Only renders a status badge, no heavy UI.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code class="language-html">&lt;div id="status"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const status = new uiframe.Online({ name: 'net' });
+  status.renderInto('status');
+&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card mt-3">
@@ -107,6 +138,10 @@ status.renderInto('status-container');
     ></script>
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/online/dist/online.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
     <script type="module">
       const online = new uiframe.Online({ name: "demo-online", options: { notify: true } });

@@ -12,6 +12,14 @@
     />
     <link rel="stylesheet" type="text/css" href="../components/css/base.css" />
     <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+    />
   </head>
 
   <body class="p-3 template-body">
@@ -27,15 +35,14 @@
       <div class="card">
         <div class="section-title">Install & Import</div>
         <p class="mb-2">Use as an ES module.</p>
-        <pre><code>&lt;!-- Load core and dropdown packages --&gt;
+        <pre><code class="language-html">&lt;!-- Load core and dropdown packages --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
-&lt;script src="../packages/dropdown/dist/dropdown.min.js"&gt;&lt;/script&gt;
-      </code></pre>
+&lt;script src="../packages/dropdown/dist/dropdown.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code>const dd = new uiframe.Dropdown({
+        <pre><code class="language-javascript">const dd = new uiframe.Dropdown({
   name: 'my-dropdown',
   options: {
     search: true,
@@ -47,8 +54,7 @@ dd.setDropdownItems([
   { name: 'Option A', value: 'a' },
   { name: 'Option B', value: 'b' }
 ]);
-dd.on('item:click', (item) => console.log('Selected:', item));
-      </code></pre>
+dd.on('item:click', (item) => console.log('Selected:', item));</code></pre>
       </div>
 
       <div class="card">
@@ -87,9 +93,32 @@ dd.on('item:click', (item) => console.log('Selected:', item));
             for lazy loading).
           </li>
         </ul>
-        <pre><code>dd.on('item:click', (item) => {
+        <pre><code class="language-javascript">dd.on('item:click', (item) => {
     console.log(item.name, item.value);
 });</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li><strong>Lazy loading</strong>: Use the <code>init</code> event to load items only when dropdown is first opened.</li>
+          <li><strong>Search filtering</strong>: Enable <code>search: true</code> for auto-filtering as users type.</li>
+          <li><strong>Separator items</strong>: Use <code>null</code> in the items array to create visual separators.</li>
+          <li><strong>Item structure</strong>: Each item requires <code>{ name, value }</code>; additional properties are preserved.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code class="language-html">&lt;div id="my-dd"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const dd = new uiframe.Dropdown({ name: 'Pick' });
+  dd.renderInto('my-dd');
+  dd.setDropdownItems([
+    { name: 'Option 1', value: 'opt1' },
+    { name: 'Option 2', value: 'opt2' }
+  ]);
+&lt;/script&gt;</code></pre>
       </div>
 
       <h2 class="mt-4">Live Demos</h2>
@@ -122,13 +151,12 @@ dd.on('item:click', (item) => console.log('Selected:', item));
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code>&lt;div id="my-dd"&gt;&lt;/div&gt;
+        <pre><code class="language-html">&lt;div id="my-dd"&gt;&lt;/div&gt;
 &lt;script&gt;
   const d = new uiframe.Dropdown({ name: 'Pick', options: { search: false } });
   d.renderInto('my-dd');
   d.setDropdownItems([{ name: 'One', value: 1 }, { name: 'Two', value: 2 }]);
-&lt;/script&gt;
-      </code></pre>
+&lt;/script&gt;</code></pre>
       </div>
     </div>
 
@@ -140,6 +168,10 @@ dd.on('item:click', (item) => console.log('Selected:', item));
     <!-- Local dist path is added to publish as static content in github pages -->
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/dropdown/dist/dropdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
     <script type="module">
       // Demo 1: Basic dropdown
