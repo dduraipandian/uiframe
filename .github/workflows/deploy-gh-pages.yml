@@ -26,7 +26,6 @@ jobs:
           mkdir pages
           cp index.html pages/
           cp -r templates pages/
-          cp -r components pages/
           cp -r packages pages/
 
       - name: Deploy to GitHub Pages
