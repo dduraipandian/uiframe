@@ -20,6 +20,7 @@
     />
 
     <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/notification/dist/notification.css" />
     <link rel="stylesheet" type="text/css" href="../packages/table/dist/table.css" />
     <link rel="stylesheet" type="text/css" href="./css/doc.css" />
     <link
@@ -121,7 +122,9 @@ table.updateData([
       <div class="card">
         <div class="section-title">Events</div>
         <p class="mb-2">Events are configured via the <code>link</code> option.</p>
-        <pre class="code_example"><code class="language-javascript">// Example: Emit 'user:click' when 'id' column is clicked
+        <pre
+          class="code_example"
+        ><code class="language-javascript">// Example: Emit 'user:click' when 'id' column is clicked
 const tbl = new Table({
   name: 'Users',
   options: {
@@ -170,7 +173,9 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre class="code_example"><code class="language-html">&lt;div id="table-container"&gt;&lt;/div&gt;
+        <pre
+          class="code_example"
+        ><code class="language-html">&lt;div id="table-container"&gt;&lt;/div&gt;
 &lt;script&gt;
   const tbl = new uiframe.Table({ name: 'Data' });
   tbl.renderInto('table-container');
@@ -205,11 +210,13 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
     <!-- <script src="./components/js/vendor/fileSaver.min.js"></script> -->
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/table/dist/table.min.js"></script>
+    <script src="../packages/notification/dist/notification.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
     <script type="module">
+      const notification = new uiframe.Notification({ app: "table-demo" });
       let tableData = [
         { id: 1, name: "Alice", age: 30, details: { city: "New York", job: "Engineer" } },
         { id: 2, name: "Bob", age: 25, details: { city: "San Francisco", job: "Designer" } },
@@ -262,10 +269,21 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
         { id: 49, name: "Will", age: 28, details: { city: "Plano", job: "Agent" } },
         { id: 50, name: "Zoe", age: 31, details: { city: "Lincoln", job: "Representative" } },
       ];
-      const options = { pageSize: 10 };
+      const options = {
+        pageSize: 10,
+        link: {
+          key: "id", // Column to make clickable
+          fields: ["id", "name", "age", "details"], // Data to pass in event
+          listen: "user:click", // Event name
+        },
+      };
       const tbl = new uiframe.Table({ name: "Users", options: options });
       tbl.renderInto("table-demo");
       tbl.updateData(tableData);
+      tbl.on("user:click", (data) => {
+        console.log(data);
+        notification.info(`Row is clicked: ${data.id}`);
+      });
     </script>
   </body>
 </html>
