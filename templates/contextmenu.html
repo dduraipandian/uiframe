@@ -57,8 +57,11 @@ menu.renderInto('container-id');
 
 // Define menu items
 menu.setDropdownItems([
-  { name: 'Edit', value: 'edit' },
-  { name: 'Delete', value: 'delete' }
+    { name: "Refresh", value: "refresh" },
+    { name: "Rename", value: "rename" },
+    { name: "Delete", value: "delete" },
+    null, // separator will be created
+    { name: "Properties", value: "props" },
 ]);
 
 // Attach to elements for right-click menu
@@ -138,11 +141,17 @@ menu.on('item:click', (item) => {
   const menu = new uiframe.ContextMenu({ name: 'ctx' });
   menu.renderInto('menu-holder');
   menu.setDropdownItems([
-    { name: 'Copy', value: 'copy' },
-    { name: 'Paste', value: 'paste' }
+    { name: "Refresh", value: "refresh" },
+    { name: "Rename", value: "rename" },
+    { name: "Delete", value: "delete" },
+    null, // separator will be created
+    { name: "Properties", value: "props" },
   ]);
   document.getElementById('target').addEventListener('contextmenu', (e) => {
     menu.show(null, e);
+  });
+  menu.on('item:click', (item) => {
+    console.log('Menu action:', item.value);
   });
 &lt;/script&gt;</code></pre>
       </div>
@@ -190,7 +199,7 @@ menu.on('item:click', (item) => {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
     <script type="module">
-      const notification = new uiframe.notification({ app: "contextmenu-demo" });
+      const notification = uiframe.notification({ app: "contextmenu-demo" });
       const menu = new uiframe.ContextMenu({
         name: "Demo Context Menu",
         options: { maxHeight: "12em" },
@@ -223,7 +232,7 @@ menu.on('item:click', (item) => {
       // Listen to menu item clicks
       menu.on("item:click", (item) => {
         console.log("Context menu clicked:", item);
-        notification.info(`Clicked: ${item.name} (value=${item.value})`);
+        notification.info(`Menu action: ${item.name} (value=${item.value})`);
       });
     </script>
   </body>
