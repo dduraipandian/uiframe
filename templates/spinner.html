@@ -35,27 +35,39 @@
       </p>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Use as an ES module.</p>
-        <pre><code class="language-html">&lt;!-- Load core and spinner packages --&gt;
+        <div class="section-title">Installation</div>
+        <p class="mb-2">Include the core package in your HTML:</p>
+        <pre class="code_example"><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/spinner/dist/spinner.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">const spinner = new uiframe.Spinner({
+        <pre class="code_example"><code class="language-javascript">// Create the spinner component
+const spinner = new uiframe.Spinner({
   name: 'my-spinner',
   options: {
-    spinnerColor: 'text-primary',
-    spinnerType: 'border'
+    spinnerColor: 'text-primary',   // Bootstrap text color
+    spinnerType: 'border',          // 'border' or 'grow'
+    loadingText: 'Loading...',
+    enableCancel: false             // Show cancel button
   }
 });
-spinner.renderInto('container-id');
-spinner.show('Loading...', true);</code></pre>
-      </div>
 
+// Render into a container
+spinner.renderInto('container-id');
+
+// Show the spinner with custom message
+spinner.show('Processing your request...', true);
+
+// Hide spinner when done
+setTimeout(() => spinner.hide(), 3000);
+</code></pre>
+      </div>
       <div class="card">
         <div class="section-title">Options</div>
         <ul class="list-compact">
@@ -63,7 +75,23 @@ spinner.show('Loading...', true);</code></pre>
             <strong>spinnerColor</strong>: Bootstrap text color class (default:
             <code>text-secondary</code>).
           </li>
-          <li><strong>spinnerType</strong>: <code>border</code> (default) or <code>grow</code>.</li>
+          <li>
+            <strong>spinnerType</strong>:
+            <ul>
+              <li>
+                <code>border</code> (default)
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </li>
+              <li>
+                <code>grow</code>
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </li>
+            </ul>
+          </li>
           <li>
             <strong>loadingText</strong>: Default text to display (default: <code>'Loading'</code>).
           </li>
@@ -91,7 +119,7 @@ spinner.show('Loading...', true);</code></pre>
           Listen to events on the container based on the pattern
           `spinner:{containerId}:{name}:cancel`.
         </p>
-        <pre><code class="language-javascript">// Example: Handle cancellation
+        <pre class="code_example"><code class="language-javascript">// Example: Handle cancellation
 spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}:cancel`, (e) => {
     console.log('User clicked cancel', e.detail);
 });</code></pre>
@@ -159,12 +187,17 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="spinner-container" style="position:relative; height: 240px;"&gt;&lt;/div&gt;
+        <pre
+          class="code_example"
+        ><code class="language-html">&lt;div id="spinner-container" style="position:relative; height: 240px;"&gt;&lt;/div&gt;
 &lt;script&gt;
-  const s = new uiframe.Spinner({ options: { spinnerColor: 'text-primary', spinnerType: 'border' } });
-  s.renderInto('spinner-container');
-  s.show('Loading...', true);
-  setTimeout(() =&gt; s.hide(), 2000);
+  const spinner = new uiframe.Spinner({ 
+    name: 'my-spinner',
+    options: { spinnerColor: 'text-primary', spinnerType: 'border' } 
+  });
+  spinner.renderInto('spinner-container');
+  spinner.show('Loading...', true);
+  setTimeout(() =&gt; spinner.hide(), 2000);
 &lt;/script&gt;</code></pre>
       </div>
     </div>
@@ -221,7 +254,7 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
       });
       document
         .getElementById("demo3-show")
-        .addEventListener("click", () => s3.show("Processing request..."));
+        .addEventListener("click", () => s3.show("Processing the request..."));
       document.getElementById("demo3-hide").addEventListener("click", () => s3.hide());
     </script>
   </body>

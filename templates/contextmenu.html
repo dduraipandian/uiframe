@@ -33,11 +33,15 @@
       </div>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Extends <strong>Dropdown</strong>.</p>
-        <pre><code class="language-html">&lt;!-- Load core, dropdown and contextmenu packages --&gt;
+        <div class="section-title">Installation</div>
+        <p class="mb-2">
+          Extends the <strong>Dropdown</strong> component. Include all required packages:
+        </p>
+        <pre class="code_example"><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/dropdown/dist/dropdown.css"&gt;
+
+&lt;!-- Scripts (order matters) --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/dropdown/dist/dropdown.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/contextmenu/dist/contextmenu.min.js"&gt;&lt;/script&gt;</code></pre>
@@ -45,19 +49,32 @@
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">const menu = new uiframe.ContextMenu({ name: 'My Context Menu' });
+        <pre class="code_example"><code class="language-javascript">// Create the context menu
+const menu = new uiframe.ContextMenu({ 
+  name: 'My Context Menu' 
+});
+
+// Render into a container
 menu.renderInto('container-id');
+
+// Define menu items
 menu.setDropdownItems([
-  { name: 'Edit', value: 'edit' },
-  { name: 'Delete', value: 'delete' }
+    { name: "Refresh", value: "refresh" },
+    { name: "Rename", value: "rename" },
+    { name: "Delete", value: "delete" },
+    null, // separator will be created
+    { name: "Properties", value: "props" },
 ]);
 
-// Attach to element
+// Attach to elements for right-click menu
 document.getElementById('target').addEventListener('contextmenu', (e) => {
   menu.show(null, e);
 });
 
-menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
+// Handle selections
+menu.on('item:click', (item) => {
+  console.log('Menu action:', item.value);
+});</code></pre>
       </div>
 
       <div class="card">
@@ -92,7 +109,9 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
             <strong>item:click</strong>: Emitted when an item is clicked (inherited from Dropdown).
           </li>
         </ul>
-        <pre><code class="language-javascript">menu.on('item:click', (item) => {
+        <pre
+          class="code_example"
+        ><code class="language-javascript">menu.on('item:click', (item) => {
   console.log('Menu item clicked:', item.name, item.value);
 });</code></pre>
       </div>
@@ -120,17 +139,25 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="target" class="context-menu-container"&gt;Right-click me&lt;/div&gt;
+        <pre
+          class="code_example"
+        ><code class="language-html">&lt;div id="target" class="context-menu-container"&gt;Right-click me&lt;/div&gt;
 &lt;div id="menu-holder"&gt;&lt;/div&gt;
 &lt;script&gt;
   const menu = new uiframe.ContextMenu({ name: 'ctx' });
   menu.renderInto('menu-holder');
   menu.setDropdownItems([
-    { name: 'Copy', value: 'copy' },
-    { name: 'Paste', value: 'paste' }
+    { name: "Refresh", value: "refresh" },
+    { name: "Rename", value: "rename" },
+    { name: "Delete", value: "delete" },
+    null, // separator will be created
+    { name: "Properties", value: "props" },
   ]);
   document.getElementById('target').addEventListener('contextmenu', (e) => {
     menu.show(null, e);
+  });
+  menu.on('item:click', (item) => {
+    console.log('Menu action:', item.value);
   });
 &lt;/script&gt;</code></pre>
       </div>
@@ -178,7 +205,7 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
     <script type="module">
-      const notification = new uiframe.notification({ app: "contextmenu-demo" });
+      const notification = uiframe.notification({ app: "contextmenu-demo" });
       const menu = new uiframe.ContextMenu({
         name: "Demo Context Menu",
         options: { maxHeight: "12em" },
@@ -211,7 +238,7 @@ menu.on('item:click', (item) => console.log('Clicked', item));</code></pre>
       // Listen to menu item clicks
       menu.on("item:click", (item) => {
         console.log("Context menu clicked:", item);
-        notification.info(`Clicked: ${item.name} (value=${item.value})`);
+        notification.info(`Menu action: ${item.name} (value=${item.value})`);
       });
     </script>
   </body>

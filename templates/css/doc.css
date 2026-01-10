@@ -106,25 +106,21 @@ body {
   color: var(--text-main);
 }
 
-pre {
-  background: var(--code-bg);
+pre.code_example {
+  background: #282c34 !important;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: var(--spacing-md);
-  margin: 1rem 0;
+  margin: 1rem 0 0 0;
   overflow-x: auto;
 }
 
-pre code {
+pre.code_example code {
   font-size: 0.85rem;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   background: transparent;
   padding: 0;
-}
-
-code {
-  /* color: #444;
-  background-color: rgba(0, 0, 0, 0.05); */
+  color: #61dafb !important;
   padding: 0.2rem 0.4rem;
   border-radius: var(--radius-xs);
   font-size: 0.9em;
@@ -142,6 +138,7 @@ code {
   cursor: pointer !important;
   transition: all 0.2s ease !important;
   box-shadow: var(--shadow-sm) !important;
+  margin: 0.5rem 0 0 0;
 }
 
 .copy-to-clipboard-button:hover {
