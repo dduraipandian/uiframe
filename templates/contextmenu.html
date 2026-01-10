@@ -35,7 +35,7 @@
       <div class="card">
         <div class="section-title">Installation</div>
         <p class="mb-2">Extends the <strong>Dropdown</strong> component. Include all required packages:</p>
-        <pre><code class="language-html">&lt;!-- Styles --&gt;
+        <pre class="code_example"><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/dropdown/dist/dropdown.css"&gt;
 
@@ -47,7 +47,7 @@
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">// Create the context menu
+        <pre class="code_example"><code class="language-javascript">// Create the context menu
 const menu = new uiframe.ContextMenu({ 
   name: 'My Context Menu' 
 });
@@ -107,7 +107,7 @@ menu.on('item:click', (item) => {
             <strong>item:click</strong>: Emitted when an item is clicked (inherited from Dropdown).
           </li>
         </ul>
-        <pre><code class="language-javascript">menu.on('item:click', (item) => {
+        <pre class="code_example"><code class="language-javascript">menu.on('item:click', (item) => {
   console.log('Menu item clicked:', item.name, item.value);
 });</code></pre>
       </div>
@@ -135,7 +135,7 @@ menu.on('item:click', (item) => {
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="target" class="context-menu-container"&gt;Right-click me&lt;/div&gt;
+        <pre class="code_example"><code class="language-html">&lt;div id="target" class="context-menu-container"&gt;Right-click me&lt;/div&gt;
 &lt;div id="menu-holder"&gt;&lt;/div&gt;
 &lt;script&gt;
   const menu = new uiframe.ContextMenu({ name: 'ctx' });

@@ -38,7 +38,7 @@
         <p class="mb-2">
           Include the core and dropdown packages in your HTML:
         </p>
-        <pre><code class="language-html">&lt;!-- Styles --&gt;
+        <pre class="code_example"><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/dropdown/dist/dropdown.css"&gt;
 
@@ -49,7 +49,7 @@
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">// Create and configure the dropdown
+        <pre class="code_example"><code class="language-javascript">// Create and configure the dropdown
 const dropdown = new uiframe.Dropdown({
   name: 'my-dropdown',
   options: {
@@ -104,14 +104,14 @@ dropdown.on('item:click', (item) => {
             <strong>item:click</strong>: Emitted when an item is selected. Callback receives the
             item object.
           </li>
-          <pre><code class="language-javascript">dropdown.on('item:click', (item) => {
+          <pre class="code_example"><code class="language-javascript">dropdown.on('item:click', (item) => {
     console.log(item.name, item.value);
 });</code></pre>
           <li>
             <strong>init</strong>: Emitted when the dropdown is opened for the first time (useful
             for lazy loading).
           </li>
-          <pre><code class="language-javascript">// This will be helpful for lazy loading
+          <pre class="code_example"><code class="language-javascript">// This will be helpful for lazy loading
 dropdown.on("init", () => console.debug("[Demo1] Init fired (first open)"));</code></pre>
         </ul>
       </div>
@@ -140,7 +140,7 @@ dropdown.on("init", () => console.debug("[Demo1] Init fired (first open)"));</co
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="my-dropdown"&gt;&lt;/div&gt;
+        <pre class="code_example"><code class="language-html">&lt;div id="my-dropdown"&gt;&lt;/div&gt;
 &lt;script&gt;
   const dropdown = new uiframe.Dropdown({ name: 'Pick' });
   dropdown.renderInto('my-dropdown');

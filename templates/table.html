@@ -45,7 +45,7 @@
         <p class="mb-2">
           The Table component depends on Bootstrap Table and jQuery. Include all required libraries:
         </p>
-        <pre><code class="language-html">&lt;!-- Vendor Dependencies --&gt;
+        <pre class="code_example"><code class="language-html">&lt;!-- Vendor Dependencies --&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/bootstrap-table.min.css"&gt;
 &lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"&gt;&lt;/script&gt;
@@ -63,7 +63,7 @@
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">// Create the table component
+        <pre class="code_example"><code class="language-javascript">// Create the table component
 const table = new uiframe.Table({ 
   name: 'Users',
   options: {
@@ -121,7 +121,7 @@ table.updateData([
       <div class="card">
         <div class="section-title">Events</div>
         <p class="mb-2">Events are configured via the <code>link</code> option.</p>
-        <pre><code class="language-javascript">// Example: Emit 'user:click' when 'id' column is clicked
+        <pre class="code_example"><code class="language-javascript">// Example: Emit 'user:click' when 'id' column is clicked
 const tbl = new Table({
   name: 'Users',
   options: {
@@ -170,7 +170,7 @@ tbl.on('user:click', (data) => console.log('Clicked:', data));</code></pre>
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="table-container"&gt;&lt;/div&gt;
+        <pre class="code_example"><code class="language-html">&lt;div id="table-container"&gt;&lt;/div&gt;
 &lt;script&gt;
   const tbl = new uiframe.Table({ name: 'Data' });
   tbl.renderInto('table-container');
