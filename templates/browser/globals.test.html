@@ -5,6 +5,7 @@
     <title>uiframe global tests</title>
   </head>
   <body>
+    <div id="messages"></div>
     <script src="../../packages/core/dist/core.min.js"></script>
     <script src="../../packages/dropdown/dist/dropdown.min.js"></script>
     <script src="../../packages/notification/dist/notification.min.js"></script>
@@ -12,8 +13,10 @@
     <script>
       function assert(condition, message) {
         if (!condition) {
+          document.getElementById("messages").innerHTML += "❌ " + message + "<br>";
           throw new Error("❌ " + message);
         }
+        document.getElementById("messages").innerHTML += "✅ " + message + "<br>";
         console.log("✅ " + message);
       }
 

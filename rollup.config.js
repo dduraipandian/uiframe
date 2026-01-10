@@ -70,7 +70,7 @@ export default packages.map((pkg) => {
         file: path.join(pkgPath, `dist/${pkg}.min.js`),
         format: "iife",
         name: "uiframe",
-        extend: publishSourceMap,
+        extend: true,
         plugins: [iifeGuardPlugin(pkg), terser()],
         globals: { "@uiframe/core": "uiframe" },
       },
