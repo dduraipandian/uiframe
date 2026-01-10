@@ -95,7 +95,10 @@
         // Global contract
         test(window.uiframe, "Global uiframe object available on window");
         test(typeof uiframe === "object", "uiframe is a proper object type");
-        test(typeof uiframe.EmitterComponent === "function", "EmitterComponent base class exported");
+        test(
+          typeof uiframe.EmitterComponent === "function",
+          "EmitterComponent base class exported"
+        );
 
         // Components
         test(typeof uiframe.Dropdown === "function", "Dropdown component exported");
