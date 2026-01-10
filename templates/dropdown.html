@@ -104,14 +104,16 @@ dropdown.on('item:click', (item) => {
             <strong>item:click</strong>: Emitted when an item is selected. Callback receives the
             item object.
           </li>
+          <pre><code class="language-javascript">dropdown.on('item:click', (item) => {
+    console.log(item.name, item.value);
+});</code></pre>
           <li>
             <strong>init</strong>: Emitted when the dropdown is opened for the first time (useful
             for lazy loading).
           </li>
+          <pre><code class="language-javascript">// This will be helpful for lazy loading
+dropdown.on("init", () => console.debug("[Demo1] Init fired (first open)"));</code></pre>
         </ul>
-        <pre><code class="language-javascript">dd.on('item:click', (item) => {
-    console.log(item.name, item.value);
-});</code></pre>
       </div>
 
       <div class="card">
@@ -138,11 +140,11 @@ dropdown.on('item:click', (item) => {
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="my-dd"&gt;&lt;/div&gt;
+        <pre><code class="language-html">&lt;div id="my-dropdown"&gt;&lt;/div&gt;
 &lt;script&gt;
-  const dd = new uiframe.Dropdown({ name: 'Pick' });
-  dd.renderInto('my-dd');
-  dd.setDropdownItems([
+  const dropdown = new uiframe.Dropdown({ name: 'Pick' });
+  dropdown.renderInto('my-dropdown');
+  dropdown.setDropdownItems([
     { name: 'Option 1', value: 'opt1' },
     { name: 'Option 2', value: 'opt2' }
   ]);
@@ -178,13 +180,16 @@ dropdown.on('item:click', (item) => {
       </div>
 
       <div class="card">
-        <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="my-dd"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const d = new uiframe.Dropdown({ name: 'Pick', options: { search: false } });
-  d.renderInto('my-dd');
-  d.setDropdownItems([{ name: 'One', value: 1 }, { name: 'Two', value: 2 }]);
-&lt;/script&gt;</code></pre>
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="section-title mb-0">With Search & Long List with lazy loading</div>
+          <div class="btn-group d-flex">
+            <button class="btn btn-sm btn-outline-secondary" id="demo3-reset">Reset</button>
+          </div>
+        </div>
+        <div id="demo3" class="demo-box mt-2">
+          <div id="dropdown-demo-3" class="mt-2 float-end"></div>
+          <small class="text-muted">Type to filter results.</small>
+        </div>
       </div>
     </div>
 
@@ -238,6 +243,24 @@ dropdown.on('item:click', (item) => {
       document
         .getElementById("demo2-reset")
         .addEventListener("click", () => dd2.setDropdownItems(items));
+
+      // Demo 3: Search + long list with lazy loading
+      const dd3 = new uiframe.Dropdown({
+        name: "Choose",
+        options: { search: true, maxHeight: "12em" },
+      });
+      dd3.renderInto("dropdown-demo-3");
+      dd3.on("init", () => {
+        console.debug("[Demo3] Init fired (first open)");
+        const items3 = Array.from({ length: 30 }, (_, i) => ({ name: `Item ${i + 1}`, value: i + 1 }));
+        setTimeout(() => {
+          dd3.setDropdownItems(items3);
+        }, 5000);
+      });
+      dd3.on("item:click", (item) => console.debug("[Demo3] Selected", item));
+      document
+        .getElementById("demo3-reset")
+        .addEventListener("click", () => dd3.setDropdownItems([]));
     </script>
   </body>
 </html>
