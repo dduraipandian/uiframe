@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Split — Minimal Docs</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/split/dist/split.css" />
+    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+    />
+  </head>
+
+  <body class="p-3 template-body">
+    <div class="container page">
+      <div class="header mb-3">
+        <h1 class="mb-0">Split</h1>
+        <span class="subtitle">Resizable panes layout</span>
+      </div>
+      <p class="text-muted mb-3">Two- or multi-pane layout with a draggable divider.</p>
+
+      <div class="card">
+        <div class="section-title">Install & Import</div>
+        <p class="mb-2">Use as an ES module.</p>
+        <pre><code class="language-html">&lt;!-- Load core and split packages --&gt;
+&lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
+&lt;link rel="stylesheet" href="../packages/split/dist/split.css"&gt;
+&lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
+&lt;script src="../packages/split/dist/split.min.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Quick Start</div>
+        <pre><code class="language-javascript">// Create container and pane elements first
+const topDiv = document.createElement('div');
+topDiv.innerHTML = "Top Content";
+const bottomDiv = document.createElement('div');
+bottomDiv.innerHTML = "Bottom Content";
+
+const split = new uiframe.SplitPane({
+  containerID: 'split-container',
+  top: topDiv,
+  bottom: bottomDiv,
+  options: {
+    min_size: 100
+  }
+});
+split.render();</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Options</div>
+        <ul class="list-compact">
+          <li><strong>containerID</strong>: ID of the host element.</li>
+          <li><strong>top</strong>: HTMLElement for the top pane.</li>
+          <li><strong>bottom</strong>: HTMLElement for the bottom pane.</li>
+          <li><strong>options.min_size</strong>: Min size in px for panes (default: 60).</li>
+          <li><strong>options.topHeight</strong>: Initial top pane height (default: '49.9%').</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">API</div>
+        <ul class="list-compact">
+          <li><code>render()</code>: Renders the split layout into the container.</li>
+          <li><code>init()</code>: Re-initializes event listeners (internal).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Events</div>
+        <p class="mb-2">
+          This component does not currently emit custom events. Use CSS resize observers or manual
+          drag tracking for advanced use cases.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Features</div>
+        <ul class="list-compact">
+          <li>
+            <strong>Fixed container height</strong>: The split container needs explicit height (in
+            px or %).
+          </li>
+          <li>
+            <strong>Min size constraints</strong>: Set <code>min_size</code> to prevent panes from
+            collapsing too small.
+          </li>
+          <li>
+            <strong>Dynamic content</strong>: Update pane content by modifying the DOM elements
+            directly.
+          </li>
+          <li><strong>Two-pane only</strong>: Currently designed for top/bottom split layout.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Minimal Example</div>
+        <pre><code class="language-html">&lt;div id="split-container" style="height: 500px;"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const top = document.createElement('div');
+  top.textContent = 'Top area';
+  const bottom = document.createElement('div');
+  bottom.textContent = 'Bottom area';
+  
+  const split = new uiframe.SplitPane({
+    containerID: 'split-container',
+    top: top,
+    bottom: bottom
+  });
+  split.render();
+&lt;/script&gt;</code></pre>
+      </div>
+
+      <h2 class="mt-4">Live Demos</h2>
+      <div class="card demo-tall">
+        <div id="split-demo" class="demo-box"></div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="../packages/core/dist/core.min.js"></script>
+    <script src="../packages/split/dist/split.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+
+    <script type="module">
+      const topContent = document.createElement("div");
+      topContent.className = "p-3 bg-light h-100";
+      topContent.textContent = "Top Pane Content";
+
+      const bottomContent = document.createElement("div");
+      bottomContent.className = "p-3 bg-white h-100";
+      bottomContent.textContent = "Bottom Pane Content";
+
+      // Ensure container exists
+      const container = document.getElementById("split-demo");
+      container.style.height = "700px"; // Needs explicit height
+
+      const split = new uiframe.SplitPane({
+        containerID: "split-demo",
+        top: topContent,
+        bottom: bottomContent,
+        options: { min_size: 50 },
+      });
+      split.render();
+    </script>
+  </body>
+</html>
