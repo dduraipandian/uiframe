@@ -12,7 +12,7 @@
     />
 
     <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
-    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
+    <link rel="stylesheet" type="text/css" href="./css/doc.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
@@ -58,15 +58,6 @@ const status = new uiframe.Online({
 
 // Render into a container
 status.renderInto('status-container');
-
-// Listen for status changes
-status.on('online', () => {
-  console.log('Connection restored');
-});
-
-status.on('offline', () => {
-  console.log('Connection lost');
-});
 </code></pre>
       </div>
       <div class="card">
