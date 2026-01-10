@@ -95,16 +95,8 @@ status.renderInto('status-container');
       <div class="card">
         <div class="section-title">Events</div>
         <p class="mb-2">
-          This component automatically listens to <code>window.ononline</code> and
-          <code>window.onoffline</code> events.
+          This component doesn't emit any events.
         </p>
-        <pre class="code_example"><code class="language-javascript">// Status changes trigger internal updates and notifications
-window.addEventListener('online', () => {
-  console.log('Connection restored');
-});
-window.addEventListener('offline', () => {
-  console.log('Connection lost');
-});</code></pre>
       </div>
 
       <div class="card">
@@ -161,7 +153,12 @@ window.addEventListener('offline', () => {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
     <script type="module">
-      const online = new uiframe.Online({ name: "demo-online", options: { notify: true } });
+      const online = new uiframe.Online({ name: "demo-online", 
+        options: { 
+          notify: true ,
+          online_notification_text: "You are online now."
+        } 
+      });
       online.renderInto("online-container");
 
       // Simulation buttons (cannot truly toggle navigator.onLine, so simulate update)
