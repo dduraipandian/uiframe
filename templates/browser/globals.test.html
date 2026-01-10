@@ -1,38 +1,124 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>uiframe global tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>uiframe Validation</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f5f5f5;
+        padding: 16px;
+        height: 100vh;
+      }
+
+      h1 {
+        font-size: 18px;
+        margin-bottom: 12px;
+        color: #222;
+      }
+
+      #messages {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #333;
+      }
+
+      .pass {
+        color: #22863a;
+      }
+
+      .fail {
+        color: #cb2431;
+      }
+
+      #summary {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid #ddd;
+        font-weight: 500;
+        font-size: 13px;
+      }
+
+      #summary.success {
+        color: #22863a;
+      }
+
+      #summary.error {
+        color: #cb2431;
+      }
+    </style>
   </head>
   <body>
+    <h1>UIFrame Export Validation</h1>
+    <div id="messages"></div>
+    <div id="summary"></div>
+
     <script src="../../packages/core/dist/core.min.js"></script>
     <script src="../../packages/dropdown/dist/dropdown.min.js"></script>
     <script src="../../packages/notification/dist/notification.min.js"></script>
     <script src="../../packages/contextmenu/dist/contextmenu.min.js"></script>
+    <script src="../../packages/online/dist/online.min.js"></script>
+    <script src="../../packages/spinner/dist/spinner.min.js"></script>
+    <script src="../../packages/split/dist/split.min.js"></script>
+    <script src="../../packages/tab/dist/tab.min.js"></script>
+    <script src="../../packages/table/dist/table.min.js"></script>
+    <script src="../../packages/tree/dist/tree.min.js"></script>
+
     <script>
-      function assert(condition, message) {
-        if (!condition) {
-          throw new Error("❌ " + message);
+      const messagesEl = document.getElementById("messages");
+      const summaryEl = document.getElementById("summary");
+      let passed = 0;
+      let failed = 0;
+
+      function test(condition, message) {
+        const span = document.createElement("div");
+        span.className = condition ? "pass" : "fail";
+        span.textContent = (condition ? "✅ " : "❌ ") + message;
+        messagesEl.appendChild(span);
+
+        if (condition) {
+          passed++;
+        } else {
+          failed++;
+          console.error(message);
         }
-        console.log("✅ " + message);
       }
 
-      console.log("uiframe", uiframe);
-      // ---- GLOBAL CONTRACT ----
-      assert(window.uiframe, "window.uiframe exists");
-      assert(typeof uiframe === "object", "uiframe is an object");
-      assert(typeof uiframe.EmitterComponent === "function", "EmitterComponent exposed");
+      try {
+        // Global contract
+        test(window.uiframe, "Global uiframe object available on window");
+        test(typeof uiframe === "object", "uiframe is a proper object type");
+        test(typeof uiframe.EmitterComponent === "function", "EmitterComponent base class exported");
 
-      // ---- COMPONENTS ----
-      assert(typeof uiframe.Dropdown === "function", "Dropdown exposed");
-      assert(typeof uiframe.Notification === "function", "Notification exposed");
-      assert(typeof uiframe.ContextMenu === "function", "ContextMenu exposed");
+        // Components
+        test(typeof uiframe.Dropdown === "function", "Dropdown component exported");
+        test(typeof uiframe.Notification === "function", "Notification component exported");
+        test(typeof uiframe.ContextMenu === "function", "ContextMenu component exported");
+        test(typeof uiframe.Online === "function", "Online component exported");
+        test(typeof uiframe.Spinner === "function", "Spinner component exported");
+        test(typeof uiframe.SplitPane === "function", "SplitPane component exported");
+        test(typeof uiframe.Tab === "function", "Tab component exported");
+        test(typeof uiframe.Table === "function", "Table component exported");
+        test(typeof uiframe.Tree === "function", "Tree component exported");
 
-      // ---- NO LEAKS ----
-      assert(!window.Dropdown, "Dropdown is NOT global");
-      assert(!window.ContextMenu, "ContextMenu is NOT global");
+        // No leaks
+        test(!window.Dropdown, "Dropdown is not leaked to global scope");
+        test(!window.ContextMenu, "ContextMenu is not leaked to global scope");
 
-      console.log("🎉 All uiframe global tests passed");
+        summaryEl.className = failed === 0 ? "success" : "error";
+        summaryEl.textContent = `${passed} passed, ${failed} failed`;
+      } catch (error) {
+        summaryEl.className = "error";
+        summaryEl.textContent = "Error: " + error.message;
+        console.error(error);
+      }
     </script>
   </body>
 </html>
