@@ -36,9 +36,7 @@
 
       <div class="card">
         <div class="section-title">Installation</div>
-        <p class="mb-2">
-          Include the core package in your HTML:
-        </p>
+        <p class="mb-2">Include the core package in your HTML:</p>
         <pre class="code_example"><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 
@@ -80,12 +78,18 @@ setTimeout(() => spinner.hide(), 3000);
           <li>
             <strong>spinnerType</strong>:
             <ul>
-              <li><code>border</code> (default) <div class="spinner-border spinner-border-sm" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div></li>
-              <li><code>grow</code> <div class="spinner-grow spinner-grow-sm" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div></li>
+              <li>
+                <code>border</code> (default)
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </li>
+              <li>
+                <code>grow</code>
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </li>
             </ul>
           </li>
           <li>
@@ -183,7 +187,9 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre class="code_example"><code class="language-html">&lt;div id="spinner-container" style="position:relative; height: 240px;"&gt;&lt;/div&gt;
+        <pre
+          class="code_example"
+        ><code class="language-html">&lt;div id="spinner-container" style="position:relative; height: 240px;"&gt;&lt;/div&gt;
 &lt;script&gt;
   const spinner = new uiframe.Spinner({ 
     name: 'my-spinner',
