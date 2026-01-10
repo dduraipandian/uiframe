@@ -12,7 +12,7 @@
     />
 
     <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
-    <link rel="stylesheet" type="text/css" href="./css/doc.css" />
+    <link rel="stylesheet" type="text/css" href="../components/css/doc.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
@@ -31,25 +31,44 @@
       </div>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Use as an ES module.</p>
-        <pre><code class="language-html">&lt;!-- Load core and online packages --&gt;
+        <div class="section-title">Installation</div>
+        <p class="mb-2">
+          Include the core and online packages in your HTML:
+        </p>
+        <pre><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/online/dist/online.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">const status = new uiframe.Online({ 
+        <pre><code class="language-javascript">// Create the online status indicator
+const status = new uiframe.Online({ 
   name: 'net-status',
   options: {
-    notify: true
+    notify: true,                    // Show toast on status change
+    online_text: 'Online',            // Text when connected
+    offline_text: 'Offline',          // Text when disconnected
+    disappear_after: 3000             // Toast duration in ms
   }
 });
-status.renderInto('status-container');</code></pre>
-      </div>
 
+// Render into a container
+status.renderInto('status-container');
+
+// Listen for status changes
+status.on('online', () => {
+  console.log('Connection restored');
+});
+
+status.on('offline', () => {
+  console.log('Connection lost');
+});
+</code></pre>
+      </div>
       <div class="card">
         <div class="section-title">Options</div>
         <ul class="list-compact">

@@ -32,26 +32,49 @@
       <p class="text-muted mb-3">Create tabbed views with a minimal API.</p>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Use as an ES module.</p>
-        <pre><code class="language-html">&lt;!-- Load core and tab packages --&gt;
+        <div class="section-title">Installation</div>
+        <p class="mb-2">
+          Include the core and tab packages in your HTML:
+        </p>
+        <pre><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/tab/dist/tab.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/tab/dist/tab.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">const tab = new uiframe.Tab({ 
+        <pre><code class="language-javascript">// Create the tab component
+const tabs = new uiframe.Tab({ 
   name: 'my-tabs',
   options: {
-    activeTab: 'home' 
+    activeTab: 'home' // Initially active tab ID
   }
 });
-tab.renderInto('container-id');
-tab.addTab({ id: 'home', title: 'Home', content: 'Home Content' });
-tab.addTab({ id: 'profile', title: 'Profile', content: 'Profile Content' });</code></pre>
+
+// Render into a container
+tabs.renderInto('container-id');
+
+// Add tabs dynamically
+tabs.addTab({ 
+  id: 'home', 
+  title: 'Home', 
+  content: 'Welcome to the home tab!' 
+});
+
+tabs.addTab({ 
+  id: 'profile', 
+  title: 'Profile', 
+  content: 'Your profile information here' 
+});
+
+// Listen for tab changes
+tabs.on('tab:change', (tabId) => {
+  console.log('Switched to tab:', tabId);
+});</code></pre>
       </div>
 
       <div class="card">

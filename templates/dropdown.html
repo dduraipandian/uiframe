@@ -34,30 +34,43 @@
       </p>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Use as an ES module.</p>
-        <pre><code class="language-html">&lt;!-- Load core and dropdown packages --&gt;
+        <div class="section-title">Installation</div>
+        <p class="mb-2">
+          Include the core and dropdown packages in your HTML:
+        </p>
+        <pre><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/dropdown/dist/dropdown.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/dropdown/dist/dropdown.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">const dd = new uiframe.Dropdown({
+        <pre><code class="language-javascript">// Create and configure the dropdown
+const dropdown = new uiframe.Dropdown({
   name: 'my-dropdown',
   options: {
-    search: true,
-    maxHeight: '15em'
+    search: true,    // Enable search filter
+    maxHeight: '15em' // Max height of item list
   }
 });
-dd.renderInto('container-id');
-dd.setDropdownItems([
+
+// Render into a container
+dropdown.renderInto('container-id');
+
+// Add menu items
+dropdown.setDropdownItems([
   { name: 'Option A', value: 'a' },
   { name: 'Option B', value: 'b' }
 ]);
-dd.on('item:click', (item) => console.log('Selected:', item));</code></pre>
+
+// Listen for selections
+dropdown.on('item:click', (item) => {
+  console.log('Selected:', item.value);
+});</code></pre>
       </div>
 
       <div class="card">

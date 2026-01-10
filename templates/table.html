@@ -41,39 +41,46 @@
       <p class="text-muted mb-3">Render tabular data with a clean, minimal API.</p>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
+        <div class="section-title">Installation</div>
         <p class="mb-2">
-          <strong>Dependencies:</strong> Bootstrap Icons, Bootstrap Table (CSS/JS), TableExport,
-          FileSaver.
+          The Table component depends on Bootstrap Table and jQuery. Include all required libraries:
         </p>
-        <pre><code class="language-html">&lt;!-- Required Vendor Assets & UI Frame --&gt;
+        <pre><code class="language-html">&lt;!-- Vendor Dependencies --&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/bootstrap-table.min.css"&gt;
 &lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.26.0/dist/bootstrap-table.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.29.0/tableExport.min.js"&gt;&lt;/script&gt;
 
-&lt;!-- UI Frame Packages --&gt;
+&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/table/dist/table.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/table/dist/table.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">const tbl = new uiframe.Table({ 
+        <pre><code class="language-javascript">// Create the table component
+const table = new uiframe.Table({ 
   name: 'Users',
   options: {
-    search: true,
-    pagination: true,
-    pageSize: 10
+    search: true,      // Enable search filter
+    pagination: true,  // Enable pagination
+    pageSize: 10       // Items per page
   }
 });
-tbl.renderInto('container-id');
-tbl.updateData([
-  { id: 1, name: 'Alice', role: 'Admin' },
-  { id: 2, name: 'Bob', role: 'User' }
+
+// Render into a container
+table.renderInto('container-id');
+
+// Populate with data
+table.updateData([
+  { id: 1, name: 'Alice Johnson', role: 'Admin', email: 'alice@example.com' },
+  { id: 2, name: 'Bob Smith', role: 'User', email: 'bob@example.com' },
+  { id: 3, name: 'Carol White', role: 'Editor', email: 'carol@example.com' }
 ]);</code></pre>
       </div>
 

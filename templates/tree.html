@@ -36,23 +36,52 @@
       </p>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Use as an ES module.</p>
-        <pre><code class="language-html">&lt;!-- Load core and tree packages --&gt;
+        <div class="section-title">Installation</div>
+        <p class="mb-2">
+          Include the core and tree packages in your HTML:
+        </p>
+        <pre><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/tree/dist/tree.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/tree/dist/tree.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">const sample = [
-  { name: 'Root', children: [ { name: 'Child A', children: [] } ] }
+        <pre><code class="language-javascript">// Define your tree data structure
+const treeData = [
+  { 
+    name: 'Documents', 
+    children: [ 
+      { name: 'Resumé', children: [] },
+      { name: 'Cover Letter', children: [] }
+    ] 
+  },
+  { 
+    name: 'Projects', 
+    children: [ 
+      { name: 'Website', children: [] },
+      { name: 'App', children: [] }
+    ] 
+  }
 ];
-// IDs are automatically generated based on path (e.g. root-Child A)
-const tree = new uiframe.Tree({ name: 'my-tree', objects: sample });
-tree.renderInto('my-tree-container');</code></pre>
+
+// Create the tree component
+const tree = new uiframe.Tree({ 
+  name: 'my-tree', 
+  objects: treeData 
+});
+
+// Render into a container
+tree.renderInto('my-tree-container');
+
+// Listen for node interactions
+tree.on('node:click', (node) => {
+  console.log('Clicked node:', node.name);
+});</code></pre>
       </div>
 
       <div class="card">
