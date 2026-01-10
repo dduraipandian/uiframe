@@ -32,34 +32,41 @@
       <p class="text-muted mb-3">Two- or multi-pane layout with a draggable divider.</p>
 
       <div class="card">
-        <div class="section-title">Install & Import</div>
-        <p class="mb-2">Use as an ES module.</p>
-        <pre><code class="language-html">&lt;!-- Load core and split packages --&gt;
+        <div class="section-title">Installation</div>
+        <p class="mb-2">Include the core and split packages in your HTML:</p>
+        <pre class="code_example"><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/split/dist/split.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/split/dist/split.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">// Create container and pane elements first
-const topDiv = document.createElement('div');
-topDiv.innerHTML = "Top Content";
-const bottomDiv = document.createElement('div');
-bottomDiv.innerHTML = "Bottom Content";
+        <pre class="code_example"><code class="language-javascript">// Create content for each pane
+const topPane = document.createElement('div');
+topPane.innerHTML = '&lt;h3&gt;Top Pane&lt;/h3&gt;&lt;p&gt;Your content here&lt;/p&gt;';
 
+const bottomPane = document.createElement('div');
+bottomPane.innerHTML = '&lt;h3&gt;Bottom Pane&lt;/h3&gt;&lt;p&gt;More content here&lt;/p&gt;';
+
+// Create and configure the split pane
 const split = new uiframe.SplitPane({
   containerID: 'split-container',
-  top: topDiv,
-  bottom: bottomDiv,
+  top: topPane,
+  bottom: bottomPane,
   options: {
-    min_size: 100
+    min_size: 100,      // Minimum pane size in pixels
+    topHeight: '49.9%'  // Initial top pane height
   }
 });
-split.render();</code></pre>
-      </div>
 
+// Render the split layout
+split.render();
+</code></pre>
+      </div>
       <div class="card">
         <div class="section-title">Options</div>
         <ul class="list-compact">
@@ -108,7 +115,9 @@ split.render();</code></pre>
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;div id="split-container" style="height: 500px;"&gt;&lt;/div&gt;
+        <pre
+          class="code_example"
+        ><code class="language-html">&lt;div id="split-container" style="height: 500px;"&gt;&lt;/div&gt;
 &lt;script&gt;
   const top = document.createElement('div');
   top.textContent = 'Top area';

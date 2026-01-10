@@ -117,28 +117,28 @@ class Spinner extends EmitterComponent {
   /**
    * Shows the spinner and optionally updates the loading text.
    * @param {string} [loadingText=null] - Optional new text to display.
-   * @param {boolean} [textDotChange=false] - Whether to animate the text with trailing dots.
+   * @param {boolean} [dotAnimation=false] - Whether to animate the text with trailing dots.
    */
-  show(loadingText = null, textDotChange = false) {
+  show(loadingText = null, dotAnimation = false) {
     loadingText = loadingText || this.loadingText;
 
     this.element.style.display = "block";
     this.enableParentContainer(false);
-    this.setLoadingProgress(loadingText, textDotChange);
+    this.setLoadingProgress(loadingText, dotAnimation);
   }
 
   /**
    * Sets the loading progress text and starts the dot animation if requested.
    * @param {string} loadingText - The text to display.
-   * @param {boolean} textDotChange - Whether to animate dots.
+   * @param {boolean} dotAnimation - Whether to animate dots.
    */
-  setLoadingProgress(loadingText, textDotChange) {
+  setLoadingProgress(loadingText, dotAnimation) {
     this.count = 1;
     let originalText = loadingText;
     const loadingTextElement = this.element.querySelector(`#${this.spinnerTextId}`);
     if (loadingTextElement) {
       loadingTextElement.textContent = loadingText;
-      if (textDotChange) {
+      if (dotAnimation) {
         this.intervalId = setInterval(() => {
           this.count = (this.count % 4) + 1;
           if (this.count === 1) {
