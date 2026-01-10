@@ -25,6 +25,7 @@ jobs:
           rm -rf pages
           mkdir pages
           cp index.html pages/
+          cp -r templates pages/
           cp -r components pages/
           cp -r packages pages/
 
