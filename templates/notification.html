@@ -36,16 +36,18 @@
         <p class="mb-2">
           Use as an ES module. The library exports a default `notification` instance.
         </p>
-        <pre><code class="language-html">&lt;!-- Load core and notification packages --&gt;
+        <pre class="code_example"><code class="language-html">&lt;!-- Styles --&gt;
 &lt;link rel="stylesheet" href="../packages/core/dist/base.css"&gt;
 &lt;link rel="stylesheet" href="../packages/notification/dist/notification.css"&gt;
+
+&lt;!-- Scripts --&gt;
 &lt;script src="../packages/core/dist/core.min.js"&gt;&lt;/script&gt;
 &lt;script src="../packages/notification/dist/notification.min.js"&gt;&lt;/script&gt;</code></pre>
       </div>
 
       <div class="card">
         <div class="section-title">Quick Start</div>
-        <pre><code class="language-javascript">// Initialize notification (returns a singleton or per-app instance)
+        <pre class="code_example"><code class="language-javascript">// Initialize notification (returns a singleton or per-app instance)
 const notification = uiframe.notification({ name: "demo" });
 
 // Basic types
@@ -98,10 +100,10 @@ notification.error('An error occurred', 'Error Title', {
 
       <div class="card">
         <div class="section-title">Minimal Example</div>
-        <pre><code class="language-html">&lt;script&gt;
-  const notify = uiframe.notification();
-  notify.success('All set!');
-  notify.error('Something went wrong');
+        <pre class="code_example"><code class="language-html">&lt;script&gt;
+  const notification = uiframe.notification({ name: 'my-app' });
+  notification.success('All set!');
+  notification.error('Something went wrong');
 &lt;/script&gt;</code></pre>
       </div>
 
