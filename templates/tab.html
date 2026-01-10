@@ -94,13 +94,8 @@ tabs.addTab({
       <div class="card">
         <div class="section-title">Events</div>
         <p class="mb-2">
-          This component relies on native Bootstrap tab events on the DOM elements.
+          This component doesn't emit any events. Native Bootstrap tab events are available on the DOM elements.
         </p>
-        <pre class="code_example"><code class="language-javascript">// Listen to Bootstrap tab show event
-const tabElement = document.getElementById('tab-demo');
-tabElement.addEventListener('shown.bs.tab', (event) => {
-  console.log('Tab changed to:', event.target);
-});</code></pre>
       </div>
 
       <div class="card">
