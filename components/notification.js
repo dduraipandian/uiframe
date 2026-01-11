@@ -26,7 +26,7 @@ class Notification extends EmitterComponent {
             <div class="toast-container bottom-0 end-0"></div>
         </div>
       `;
-      document.body.innerHTML += notificationContainerHtml;
+      document.body.insertAdjacentHTML("beforeend", notificationContainerHtml);
     }
 
     this.notificationContainer = container ?? document.querySelector(this.querySelector);

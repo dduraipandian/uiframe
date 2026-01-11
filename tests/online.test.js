@@ -41,6 +41,8 @@ describe("Online Component", () => {
     const online = new Online({ name: "Status" });
     online.renderInto(container);
 
+    const notificationId = "status-toast";
+
     // Offline
     window.navigator.onLine = false;
     window.dispatchEvent(new Event("offline"));
@@ -48,7 +50,7 @@ describe("Online Component", () => {
     expect(container.textContent).toContain("Offline.");
     expect(container.querySelector("svg").getAttribute("fill")).toBe("red");
     expect(mockToast.show).toHaveBeenCalled();
-    expect(document.getElementById(online.notificationBodyId).textContent).toBe(
+    expect(document.getElementById(`${notificationId}-toast-body-error`).textContent).toBe(
       online.offlineNotificationText
     );
 
@@ -58,7 +60,7 @@ describe("Online Component", () => {
 
     expect(container.textContent).toContain("Online.");
     expect(container.querySelector("svg").getAttribute("fill")).toBe("green");
-    expect(document.getElementById(online.notificationBodyId).textContent).toBe(
+    expect(document.getElementById(`${notificationId}-toast-body-success`).textContent).toBe(
       online.onlineNotificationText
     );
   });
