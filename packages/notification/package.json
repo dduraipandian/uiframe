@@ -11,7 +11,8 @@
   "sideEffects": false,
   "style": "dist/notification.css",
   "peerDependencies": {
-    "@uiframe/core": "~0.1.0"
+    "@uiframe/core": "~0.1.0",
+    "@uiframe/notification": "~0.1.0"
   },
   "exports": {
     ".": {

@@ -1,4 +1,5 @@
 import { EmitterComponent } from "@uiframe/core";
+import { Notification } from "@uiframe/notification";
 
 /**
  * Component for monitoring and displaying network status (Online/Offline).
@@ -30,6 +31,7 @@ class Online extends EmitterComponent {
     this.notificationContainerId = this.containerID + "-online-container";
     this.notificationBodyId = `${this.notificationContainerId}-body`;
 
+    this.notificationInstance = null;
     this.element = null;
   }
 
@@ -65,27 +67,13 @@ class Online extends EmitterComponent {
     this.element = this.container;
 
     if (this.notify) {
-      let notificationTemplate = `
-            <div class="toast-container position-fixed bottom-0 end-0 p-3 me-2 mb-3">
-                <div id="${this.notificationContainerId}" 
-                    class="toast align-items-center alert alert-info p-0" 
-                    role="alert" 
-                    aria-live="assertive"
-                    aria-atomic="true" 
-                    data-bs-delay="${this.disapearAfter}">
-                    <div class="d-flex">
-                        <div id="${this.notificationBodyId}" class="toast-body text-white"></div>
-                        <button type="button" 
-                            class="btn-close btn-close-white me-2 m-auto"
-                            data-bs-dismiss="toast" 
-                            aria-label="Close">
-                        </button>
-                    </div>
-                </div>
-            </div>`;
-      const div = document.createElement("div");
-      div.insertAdjacentHTML("beforeend", notificationTemplate);
-      document.body.appendChild(div);
+      this.notificationInstance = new Notification({
+        name: this.name + "-toast",
+        options: {
+          autohide_on_error: true,
+          disappear_after: this.disapearAfter,
+        },
+      });
     }
     window.addEventListener("online", this.updateStatus.bind(this));
     window.addEventListener("offline", this.updateStatus.bind(this));
@@ -96,15 +84,12 @@ class Online extends EmitterComponent {
    */
   updateStatus() {
     const status = this.isOnline();
-    if (this.notify && this.isCreated()) {
-      document.getElementById(this.notificationBodyId).innerHTML = status
-        ? this.onlineNotificationText
-        : this.offlineNotificationText;
-      const toast = document.getElementById(this.notificationContainerId);
-      toast.classList.remove("bg-success", "bg-danger");
-      toast.classList.add(status ? "bg-success" : "bg-danger");
-      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast);
-      toastBootstrap.show();
+    if (this.notificationInstance && this.isCreated()) {
+      if (status) {
+        this.notificationInstance.success(this.onlineNotificationText);
+      } else {
+        this.notificationInstance.error(this.offlineNotificationText);
+      }
     }
     this.element.innerHTML = this.html();
   }
