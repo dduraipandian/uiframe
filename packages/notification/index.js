@@ -2,23 +2,15 @@ import "../../components/css/notification.css";
 
 import { Notification } from "../../components/notification.js";
 
-let instance = null;
+let instance = new WeakMap();
 
-function getInstance({ app, options = {} }) {
-  // IIFE / Browser path
-  if (typeof window !== "undefined" && window.uiframe) {
-    window.uiframe._notification =
-      window.uiframe._notification || new Notification({ name: app, options });
-
-    return window.uiframe._notification;
+function getInstance(params) {
+  // const params = { name, options = {} };
+  if (!instance.has(params)) {
+    instance.set(params, new Notification(params));
   }
 
-  // ESM / CJS path
-  if (!instance) {
-    instance = new Notification({ name: app, options });
-  }
-
-  return instance;
+  return instance.get(params);
 }
 
 export { Notification, getInstance as notification };

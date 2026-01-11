@@ -50,7 +50,13 @@
         <pre
           class="code_example"
         ><code class="language-javascript">// Initialize notification (returns a singleton or per-app instance)
-const notification = uiframe.notification({ name: "demo" });
+const notification = uiframe.notification({ 
+  name: "demo", 
+  options: { 
+    autohide_on_error: true, // By default it is `false` for error. It has to be closed manually.
+    disappear_after: 3000, // Toast duration in ms
+  } 
+});
 
 // Basic types
 notification.info('Informational message');
@@ -120,6 +126,9 @@ notification.error('An error occurred', 'Error Title', {
           <button id="btn-success" class="btn btn-sm btn-outline-success me-2">Show Success</button>
           <button id="btn-warning" class="btn btn-sm btn-outline-warning me-2">Show Warning</button>
           <button id="btn-error" class="btn btn-sm btn-outline-danger">Show Error</button>
+          <button id="btn-error2" class="btn btn-sm btn-outline-danger">
+            Show Error without details (with auto hide)
+          </button>
         </div>
       </div>
     </div>
@@ -157,6 +166,13 @@ notification.error('An error occurred', 'Error Title', {
           status: 500,
           message: "Internal server error",
         });
+      });
+      document.getElementById("btn-error2").addEventListener("click", () => {
+        const notification1 = uiframe.notification({
+          name: "demo1",
+          options: { autohide_on_error: true },
+        });
+        notification1.error("Unexpected error occurred (auto hide)");
       });
     </script>
   </body>
