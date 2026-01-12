@@ -188,6 +188,7 @@ class Online extends EmitterComponent {
 
     this.notificationInstance = null;
     this.element = null;
+    this._forced = null;
   }
 
   /**
@@ -195,6 +196,7 @@ class Online extends EmitterComponent {
    * @returns {boolean}
    */
   isOnline() {
+    if (this._forced !== null) return this._forced;
     return navigator.onLine;
   }
 
@@ -247,6 +249,16 @@ class Online extends EmitterComponent {
       }
     }
     this.element.innerHTML = this.html();
+  }
+
+  // dev-only simulation
+  simulate(state) {
+    this._forced = state;
+    window.dispatchEvent(new Event(state ? "online" : "offline"));
+  }
+
+  clearSimulation() {
+    this._forced = null;
   }
 }
 
