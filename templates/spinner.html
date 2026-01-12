@@ -12,6 +12,7 @@
     />
 
     <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/notification/dist/notification.css" />
     <link rel="stylesheet" type="text/css" href="./css/doc.css" />
     <link
       rel="stylesheet"
@@ -115,14 +116,15 @@ setTimeout(() => spinner.hide(), 3000);
 
       <div class="card">
         <div class="section-title">Events</div>
-        <p class="mb-2">
-          Listen to events on the container based on the pattern
-          `spinner:{containerId}:{name}:cancel`.
-        </p>
-        <pre class="code_example"><code class="language-javascript">// Example: Handle cancellation
-spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}:cancel`, (e) => {
+        <ul class="list-compact">
+          <li><strong>spinner:cancel</strong>: Emitted when spinner is cancelled.</li>
+          <pre
+            class="code_example"
+          ><code class="language-javascript">// Example: Handle cancellation
+spinner.on(`spinner:cancel`, (e) => {
     console.log('User clicked cancel', e.detail);
 });</code></pre>
+        </ul>
       </div>
 
       <div class="card">
@@ -209,6 +211,7 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
     ></script>
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/spinner/dist/spinner.min.js"></script>
+    <script src="../packages/notification/dist/notification.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
@@ -248,9 +251,9 @@ spinner.container.addEventListener(`spinner:${spinner.containerId}:${spinner.id}
         },
       });
       s3.renderInto("demo3");
-      // Listen for the internal cancel event as well
-      s3.container.addEventListener(`spinner:${s3.containerId}:${s3.id}:cancel`, (ev) => {
-        console.debug("Spinner cancel event received", ev.detail);
+      s3.on("spinner:cancel", (ev) => {
+        const notification = uiframe.notification({ name: "spinner-demo" });
+        notification.info("Spinner cancelled");
       });
       document
         .getElementById("demo3-show")

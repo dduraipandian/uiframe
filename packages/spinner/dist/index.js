@@ -28,7 +28,6 @@ class Spinner extends core.EmitterComponent {
     this.spinnerType = options.spinnerType || "border";
     this.cancelId = `uiframe-${this.containerId}-${this.id}-cancel`;
     this.spinnerTextId = `uiframe-${this.id}-spinner-text`;
-    this.cancelEventId = `spinner:${this.containerId}:${this.id}:cancel`;
     this.loadingText = options.loadingText || "Loading";
 
     this.element = null;
@@ -108,14 +107,7 @@ class Spinner extends core.EmitterComponent {
     // Implement the logic to handle cancellation
     this.hide();
     console.debug(`Cancellation requested for spinner with id: ${this.id}`);
-    const customEvent = new CustomEvent(this.cancelEventId, {
-      detail: {
-        id: this.id,
-        topic: this.topic,
-      },
-      bubbles: true,
-    });
-    this.element.dispatchEvent(customEvent);
+    this.emit("spinner:cancel", { id: this.id, topic: this.topic });
   }
 
   /**

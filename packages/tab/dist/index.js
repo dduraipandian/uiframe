@@ -47,7 +47,7 @@ class Tab extends core.EmitterComponent {
                     ${tabHeaders}
                 </div>
             </nav>
-            <div class="uiframe-tab-content" id="${this.tabContentId}" style="height: calc(100% - 40px); overflow: auto;">
+            <div class="uiframe-tab-content tab-content" id="${this.tabContentId}" style="height: calc(100% - 40px); overflow: auto;">
                 ${this.tabs.map((tab) => this.newTabContentHtml(tab)).join("")}
             </div>
         `;
@@ -68,6 +68,8 @@ class Tab extends core.EmitterComponent {
         this.populateTabContent(tab, container);
       }
     });
+    const tabEl = this.tabListContainer.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabEl.forEach((tab) => this.registerEvent(tab));
   }
 
   /**
@@ -87,6 +89,14 @@ class Tab extends core.EmitterComponent {
 
     const container = this.tabContentContainer.querySelector(`#${tab.id}-content`);
     this.populateTabContent(tab, container);
+    this.registerEvent(this.tabListContainer.querySelector(`#${tab.id}-tab`));
+  }
+
+  registerEvent(tab) {
+    tab.addEventListener("shown.bs.tab", (event) => {
+      const tabId = event.target.dataset.tabId;
+      this.emit("tab:change", { id: tabId });
+    });
   }
 
   populateTabContent(tab, container) {
@@ -107,9 +117,11 @@ class Tab extends core.EmitterComponent {
     return `
                 <button class="nav-link ${isActive} rounded-0" 
                     id="${tab.id}-tab" 
-                    aria-controls="${tab.id}-content" 
                     role="tab" 
-                    data-bs-toggle="tab" 
+                    data-bs-toggle="tab"                     
+                    aria-selected="false"
+                    data-tab-id="${tab.id}"
+                    aria-controls="${tab.id}-content"
                     data-bs-target="#${tab.id}-content">
                     ${tab.title}
                 </button>
@@ -123,6 +135,8 @@ class Tab extends core.EmitterComponent {
                 id="${tab.id}-content" 
                 style="height: 100%; width: 100%; overflow: auto;"
                 role="tabpanel" 
+                tabindex="0"
+                data-tab-id="${tab.id}"
                 aria-labelledby="${tab.id}-tab">
             </div>
         `;
