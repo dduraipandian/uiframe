@@ -12,6 +12,7 @@
     />
     <link rel="stylesheet" type="text/css" href="../packages/core/dist/base.css" />
     <link rel="stylesheet" type="text/css" href="../packages/tab/dist/tab.css" />
+    <link rel="stylesheet" type="text/css" href="../packages/notification/dist/notification.css" />
     <link rel="stylesheet" type="text/css" href="./css/doc.css" />
     <link
       rel="stylesheet"
@@ -91,10 +92,14 @@ tabs.addTab({
 
       <div class="card">
         <div class="section-title">Events</div>
-        <p class="mb-2">
-          This component doesn't emit any events. Native Bootstrap tab events are available on the
-          DOM elements.
-        </p>
+        <ul class="list-compact">
+          <li><strong>tab:change</strong>: Emitted when a new tab is activated.</li>
+          <pre
+            class="code_example"
+          ><code class="language-javascript">tabs.on('tab:change', (tab) => {
+  console.log('Tab changed:', tab.id);
+});</code></pre>
+        </ul>
       </div>
 
       <div class="card">
@@ -139,6 +144,7 @@ tabs.addTab({
     ></script>
     <script src="../packages/core/dist/core.min.js"></script>
     <script src="../packages/tab/dist/tab.min.js"></script>
+    <script src="../packages/notification/dist/notification.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
@@ -149,6 +155,11 @@ tabs.addTab({
       tab.addTab({ id: "home", title: "Home", content: "Welcome to the Home tab!" });
       tab.addTab({ id: "profile", title: "Profile", content: "This is your profile tab." });
       tab.addTab({ id: "settings", title: "Settings", content: "Adjust your settings here." });
+
+      tab.on("tab:change", (event) => {
+        const notification = uiframe.notification({ name: "tab-demo" });
+        notification.info(`Tab changed to ${event.id}`);
+      });
     </script>
   </body>
 </html>
