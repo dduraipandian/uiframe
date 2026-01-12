@@ -116,11 +116,15 @@ setTimeout(() => spinner.hide(), 3000);
 
       <div class="card">
         <div class="section-title">Events</div>
-        <p class="mb-2">Listen to events on the container based on the pattern `spinner:cancel`.</p>
-        <pre class="code_example"><code class="language-javascript">// Example: Handle cancellation
+        <ul class="list-compact">
+          <li><strong>spinner:cancel</strong>: Emitted when spinner is cancelled.</li>
+          <pre
+            class="code_example"
+          ><code class="language-javascript">// Example: Handle cancellation
 spinner.on(`spinner:cancel`, (e) => {
     console.log('User clicked cancel', e.detail);
 });</code></pre>
+        </ul>
       </div>
 
       <div class="card">
