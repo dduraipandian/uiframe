@@ -90,7 +90,7 @@ describe("Spinner Component", () => {
     const cancelButton = document.getElementById(spinner.cancelId);
     const cancelSpy = jest.fn();
 
-    spinner.element.addEventListener(spinner.cancelEventId, cancelSpy);
+    spinner.on("spinner:cancel", cancelSpy);
 
     cancelButton.click();
 

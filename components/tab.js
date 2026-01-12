@@ -113,12 +113,11 @@ class Tab extends EmitterComponent {
     return `
                 <button class="nav-link ${isActive} rounded-0" 
                     id="${tab.id}-tab" 
-                    aria-controls="${tab.id}-content" 
                     role="tab" 
                     data-bs-toggle="tab"                     
                     aria-selected="false"
                     data-tab-id="${tab.id}"
-                    aria-controls="#${tab.id}-content"
+                    aria-controls="${tab.id}-content"
                     data-bs-target="#${tab.id}-content">
                     ${tab.title}
                 </button>

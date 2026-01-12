@@ -47,4 +47,26 @@ describe("Tab Component", () => {
     expect(container.querySelector("#new-tab")).toBeTruthy();
     expect(container.querySelector("#mock-content")).toBeTruthy();
   });
+
+  test("should emit on tab change", () => {
+    const tab = new Tab({ name: "MyTabs", options: { tabs: [] } });
+    tab.renderInto(container);
+
+    const newTab1 = { id: "tab1", title: "New Tab 1", content: new MockContent({ name: "Mock" }) };
+    const newTab2 = { id: "tab2", title: "New Tab 2", content: new MockContent({ name: "Mock" }) };
+    tab.addTab(newTab1);
+    tab.addTab(newTab2);
+
+    const spyFn = jest.fn();
+
+    tab.on("tab:change", spyFn);
+
+    const tab1Btn = container.querySelector("#tab1-tab");
+    tab1Btn.dispatchEvent(new Event("shown.bs.tab", { bubbles: true }));
+    expect(spyFn).toHaveBeenCalledWith({ id: "tab1" });
+
+    const tab2Btn = container.querySelector("#tab2-tab");
+    tab2Btn.dispatchEvent(new Event("shown.bs.tab", { bubbles: true }));
+    expect(spyFn).toHaveBeenCalledWith({ id: "tab2" });
+  });
 });
