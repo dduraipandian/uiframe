@@ -163,12 +163,13 @@ status.renderInto('status-container');
       // Simulation buttons (cannot truly toggle navigator.onLine, so simulate update)
       document.getElementById("simulate-offline").addEventListener("click", () => {
         // Simulate offline update by temporarily calling updateStatus with mocked state
-        Object.defineProperty(navigator, "onLine", { value: false, configurable: true });
-        online.updateStatus();
+        // Object.defineProperty(navigator, "onLine", { value: false, configurable: true });
+        online.simulate(false);
+        online.clearSimulation();
       });
       document.getElementById("simulate-online").addEventListener("click", () => {
-        Object.defineProperty(navigator, "onLine", { value: true, configurable: true });
-        online.updateStatus();
+        online.simulate(true);
+        online.clearSimulation();
       });
     </script>
   </body>
